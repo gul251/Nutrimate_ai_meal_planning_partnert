@@ -467,3 +467,91 @@ body {
     padding: 30px;
   }
 }
+
+
+/* ================================= */
+/* How It Works Page Styles */
+/* ================================= */
+
+.how-container {
+  max-width: 900px;
+  margin: 60px auto;
+  padding: 20px;
+}
+
+.how-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.how-header h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+}
+
+.how-header p {
+  color: #555;
+  font-size: 16px;
+}
+
+.steps {
+  position: relative;
+  margin-left: 40px;
+}
+
+.steps::before {
+  content: '';
+  position: absolute;
+  left: 20px;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: #22c55e;
+}
+
+.step {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.step-number {
+  width: 40px;
+  height: 40px;
+  background: #22c55e;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 16px;
+  z-index: 1;
+}
+
+.step-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+  flex: 1;
+}
+
+.step-content h3 {
+  margin: 0 0 8px;
+  font-size: 20px;
+}
+
+.step-content p {
+  margin: 0;
+  color: #555;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+@media (max-width: 600px) {
+  .steps {
+    margin-left: 20px;
+  }
+}
