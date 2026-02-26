@@ -1,111 +1,24 @@
-         <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Account - NutriMate</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome - NutriMate</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
 </head>
-<style>
-          /*     primary:#0D9488
-       secondary:#A3E635 
-       accent:#F8FAFC
-       text:#0F172A
-    */
-    body {
-  font-family: 'Nexa', sans-serif;
-  background: #F8FAFC ;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
- color: #0F172A;
-}
-.container{
-     margin-bottom: 30px;
-    margin-top: 30px;
-   display: flex;
-}
-.register-container {
-   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  border-top-left-radius: 30px;
-   border-bottom-left-radius: 30px;
-   
-    flex:1;
-  background: #0D9488;
-  padding: 30px;
- 
-  width: 550px;
-  
-}
-.register-container h2{
-  color: #F8FAFC;
-  margin-top: 100px;
-}
-h2 {
-  text-align: center;
-  margin-bottom: 50px;
-}
-
-.register-image{
-   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-   border-top-right-radius: 30px;
-   border-bottom-right-radius: 30px;
-height: 350px;
-  flex: 1;
-  background-color: #F8FAFC;
- 
-  overflow: hidden;
-  width: 200px;
- 
-}
-.register-image img{
-
-    height: 100%;
-  width:400px;
-  }
-  .register-image button{
-    
-    margin-left: 50px;
-  }
-  .buttons{
-    margin-left: 10px;
-   margin-top: 110px;
-   margin-bottom: 50px;
-    justify-content: center;
-  }
-button { 
-   
-    margin: 10px;
-  width: 70%;
-  padding: 10px;
-  background: #A3E635;
-  color: #F8FAFC;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-
-}
-button:hover {
-  background:#0D9488;
-}
-
-</style>
 <body>
-    <div class="container">
-  <div class="register-container">
-    <h2>Welcome To The NutriMate AI Meal Partner</h2>
+  <div class="welcome-container">
+    <div class="welcome-left">
+      <h2>Welcome To The NutriMate AI Meal Partner</h2>
+    </div>
 
-     
-  </div>
-
-  <div class="register-image">
-    <section class="buttons">
-<button type="submit" onclick="window.location.href='login.html'">Login Now</button>
-<button type="submit" onclick="window.location.href='createaccount.html'">Create Now</button>
-  </section>
-</div>
-
+    <div class="welcome-right">
+      <section class="buttons">
+        <button type="button" onclick="window.location.href='login.html'">Login Now</button>
+        <button type="button" onclick="window.location.href='createaccount.html'">Create Now</button>
+      </section>
+    </div>
   </div>
 </body>
 </html>
