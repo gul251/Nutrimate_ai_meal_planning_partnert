@@ -58,11 +58,49 @@
     </div>
   </div>
 
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
+  <!-- Firebase Configuration -->
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+
   <script>
+    // Redirect if already logged in
+    redirectIfAuthenticated();
+
+    // Toggle password visibility
     function togglePassword() {
       const pass = document.getElementById("password");
       pass.type = pass.type === "password" ? "text" : "password";
     }
+
+    // Handle login form submission
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const loginBtn = document.querySelector('.login-btn');
+
+      // Disable button and show loading state
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Logging in...';
+
+      try {
+        await login(email, password);
+        // Success handled in auth.js (auto-redirects)
+      } catch (error) {
+        // Error handled in auth.js (shows message)
+        console.error('Login failed:', error);
+      } finally {
+        // Re-enable button
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Login';
+      }
+    });
   </script>
 </body>
 </html>
