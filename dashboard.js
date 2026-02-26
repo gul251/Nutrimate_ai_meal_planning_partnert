@@ -201,8 +201,44 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // ---------- AI SUGGESTIONS ----------
   const suggestMealsBtn = document.getElementById("suggestMealsBtn");
-  suggestMealsBtn?.addEventListener("click", ()=> {
-    showMessage("AI suggestions coming in next step!", "info");
+  suggestMealsBtn?.addEventListener("click", async () => {
+    const aiArea = document.getElementById("mealsDbArea");
+    
+    if (!aiArea) {
+      showMessage("Display area not found", "error");
+      return;
+    }
+
+    // Show loading state
+    aiArea.innerHTML = "<p>🤖 Generating AI meal plan... Please wait...</p>";
+    suggestMealsBtn.disabled = true;
+    suggestMealsBtn.textContent = "Generating...";
+
+    try {
+      // Get user profile
+      const profile = await getUserProfile();
+      
+      if (!profile) {
+        showMessage("Please complete your profile first", "error");
+        aiArea.innerHTML = "<p>Please fill out your profile information to get personalized meal suggestions.</p>";
+        return;
+      }
+
+      // Generate meal plan using AI
+      const mealPlan = await generateMealPlan(profile);
+      
+      // Display the AI-generated meal plan
+      displayMealPlan("mealsDbArea", mealPlan);
+      showMessage("AI meal plan generated!", "success");
+      
+    } catch (error) {
+      console.error('AI generation error:', error);
+      aiArea.innerHTML = "<p>❌ Failed to generate meal plan. Please check your API key in js/ai.js</p>";
+    } finally {
+      // Re-enable button
+      suggestMealsBtn.disabled = false;
+      suggestMealsBtn.textContent = "Suggest Meals";
+    }
   });
 
   // ---------- LOGOUT ----------
