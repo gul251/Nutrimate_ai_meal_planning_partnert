@@ -48,5 +48,64 @@
   </div>
 
   </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
+  <!-- Firebase Configuration -->
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    // Redirect if already logged in
+    redirectIfAuthenticated();
+
+    // Handle signup form submission
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Collect form data
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const weight = document.getElementById('weight').value;
+      const goal = document.getElementById('goal').value;
+
+      // Collect selected food types from checkboxes
+      const foodTypeCheckboxes = document.querySelectorAll('input[name="foodType"]:checked');
+      const foodTypes = Array.from(foodTypeCheckboxes).map(cb => cb.value);
+
+      // Validate that at least one food type is selected
+      if (foodTypes.length === 0) {
+        showMessage("Please select at least one food type", "error");
+        return;
+      }
+
+      // Get button and show loading state
+      const submitBtn = document.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Creating Account...';
+
+      try {
+        // Call signUp function from auth.js
+        await signUp(email, password, {
+          name: name,
+          weight: weight,
+          goal: goal,
+          foodTypes: foodTypes
+        });
+        // Success handled in auth.js (shows message and redirects)
+      } catch (error) {
+        // Error handled in auth.js (shows message)
+        console.error('Signup failed:', error);
+      } finally {
+        // Re-enable button
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Create Account';
+      }
+    });
+  </script>
 </body>
 </html>
