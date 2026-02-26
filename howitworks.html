@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NutriMate — Dashboard</title>
+  <meta name="description" content="NutriMate dashboard mock — AI meal planning portfolio page">
+  <!-- Link to external CSS (save style.css separately) -->
+  <link rel="stylesheet" href="dashboardstyle.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #f9fafb;
+      margin: 0;
+      padding: 0;
+    }
+
+    .how-container {
+      max-width: 900px;
+      margin: 60px auto;
+      padding: 20px;
+    }
+
+    .how-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .how-header h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    .how-header p {
+      color: #555;
+      font-size: 16px;
+    }
+
+    .steps {
+      position: relative;
+      margin-left: 40px;
+    }
+
+    .steps::before {
+      content: '';
+      position: absolute;
+      left: 20px;
+      top: 0;
+      width: 2px;
+      height: 100%;
+      background: #22c55e;
+    }
+
+    .step {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      background: #22c55e;
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 16px;
+      z-index: 1;
+    }
+
+    .step-content {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+      flex: 1;
+    }
+
+    .step-content h3 {
+      margin: 0 0 8px;
+      font-size: 20px;
+    }
+
+    .step-content p {
+      margin: 0;
+      color: #555;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 600px) {
+      .steps {
+        margin-left: 20px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div class="container-body">
+
+<div class="news">
+<span>Nutrimate Foods.</span>
+      <span>Healthy & Vegeterian.</span>
+      <span>Free Delivery All Over Pakistan.</span>
+</div>
+
+<header class="header">
+<div class="logo">
+    <h3>NutriMate</h3>
+</div>
+<navbar class="nav">
+           <ul>
+
+  <li><a href="dashboardd.html">Home</a></li>
+  <li><a href="howitworks.html">How It Works</a></li>
+  <li><a href="#mealplans">Meal Plans</a></li>
+  <li><a href="#aiplans">AI Planner</a></li>
+  <li><a href="#goals">Goals</a></li>
+  <li><a href="#footer">Contact</a></li>
+            </ul>
+</navbar>
+<div class="button">
+    <button id="loginBtn" class="login" onclick="window.location.href='login.html'">Login</button>
+    <button   id="logout" class="loginout" onclick="window.location.href='welcome.html'">Logout</button>
+</div>
+</header>
+
+<div class="sidebar-container">
+  <div class="hamburger" id="menuBtn">
+    &#9776; <!-- three bars -->
+  </div>
+
+  <div class="sidebar-menu" id="sidebarMenu">
+    <a href="dashboardd.html">Home</a>
+    <a href="#mealplans">Meal Plans</a>
+    <a href="#aiplans">AI Planner</a>
+    <a href="#goals">Goals</a>
+    <a href="#footer">Contact</a>
+    <a href="#profile">Profile</a>
+    <a href="login.html">Logout</a>
+  </div>
+</div>
+
+
+  <div class="how-container">
+
+    <div class="how-header">
+      <h1>How NutriMate Works</h1>
+      <p>Simple steps to plan meals and track your health easily</p>
+    </div>
+
+    <div class="steps">
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3>Create Your Profile</h3>
+          <p>
+            Enter your basic details such as age, height, weight, activity level,
+            and diet preference. This helps NutriMate understand your body needs.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3>Analyze Health Data</h3>
+          <p>
+            NutriMate analyzes your information to calculate calories,
+            protein needs, and overall nutrition requirements.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3>Get Personalized Meal Plans</h3>
+          <p>
+            Based on your goals, NutriMate suggests daily meal plans
+            that match your calorie and diet targets.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h3>Track Daily Meals</h3>
+          <p>
+            Add your meals for breakfast, lunch, dinner, or snacks
+            and track calories, protein, and cost in one place.
+          </p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">5</div>
+        <div class="step-content">
+          <h3>Monitor Progress</h3>
+          <p>
+            Record your weight and view progress over time to stay
+            motivated and consistent with your health goals.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+<footer class="footer" id="footer">
+ <div class="footer-top">
+    <h3>Nutri<white class="white">Mate</white></h3>
+
+  <div class="quicklinks">
+   <ul>
+
+  <li><a href="dashboardd.html">Home</a></li>
+  <li><a href="howitworks.html">How It Works</a></li>
+  <li><a href="#mealplans">Meal Plans</a></li>
+  <li><a href="#aiplans">AI Planner</a></li>
+  <li><a href="#goals">Goals</a></li>
+  <li><a href="#footer">Contact</a></li>
+            </ul>
+  </div>
+
+  <div class="socialmedia-icons">
+  <a href="#"><i class="fa-brands fa-tiktok"></i>Nutrimate</a> <br>
+  <a href="#"><i class="fa-brands fa-instagram"></i>Nutrimate</a> <br>
+  <a href="#"><i class="fa-brands fa-facebook"></i>Nutrimate</a> <br>
+  <a href="#"><i class="fa-brands fa-whatsapp"></i>nutrimate</a> <br>
+  <a href="mailto:nutrimate@gmail.com"><i class="fa-solid fa-envelope"></i>nutrimate@gmail.com</a>
+ </div>
+
+<div class="footer-contact">
+  <p><b>Phone No:</b>+92367895467</p>
+  <p><b>Email:</b>nutrimate@gmail.com</p>
+ </div>
+
+ 
+       </div>
+      <div class="links">
+        <h4>© 2025 NutriMate</h4>
+        <a href="#">Privacy Policy</a> |
+        <a href="#">Terms </a> |
+        <a href="#">Contact</a>
+      </div>
+     
+    </footer>
+
+  </div>  
+</body>
+<!-- Link to external JS (save script.js separately) -->
+ <script src="dashboard.js"></script>
+</html>
+

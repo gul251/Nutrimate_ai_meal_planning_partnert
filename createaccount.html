@@ -1,0 +1,165 @@
+         <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account - NutriMate</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<style>
+          /*     primary:#0D9488
+       secondary:#A3E635 
+       accent:#F8FAFC
+       text:#0F172A
+    */
+    body {
+  font-family: 'roboto', sans-serif;
+  background: #F8FAFC ;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+ color: #0F172A;
+}
+.container{
+ 
+
+     margin-bottom: 30px;
+    margin-top: 30px;
+   display: flex;
+}
+.register-container {
+   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border-top-left-radius: 30px;
+   border-bottom-left-radius: 30px;
+   margin-bottom: 30px;
+    margin-top: 350px;
+    flex:1;
+  background: white;
+  padding: 30px;
+ 
+  width: 550px;
+  
+}
+.register-container h2{
+  color: #0D9488;
+}
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.form label{
+  font-size: 14px;
+}
+.form  input{
+  width:90%;
+  height:10px;
+  font-size: 14px;
+}
+.form  input option{
+   font-size: 14px;
+}
+
+.form p{
+  font-size: 14px;
+}
+.form input{
+  font-size: 16px;
+}
+input, select {
+    border: 1px solid #A3E635;
+  width: 100%;
+  padding: 8px;
+  margin: 8px 0;
+ 
+  border-radius: 5px;
+}
+ input [type="checkbox"]{
+  font-size: 14px;
+  padding-bottom: 10px;
+}
+button {
+     
+  width: 100%;
+  padding: 10px;
+  background: #A3E635;
+  color: #F8FAFC;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.form  p a{
+  text-decoration: none;
+  list-style: none;
+  color: #0D9488;
+}
+button:hover {
+  background:#0D9488;
+}
+.form  p a:hover{
+  color: #A3E635;
+}
+.register-image{
+   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+   border-top-right-radius: 30px;
+   border-bottom-right-radius: 30px;
+  margin-top: 350px;
+  margin-bottom: 30px;
+  flex: 1;
+  background-color: #0D9488;
+ 
+  overflow: hidden;
+
+  width: 200px;
+ 
+}
+.register-image img{height: 100%;
+  width:400px;
+  object-fit: cover;
+}
+
+</style>
+<body>
+    <div class="container">
+  <div class="register-container">
+    <h2>Create Your NutriMate Account</h2>
+
+    <form action="register.php" method="POST" class="form">
+     
+      <label>Full Name:</label>
+      <input type="text" name="name" required>
+
+      <label>Email:</label>
+      <input type="email" name="email" required>
+
+        <label>Password:</label>
+      <input type="password" name="password" required>
+
+      <label>Weight (kg):</label>
+      <input type="number" name="weight" required>
+
+      <label>Goal:</label>
+      <select name="goal" required>
+        <option value="Lose Weight">Lose Weight</option>
+        <option value="Gain Muscle">Gain Muscle</option>
+        <option value="Maintain Weight">Maintain Weight</option>
+      </select>
+
+      <p>Select Food Type(s):</p>
+   
+      <label>Vegetarian</label><input type="checkbox" value="Vegetarian"><br>
+      <label>Non-Vegetarian</label><input type="checkbox" value="Non-Vegetarian">
+      <label>Vegan</label><input type="checkbox" value="Vegan">
+
+      <button type="submit">Create Account</button>
+      <p>Already have an account? <a href="login.html">Login here</a></p>
+    </form>
+  </div>
+
+  <div class="register-image">
+
+  </div>
+
+  </div>
+</body>
+</html>

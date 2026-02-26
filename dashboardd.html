@@ -1,0 +1,244 @@
+<?php
+include 'configdb.php'; // DB connection
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NutriMate — Dashboard</title>
+<link rel="stylesheet" href="dashboardstyle.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="container-body">
+
+<!-- News bar -->
+<div class="news">
+<span>Nutrimate Foods.</span>
+<span>Healthy & Vegetarian.</span>
+<span>Free Delivery All Over Pakistan.</span>
+</div>
+
+<!-- Header -->
+<header class="header">
+<div class="logo"><h3>NutriMate</h3></div>
+<navbar class="nav">
+<ul>
+<li><a href="dashboardd.php">Home</a></li>
+<li><a href="#howitworks">How It Works</a></li>
+<li><a href="#mealplans">Meal Plans</a></li>
+<li><a href="#aiplans">AI Planner</a></li>
+<li><a href="#goals">Goals</a></li>
+<li><a href="#footer">Contact</a></li>
+</ul>
+</navbar>
+<div class="button">
+<button id="loginBtn" class="login" onclick="window.location.href='login.html'">Login</button>
+<button id="logout" class="loginout" onclick="window.location.href='welcome.html'">Logout</button>
+</div>
+</header>
+
+<!-- Sidebar -->
+<div class="sidebar-container">
+<div class="hamburger" id="menuBtn">&#9776;</div>
+<div class="sidebar-menu" id="sidebarMenu">
+<a href="dashboardd.php">Home</a>
+<a href="#mealplans">Meal Plans</a>
+<a href="#aiplans">AI Planner</a>
+<a href="#goals">Goals</a>
+<a href="#footer">Contact</a>
+<a href="#profile">Profile</a>
+<a href="login.html">Logout</a>
+</div>
+</div>
+
+<!-- Main Section / Slider -->
+<section id="mainSection">
+<div class="slider">
+<img src="img1.jpeg" alt="NutriMate 1" class="active">
+<img src="img2.jpeg" alt="NutriMate 2">
+<img src="img3.jpeg" alt="NutriMate 3">
+<img src="img4.jpeg" alt="NutriMate 4">
+</div>
+<div class="dots">
+<span class="dot active"></span>
+<span class="dot"></span>
+<span class="dot"></span>
+<span class="dot"></span>
+</div>
+<div class="hero">
+<div class="wrap">
+<div class="text">
+<h1><span class="white">Nutrimate</span> — AI Diet Planner</h1>
+<h2>Eat Smarter. Personalized plans saved to your profile.</h2>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Main Grid -->
+<main class="container grid cols-3" style="grid-template-columns:2fr 1fr;">
+
+<!-- LEFT: Meal Planner -->
+<section class="card" style="min-height:400px" id="mealplans">
+<h3>Daily Planner & Meals</h3>
+<div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px">
+<div style="min-width:220px;">
+<label>Selected Date</label>
+<input type="date" id="planDate">
+</div>
+<div style="flex:1;min-width:120px">
+<label>Meal Slot</label>
+<select id="mealSlot">
+<option value="breakfast">Breakfast</option>
+<option value="lunch">Lunch</option>
+<option value="dinner">Dinner</option>
+<option value="snack">Snack</option>
+</select>
+</div>
+<div style="min-width:160px">
+<label>Search / Add Meal</label>
+<div class="row"><input type="text" id="searchMeal" placeholder="Search or type new meal"><button id="addCustomMealBtn">Add</button></div>
+</div>
+</div>
+
+<div class="card" style="padding:10px;margin-bottom:12px">
+<strong>Today's Meals</strong>
+<div id="todayMeals" style="margin-top:10px"></div>
+<div style="margin-top:12px" class="flex">
+<div class="pill">Total Calories: <span id="totalCals">0</span></div>
+<div class="pill">Protein: <span id="totalProtein">0</span> g</div>
+<div class="pill">Estimated Cost: Rs <span id="totalCost">0</span></div>
+<button id="clearDayBtn" style="margin-left:auto;background:#A3E635">Clear Day</button>
+</div>
+</div>
+
+<div>
+<h3>AI Suggested Meals</h3>
+<div class="meal-list card" id="aiSuggestions"></div>
+</div>
+</section>
+
+<!-- RIGHT: Profile / Goals / Favorites / Grocery / Progress -->
+<aside style="display:grid;gap:12px" id="profile">
+
+<!-- Profile -->
+<div class="card">
+<h3>Profile</h3>
+<label>Full Name</label>
+<input id="name" type="text" placeholder="Your name">
+<label>Age</label>
+<input id="age" type="number" min="5" max="120">
+<label>Height (cm)</label>
+<input id="height" type="number">
+<label>Weight (kg)</label>
+<input id="weight" type="number">
+<label>Activity Level</label>
+<select id="activity">
+<option value="sedentary">Sedentary</option>
+<option value="light">Light</option>
+<option value="moderate">Moderate</option>
+<option value="active">Active</option>
+</select>
+<label>Diet Type</label>
+<select id="dietType">
+<option value="omnivore">Omnivore</option>
+<option value="vegetarian">Vegetarian</option>
+<option value="vegan">Vegan</option>
+<option value="keto">Keto</option>
+</select>
+<div style="display:flex;gap:8px;margin-top:10px">
+<button id="calcGoalBtn">Calculate Goals</button>
+<button id="loadBtn" style="background:#A3E635">Load</button>
+</div>
+</div>
+
+<!-- Goals -->
+<div class="card" id="goals">
+<h3>Goals & Targets</h3>
+<label>Goal Type</label>
+<select id="goalType">
+<option value="maintain">Maintain</option>
+<option value="loss">Weight Loss</option>
+<option value="gain">Weight Gain</option>
+</select>
+<label>Daily Calorie Target</label>
+<input id="calTarget" type="number">
+<label>Protein Target (g)</label>
+<input id="proteinTarget" type="number">
+<div style="display:flex;gap:8px;margin-top:10px">
+<button id="saveGoalsBtn">Save Goals</button>
+<button id="suggestMealsBtn" style="background:#A3E635">Suggest Meals</button>
+</div>
+</div>
+
+<!-- Favorites -->
+<div class="card">
+<h3>Favorites</h3>
+<div id="favoritesList" style="max-height:200px;overflow:auto"></div>
+</div>
+
+<!-- Grocery -->
+<div class="card">
+<h3>Grocery List</h3>
+<div id="groceryList"></div>
+<div style="margin-top:8px" class="flex">
+<button id="generateGrocery">Generate from Today</button>
+<button id="clearGrocery" style="background:#A3E635">Clear</button>
+</div>
+</div>
+
+<!-- Progress -->
+<div class="card">
+<h3>Progress</h3>
+<label>Record Weight (kg)</label>
+<div class="row"><input id="recordWeight" type="number"><button id="saveWeight">Save</button></div>
+<canvas id="weightChart" width="300" height="120" style="margin-top:8px"></canvas>
+</div>
+
+</aside>
+</main>
+
+<!-- Footer -->
+<footer class="footer" id="footer">
+<div class="footer-top">
+<h3>Nutri<white class="white">Mate</white></h3>
+<div class="quicklinks">
+<ul>
+<li><a href="dashboardd.php">Home</a></li>
+<li><a href="#howitworks">How It Works</a></li>
+<li><a href="#mealplans">Meal Plans</a></li>
+<li><a href="#aiplans">AI Planner</a></li>
+<li><a href="#goals">Goals</a></li>
+<li><a href="#footer">Contact</a></li>
+</ul>
+</div>
+<div class="socialmedia-icons">
+<a href="#"><i class="fa-brands fa-tiktok"></i>Nutrimate</a><br>
+<a href="#"><i class="fa-brands fa-instagram"></i>Nutrimate</a><br>
+<a href="#"><i class="fa-brands fa-facebook"></i>Nutrimate</a><br>
+<a href="#"><i class="fa-brands fa-whatsapp"></i>nutrimate</a><br>
+<a href="mailto:nutrimate@gmail.com"><i class="fa-solid fa-envelope"></i>nutrimate@gmail.com</a>
+</div>
+<div class="footer-contact">
+<p><b>Phone No:</b>+92367895467</p>
+<p><b>Email:</b>nutrimate@gmail.com</p>
+</div>
+</div>
+<div class="links">
+<h4>© 2025 NutriMate</h4>
+<a href="#">Privacy Policy</a> |
+<a href="#">Terms</a> |
+<a href="#">Contact</a>
+</div>
+</footer>
+
+</div>
+
+
+</body>
+</html>
