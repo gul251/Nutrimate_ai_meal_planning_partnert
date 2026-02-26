@@ -35,10 +35,10 @@ Nutrimate_ai_meal_planning_partnert/
 │   └── dashboardstyle.css      # Dashboard-specific styles
 │
 ├── js/
-│   ├── config.js               # Firebase configuration
+│   ├── config.example.js       # Firebase config template (copy to config.js)
+│   ├── ai.example.js           # AI config template (copy to ai.js)
 │   ├── auth.js                 # Authentication logic
 │   ├── database.js             # Firestore helper functions
-│   ├── ai.js                   # Gemini AI integration
 │   └── dashboard.js            # Dashboard functionality
 │
 ├── assets/
@@ -111,7 +111,14 @@ cd Nutrimate_ai_meal_planning_partnert
    - Register app as "NutriMate Web"
    - Copy the `firebaseConfig` object
 
-6. **Update Configuration File**
+6. **Create Configuration File**
+   - Copy `js/config.example.js` and rename it to `js/config.js`:
+   ```bash
+   # PowerShell
+   Copy-Item js\config.example.js js\config.js
+   
+   # Or just duplicate the file manually
+   ```
    - Open `js/config.js`
    - Replace the placeholder values with your actual Firebase config:
    ```javascript
@@ -132,7 +139,14 @@ cd Nutrimate_ai_meal_planning_partnert
    - Click "Get API Key" → "Create API key in new project"
    - Copy the API key
 
-2. **Update AI Configuration**
+2. **Create AI Configuration File**
+   - Copy `js/ai.example.js` and rename it to `js/ai.js`:
+   ```bash
+   # PowerShell
+   Copy-Item js\ai.example.js js\ai.js
+   
+   # Or just duplicate the file manually
+   ```
    - Open `js/ai.js`
    - Replace the placeholder:
    ```javascript
