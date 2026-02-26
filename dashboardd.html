@@ -1,6 +1,3 @@
-<?php
-include 'configdb.php'; // DB connection
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -239,6 +236,18 @@ include 'configdb.php'; // DB connection
 
 </div>
 
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+<!-- Firebase Configuration -->
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/database.js"></script>
+
+<!-- Dashboard Logic -->
+<script src="dashboard.js"></script>
 
 </body>
 </html>

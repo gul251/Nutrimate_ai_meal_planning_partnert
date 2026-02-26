@@ -1,7 +1,9 @@
-// ================== Nutrimate JS - SQL READY ==================
-document.addEventListener("DOMContentLoaded", () => {
+// ================== NutriMate Dashboard - Firebase Integration ==================
+document.addEventListener("DOMContentLoaded", async () => {
 
-  const userId = 1; // demo user ID, login system ke saath dynamic hoga
+  // Check authentication - redirect to login if not authenticated
+  const user = await checkAuth(true);
+  if (!user) return; // Will redirect if no user
 
   // ---------- MENU BAR ----------
   const menuBtn = document.getElementById("menuBtn");
@@ -30,36 +32,41 @@ document.addEventListener("DOMContentLoaded", () => {
   const saveProfileBtn = document.getElementById("calcGoalBtn");
 
   async function loadProfile() {
-    const res = await fetch(`phpdbdashboardd.php?action=load_profile&user_id=${userId}`);
-    const data = await res.json();
-    document.getElementById('name').value = data.name;
-    document.getElementById('age').value = data.age;
-    document.getElementById('height').value = data.height;
-    document.getElementById('weight').value = data.weight;
-    document.getElementById('activity').value = data.activity;
-    document.getElementById('dietType').value = data.diet;
+    try {
+      const profile = await getUserProfile();
+      if (profile) {
+        document.getElementById('name').value = profile.name || '';
+        document.getElementById('age').value = profile.age || '';
+        document.getElementById('height').value = profile.height || '';
+        document.getElementById('weight').value = profile.weight || '';
+        document.getElementById('activity').value = profile.activity || '';
+        document.getElementById('dietType').value = profile.diet || profile.goal || '';
+      }
+    } catch (error) {
+      console.error('Error loading profile:', error);
+    }
   }
+
+  // Auto-load profile on page load
+  loadProfile();
 
   loadBtn?.addEventListener("click", loadProfile);
 
   saveProfileBtn?.addEventListener("click", async () => {
-    const payload = {
-      user_id: userId,
-      name: document.getElementById('name').value,
-      age: document.getElementById('age').value,
-      height: document.getElementById('height').value,
-      weight: document.getElementById('weight').value,
-      activity: document.getElementById('activity').value,
-      diet: document.getElementById('dietType').value,
-      gender: 'female'
-    };
-    const res = await fetch('phpdbdashboardd.php?action=save_profile', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(payload)
-    });
-    const data = await res.json();
-    alert("Profile saved! User ID: " + data.user_id);
+    try {
+      const profileData = {
+        name: document.getElementById('name').value,
+        age: parseInt(document.getElementById('age').value) || 0,
+        height: parseFloat(document.getElementById('height').value) || 0,
+        weight: parseFloat(document.getElementById('weight').value) || 0,
+        activity: document.getElementById('activity').value,
+        diet: document.getElementById('dietType').value
+      };
+      
+      await updateUserProfile(profileData);
+    } catch (error) {
+      console.error('Error saving profile:', error);
+    }
   });
 
   // ---------- MEALS DATABASE ----------
@@ -67,55 +74,75 @@ document.addEventListener("DOMContentLoaded", () => {
   const mealsDbArea = document.getElementById("mealsDbArea");
 
   async function fetchMeals() {
-    const res = await fetch('phpdbdashboardd.php?action=fetch_meals');
-    const meals = await res.json();
-    mealsDbArea.innerHTML = "";
-    meals.forEach(meal => {
-      const div = document.createElement("div");
-      div.classList.add("meal-card");
-      div.innerHTML = `
-        <strong>${meal.name}</strong> | Cal: ${meal.cal} | Protein: ${meal.protein}g | Rs ${meal.price}
-        <button class="deleteMealBtn" data-id="${meal.id}">Delete</button>
-      `;
-      mealsDbArea.appendChild(div);
-    });
+    try {
+      const meals = await getMealPlans();
+      mealsDbArea.innerHTML = "";
+      
+      if (meals.length === 0) {
+        mealsDbArea.innerHTML = "<p>No meals added yet. Add your first meal!</p>";
+        return;
+      }
 
-    // Delete meal
-    document.querySelectorAll(".deleteMealBtn").forEach(btn => {
-      btn.addEventListener("click", async () => {
-        const id = btn.dataset.id;
-        await fetch('phpdbdashboardd.php?action=delete_meal', {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({meal_id: id})
-        });
-        fetchMeals();
+      meals.forEach(meal => {
+        const div = document.createElement("div");
+        div.classList.add("meal-card");
+        div.innerHTML = `
+          <strong>${meal.name || 'Unnamed Meal'}</strong> | 
+          Cal: ${meal.calories || 0} | 
+          Protein: ${meal.protein || 0}g | 
+          ${meal.date || 'No date'}
+          <button class="deleteMealBtn" data-id="${meal.id}">Delete</button>
+        `;
+        mealsDbArea.appendChild(div);
       });
-    });
+
+      // Delete meal
+      document.querySelectorAll(".deleteMealBtn").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const id = btn.dataset.id;
+          if (confirm('Delete this meal?')) {
+            await deleteMealPlan(id);
+            fetchMeals();
+          }
+        });
+      });
+    } catch (error) {
+      console.error('Error fetching meals:', error);
+      mealsDbArea.innerHTML = "<p>Error loading meals</p>";
+    }
   }
 
   addMealDb?.addEventListener("click", async () => {
     const name = document.getElementById("dbName").value;
-    const cal = document.getElementById("dbCals").value;
+    const calories = document.getElementById("dbCals").value;
     const protein = document.getElementById("dbProtein").value;
-    const price = document.getElementById("dbPrice").value;
-    const img = ""; // optional img path
 
-    if(!name) return alert("Meal name required");
+    if(!name) {
+      showMessage("Meal name required", "error");
+      return;
+    }
 
-    const payload = {name, cal, protein, price, img};
+    const mealData = {
+      name,
+      calories: parseInt(calories) || 0,
+      protein: parseInt(protein) || 0,
+      date: new Date().toISOString().split('T')[0],
+      mealType: 'custom'
+    };
 
-    const res = await fetch('phpdbdashboardd.php?action=add_meal',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify(payload)
-    });
-    const data = await res.json();
-    fetchMeals();
-    document.getElementById("dbName").value="";
-    document.getElementById("dbCals").value="";
-    document.getElementById("dbProtein").value="";
-    document.getElementById("dbPrice").value="";
+    try {
+      await addMealPlan(mealData);
+      fetchMeals();
+      
+      // Clear form
+      document.getElementById("dbName").value="";
+      document.getElementById("dbCals").value="";
+      document.getElementById("dbProtein").value="";
+      
+      showMessage("Meal added successfully!", "success");
+    } catch (error) {
+      console.error('Error adding meal:', error);
+    }
   });
 
   fetchMeals(); // initial load
@@ -123,29 +150,66 @@ document.addEventListener("DOMContentLoaded", () => {
   // ---------- GOALS ----------
   const saveGoalsBtn = document.getElementById("saveGoalsBtn");
   saveGoalsBtn?.addEventListener("click", async () => {
-    alert("SQL integration for goals ready!");
+    try {
+      const goals = {
+        calorieTarget: parseInt(document.getElementById("calorieTarget")?.value) || 0,
+        proteinTarget: parseInt(document.getElementById("proteinTarget")?.value) || 0
+      };
+      await saveGoals(goals);
+    } catch (error) {
+      console.error('Error saving goals:', error);
+    }
   });
 
   // ---------- DAY PLANS ----------
   const clearDayBtn = document.getElementById("clearDayBtn");
-  clearDayBtn?.addEventListener("click", () => {
-    if(confirm("Clear all meals for the day?")){
-      alert("Day plans cleared in SQL");
+  clearDayBtn?.addEventListener("click", async () => {
+    if(confirm("Clear all meals for today?")){
+      const today = new Date().toISOString().split('T')[0];
+      const meals = await getMealPlans(today);
+      for (const meal of meals) {
+        await deleteMealPlan(meal.id);
+      }
+      fetchMeals();
+      showMessage("Day cleared!", "success");
     }
   });
 
   // ---------- GROCERY ----------
   const generateGrocery = document.getElementById("generateGrocery");
   const clearGrocery = document.getElementById("clearGrocery");
-  generateGrocery?.addEventListener("click", ()=> alert("Grocery generated via SQL"));
-  clearGrocery?.addEventListener("click", ()=> alert("Grocery cleared via SQL"));
+  generateGrocery?.addEventListener("click", ()=> {
+    showMessage("Grocery list generation coming soon!", "info");
+  });
+  clearGrocery?.addEventListener("click", ()=> {
+    showMessage("Grocery list cleared", "info");
+  });
 
   // ---------- PROGRESS ----------
   const saveWeight = document.getElementById("saveWeight");
-  saveWeight?.addEventListener("click", ()=> alert("Weight saved via SQL"));
+  saveWeight?.addEventListener("click", async ()=> {
+    const weight = document.getElementById("weight").value;
+    const date = new Date().toISOString().split('T')[0];
+    if (weight) {
+      try {
+        await addWeightLog(weight, date);
+      } catch (error) {
+        console.error('Error saving weight:', error);
+      }
+    }
+  });
 
   // ---------- AI SUGGESTIONS ----------
   const suggestMealsBtn = document.getElementById("suggestMealsBtn");
-  suggestMealsBtn?.addEventListener("click", ()=> alert("AI suggestions fetched from SQL"));
+  suggestMealsBtn?.addEventListener("click", ()=> {
+    showMessage("AI suggestions coming in next step!", "info");
+  });
+
+  // ---------- LOGOUT ----------
+  // Add logout button handler if it exists
+  const logoutBtn = document.getElementById("logoutBtn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", logout);
+  }
 
 });
