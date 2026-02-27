@@ -5,268 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login Page</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-        /*     primary:#0D9488
-       secondary:#A3E635 
-       accent:#F8FAFC
-       text:#0F172A
-
-*/
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'roboto', sans-serif;
-    }
-
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      background-color: #F8FAFC;
-      color:#0F172A;
-    }
-
-    .container {
-       
-      display: flex;
-      flex-direction: row; 
-      width: 750px;
-      height: 450px;
-      overflow: hidden;
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-      background: #0D9488;
-    }
-
-    .login-section {
-      flex: 2;
-      padding: 50px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      background-color: #F8FAFC;
-    }
-
-    .login-section h2 {
-      font-size: 25px;
-      font-weight: 700;
-     text-align: center;
-      margin-bottom: 10px;
-    font-family: roboto;
-      color: #0D9488;
-    }
-
-    .login-section p {
-      font-size: 12px;
-      color: #4b5563;
-      margin-bottom: 15px;
-      margin-left: 20px;
-      margin-right: 20px;
-      font-style: italic;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      margin-bottom: 15px;
-      margin-left: 20px;
-      margin-right: 20px;
-    }
-
-    .form-group label {
-      font-size: 14px;
-      color: #A3E635;
-      font-weight: 500;
-    }
-      .input-box {
-      position: relative;
-    }
-
-    .form-group input {
-      height: 35px;
-      padding: 12px;
-      border: 1px solid #A3E635;
-      border-radius: 8px;
-      font-size: 14px;
-      outline: none;
-      transition: 0.3s;
-    }
-
-    .form-group input:focus {
-      border-color: #2e7d32;
-      box-shadow: 0 0 4px rgba(46, 125, 50, 0.3);
-    }
-
-    .password-box {
-      position: relative;
-    }
-
-    .toggle-password {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      cursor: pointer;
-    }
-
-    .options {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 13px;
-      margin-bottom: 20px;
-      margin-left: 20px;
-      margin-right: 20px;
-    }
-
-    .options a {
-      color: #0D9488;
-      text-decoration: none;
-    }
-
-    
-    .login-btn {
-      width: 95%;
-      padding: 12px;
-      background-color: #A3E635;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-      margin-left: 10px;
-    
-    }
-
-    .login-btn:hover {
-      background-color: #0D9488;
-    }
-
-    .social-login {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 10px;
-    
-    }
-
-    .social-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      padding: 10px;
-      border-radius: 8px;
-      font-weight: 500;
-      border: 1px solid #ddd;
-      cursor: pointer;
-      transition: 0.3s;
-      margin-left: 10px;
-      margin-right: 10px;
-    }
-
-    .social-btn img {
-      width: 18px;
-      height: 18px;
-    }
-
-    .google-btn:hover {
-      background-color: #f5f5f5;
-    }
-
-    .facebook-btn {
-      background-color: #1877f2;
-      color: white;
-      border: none;
-    }
-
-    .facebook-btn:hover {
-      background-color: #0e5ac9;
-    }
-
-    .signup {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 14px;
-    }
-
-    .signup a {
-      color: #0D9488;
-      text-decoration: none;
-      font-weight: 500;
-    }
-  .signup a:hover{
-    color:#A3E635
-  }
-    .quote {
-      margin-top: 8px;
-      margin-bottom: 60px;
-      text-align: center;
-      color: #4b5563;
-      font-style: italic;
-      font-size: 13px;
-    }
-
-    .info-section {
-      flex: 1;
-      background-color: #0D9488;
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 50px;
-      text-align: center;
-    }
-
-    .info-section .logo {
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-
-    .info-section h3 {
-      font-size: 20px;
-      font-weight: 600;
-      margin-top: 10px;
-      
-    }
-
-    .info-section p {
-      max-width: 320px;
-      margin-top: 10px;
-      font-size: 14px;
-      color: #e8f5e9;
-      font-family: bebas,sans-serif;
-    }
-
-    .info-section img {
-      animation: rotate 1.1s linear forwards;
-      width: 250px;
-      height: 250px;
-     
-      border-radius: 50%;
-      margin-bottom: 15px;
-      border: 4px solid #A3E635 ;
-    }
-      /* Animation keyframes */
-  @keyframes rotate {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  </style>
+  <link rel="stylesheet" href="css/global.css">
 </head>
 
 <body>
-  <div class="container">
+  <div class="login-container">
     <div class="login-section">
       <h2>Login to Your Dashboard</h2>
       <form id="loginForm">
@@ -315,11 +58,49 @@
     </div>
   </div>
 
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
+  <!-- Firebase Configuration -->
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+
   <script>
+    // Redirect if already logged in
+    redirectIfAuthenticated();
+
+    // Toggle password visibility
     function togglePassword() {
       const pass = document.getElementById("password");
       pass.type = pass.type === "password" ? "text" : "password";
     }
+
+    // Handle login form submission
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const loginBtn = document.querySelector('.login-btn');
+
+      // Disable button and show loading state
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Logging in...';
+
+      try {
+        await login(email, password);
+        // Success handled in auth.js (auto-redirects)
+      } catch (error) {
+        // Error handled in auth.js (shows message)
+        console.error('Login failed:', error);
+      } finally {
+        // Re-enable button
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Login';
+      }
+    });
   </script>
 </body>
 </html>

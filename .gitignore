@@ -1,0 +1,41 @@
+# Firebase Configuration & API Keys
+js/config.js
+js/ai.js
+
+# Environment Variables
+.env
+.env.local
+
+# IDE & Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Node Modules (if using npm later)
+node_modules/
+
+# Build Files
+dist/
+build/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Temporary Files
+*.tmp
+*.temp
+.cache/
+
+# Firebase
+.firebase/
+firebase-debug.log
+firestore-debug.log

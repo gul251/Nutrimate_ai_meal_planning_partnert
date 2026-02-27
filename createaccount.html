@@ -1,155 +1,42 @@
-         <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Create Account - NutriMate</title>
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
 </head>
-<style>
-          /*     primary:#0D9488
-       secondary:#A3E635 
-       accent:#F8FAFC
-       text:#0F172A
-    */
-    body {
-  font-family: 'roboto', sans-serif;
-  background: #F8FAFC ;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
- color: #0F172A;
-}
-.container{
- 
-
-     margin-bottom: 30px;
-    margin-top: 30px;
-   display: flex;
-}
-.register-container {
-   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  border-top-left-radius: 30px;
-   border-bottom-left-radius: 30px;
-   margin-bottom: 30px;
-    margin-top: 350px;
-    flex:1;
-  background: white;
-  padding: 30px;
- 
-  width: 550px;
-  
-}
-.register-container h2{
-  color: #0D9488;
-}
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-.form label{
-  font-size: 14px;
-}
-.form  input{
-  width:90%;
-  height:10px;
-  font-size: 14px;
-}
-.form  input option{
-   font-size: 14px;
-}
-
-.form p{
-  font-size: 14px;
-}
-.form input{
-  font-size: 16px;
-}
-input, select {
-    border: 1px solid #A3E635;
-  width: 100%;
-  padding: 8px;
-  margin: 8px 0;
- 
-  border-radius: 5px;
-}
- input [type="checkbox"]{
-  font-size: 14px;
-  padding-bottom: 10px;
-}
-button {
-     
-  width: 100%;
-  padding: 10px;
-  background: #A3E635;
-  color: #F8FAFC;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.form  p a{
-  text-decoration: none;
-  list-style: none;
-  color: #0D9488;
-}
-button:hover {
-  background:#0D9488;
-}
-.form  p a:hover{
-  color: #A3E635;
-}
-.register-image{
-   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-   border-top-right-radius: 30px;
-   border-bottom-right-radius: 30px;
-  margin-top: 350px;
-  margin-bottom: 30px;
-  flex: 1;
-  background-color: #0D9488;
- 
-  overflow: hidden;
-
-  width: 200px;
- 
-}
-.register-image img{height: 100%;
-  width:400px;
-  object-fit: cover;
-}
-
-</style>
 <body>
-    <div class="container">
+  <div class="signup-container">
   <div class="register-container">
     <h2>Create Your NutriMate Account</h2>
 
-    <form action="register.php" method="POST" class="form">
+    <form id="signupForm" class="form">
      
       <label>Full Name:</label>
-      <input type="text" name="name" required>
+      <input type="text" name="name" id="name" required>
 
       <label>Email:</label>
-      <input type="email" name="email" required>
+      <input type="email" name="email" id="email" required>
 
-        <label>Password:</label>
-      <input type="password" name="password" required>
+      <label>Password:</label>
+      <input type="password" name="password" id="password" required>
 
       <label>Weight (kg):</label>
-      <input type="number" name="weight" required>
+      <input type="number" name="weight" id="weight" required>
 
       <label>Goal:</label>
-      <select name="goal" required>
+      <select name="goal" id="goal" required>
         <option value="Lose Weight">Lose Weight</option>
         <option value="Gain Muscle">Gain Muscle</option>
         <option value="Maintain Weight">Maintain Weight</option>
       </select>
 
       <p>Select Food Type(s):</p>
-   
-      <label>Vegetarian</label><input type="checkbox" value="Vegetarian"><br>
-      <label>Non-Vegetarian</label><input type="checkbox" value="Non-Vegetarian">
-      <label>Vegan</label><input type="checkbox" value="Vegan">
+      <label><input type="checkbox" name="foodType" value="Vegetarian"> Vegetarian</label><br>
+      <label><input type="checkbox" name="foodType" value="Non-Vegetarian"> Non-Vegetarian</label><br>
+      <label><input type="checkbox" name="foodType" value="Vegan"> Vegan</label>
 
       <button type="submit">Create Account</button>
       <p>Already have an account? <a href="login.html">Login here</a></p>
@@ -161,5 +48,64 @@ button:hover {
   </div>
 
   </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
+  <!-- Firebase Configuration -->
+  <script src="js/config.js"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    // Redirect if already logged in
+    redirectIfAuthenticated();
+
+    // Handle signup form submission
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Collect form data
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const weight = document.getElementById('weight').value;
+      const goal = document.getElementById('goal').value;
+
+      // Collect selected food types from checkboxes
+      const foodTypeCheckboxes = document.querySelectorAll('input[name="foodType"]:checked');
+      const foodTypes = Array.from(foodTypeCheckboxes).map(cb => cb.value);
+
+      // Validate that at least one food type is selected
+      if (foodTypes.length === 0) {
+        showMessage("Please select at least one food type", "error");
+        return;
+      }
+
+      // Get button and show loading state
+      const submitBtn = document.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Creating Account...';
+
+      try {
+        // Call signUp function from auth.js
+        await signUp(email, password, {
+          name: name,
+          weight: weight,
+          goal: goal,
+          foodTypes: foodTypes
+        });
+        // Success handled in auth.js (shows message and redirects)
+      } catch (error) {
+        // Error handled in auth.js (shows message)
+        console.error('Signup failed:', error);
+      } finally {
+        // Re-enable button
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Create Account';
+      }
+    });
+  </script>
 </body>
 </html>
