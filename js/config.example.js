@@ -12,29 +12,27 @@
 // 9. See FIREBASE_SETUP.md for detailed instructions
 // =====================================================
 
+
+
+
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY_HERE",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyDPEV2Yravnr8gxPjXW9hwDSOUtgAYOqW8",
+  authDomain: "nutrimate-ai-7e761.firebaseapp.com",
+  projectId: "nutrimate-ai-7e761",
+  storageBucket: "nutrimate-ai-7e761.firebasestorage.app",
+  messagingSenderId: "737411805388",
+  appId: "1:737411805388:web:174a47d24e13e437569269",
+  measurementId: "G-TDJ1D2LKVV"
 };
 
 // Initialize Firebase
-let app, auth, db;
-
-try {
-  app = firebase.initializeApp(firebaseConfig);
-  auth = firebase.auth();
-  db = firebase.firestore();
-  
-  console.log("✅ Firebase initialized successfully");
-} catch (error) {
-  console.error("❌ Firebase initialization error:", error);
-  alert("Firebase configuration error. Please check js/config.js");
-}
-
-// Make auth and db available globally
-window.auth = auth;
-window.db = db;
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
