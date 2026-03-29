@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login Page</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/global.css">
 </head>
 
@@ -14,14 +13,13 @@
       <h2>Login to Your Dashboard</h2>
       <form id="loginForm">
         <div class="form-group">
-          
+          <label for="email">Email</label>
           <input type="email" id="email" placeholder="Enter your email..." required>
 
-          
           <div class="password-box">
+            <label for="password">Password</label>
             <input type="password" id="password" placeholder="Enter your password..." required>
-           
-            <span class="toggle-password" onclick="togglePassword()">👁</span>
+            <span class="toggle-password" onclick="togglePassword()" aria-label="Toggle password visibility" role="button" tabindex="0">👁</span>
           </div>
         </div>
 
@@ -30,7 +28,7 @@
           <a href="#">Forgot Password?</a>
         </div>
 
-        <button type="submit" class="login-btn">Login </button>
+        <button type="submit" class="login-btn">Login</button>
 
         <div class="social-login">
           <button type="button" class="social-btn google-btn">
@@ -52,7 +50,7 @@
     </div>
     <div class="info-section">
       <div class="logo">NutriMate</div>
-      <img src="🥗 Ready to kickstart your healthy eating journey_.jpeg" alt="Healthy Food Illustration">
+      <img src="assets/images/Healthy%20lifestyle.jpeg" alt="Healthy meal planning illustration">
       <h3>Your AI Meal Planning Partner</h3>
      
     </div>
