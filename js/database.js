@@ -94,17 +94,26 @@ async function getMealPlans(date = null) {
       throw new Error("No authenticated user");
     }
 
-    let query = db.collection('users').doc(user.uid).collection('mealPlans');
+    const collectionRef = db.collection('users').doc(user.uid).collection('mealPlans');
+    let snapshot;
 
+    // Avoid where(date)+orderBy(createdAt) to prevent required composite index.
     if (date) {
-      query = query.where('date', '==', date);
+      snapshot = await collectionRef.where('date', '==', date).get();
+    } else {
+      snapshot = await collectionRef.orderBy('createdAt', 'desc').get();
     }
 
-    const snapshot = await query.orderBy('createdAt', 'desc').get();
-    
     const mealPlans = [];
     snapshot.forEach(doc => {
       mealPlans.push({ id: doc.id, ...doc.data() });
+    });
+
+    // Keep newest-first order even for date-filtered query.
+    mealPlans.sort((a, b) => {
+      const aMs = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
+      const bMs = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
+      return bMs - aMs;
     });
 
     console.log(`✅ Loaded ${mealPlans.length} meal plans`);
