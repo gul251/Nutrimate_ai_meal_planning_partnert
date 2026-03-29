@@ -16,6 +16,7 @@
 
 <body>
 <div class="container-body">
+<a class="skip-link" href="#howMain">Skip to main content</a>
 
 <div class="news">
 <span>Nutrimate Foods.</span>
@@ -61,7 +62,7 @@
 </div>
 
 
-  <main class="how-container" id="howitworks" role="main">
+  <main class="how-container" id="howMain" role="main">
 
     <section class="how-header">
       <h1>How NutriMate Works</h1>
@@ -182,8 +183,7 @@
 
   menuBtn?.addEventListener("click", () => {
     sidebarMenu?.classList.toggle("open");
-    const expanded = menuBtn.getAttribute("aria-expanded") === "true";
-    menuBtn.setAttribute("aria-expanded", expanded ? "false" : "true");
+    menuBtn.setAttribute("aria-expanded", sidebarMenu?.classList.contains("open") ? "true" : "false");
   });
 
   sidebarMenu?.querySelectorAll("a").forEach((link) => {
@@ -203,6 +203,12 @@
     const clickedInsideMenu = sidebarMenu.contains(event.target);
     const clickedToggle = menuBtn?.contains(event.target);
     if (!clickedInsideMenu && !clickedToggle) {
+      closeMenu();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
       closeMenu();
     }
   });

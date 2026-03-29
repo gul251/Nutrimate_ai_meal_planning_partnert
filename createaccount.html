@@ -7,23 +7,24 @@
   <link rel="stylesheet" href="css/global.css">
 </head>
 <body>
+  <a class="skip-link" href="#signupMain">Skip to main content</a>
   <div class="signup-container">
-  <div class="register-container">
+  <div class="register-container" id="signupMain">
     <h2>Create Your NutriMate Account</h2>
 
     <form id="signupForm" class="form">
      
       <label for="name">Full Name:</label>
-      <input type="text" name="name" id="name" required>
+      <input type="text" name="name" id="name" autocomplete="name" required>
 
       <label for="email">Email:</label>
-      <input type="email" name="email" id="email" required>
+      <input type="email" name="email" id="email" autocomplete="email" required>
 
       <label for="password">Password:</label>
-      <input type="password" name="password" id="password" required>
+      <input type="password" name="password" id="password" autocomplete="new-password" minlength="6" required>
 
       <label for="weight">Weight (kg):</label>
-      <input type="number" name="weight" id="weight" required>
+      <input type="number" name="weight" id="weight" min="1" required>
 
       <label for="goal">Goal:</label>
       <select name="goal" id="goal" required>

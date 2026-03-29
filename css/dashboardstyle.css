@@ -127,6 +127,15 @@ padding: 8px;
   color: var(--color-secondary);
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+
 .sidebar-container {
   display: none;
   z-index: 1000;
@@ -604,4 +613,14 @@ margin-right: 3%;
 }
 .links a:hover,.quicklinks ul li a:hover{
 color: var(--color-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .news span {
+    animation: none;
+  }
+
+  .slider img {
+    transition: none;
+  }
 }

@@ -14,6 +14,7 @@
 <body>
 
 <div class="container-body">
+<a class="skip-link" href="#mainContent">Skip to main content</a>
 
 <!-- News bar -->
 <div class="news">
@@ -43,7 +44,7 @@
 
 <!-- Sidebar -->
 <div class="sidebar-container">
-<div class="hamburger" id="menuBtn">&#9776;</div>
+<button class="hamburger" id="menuBtn" type="button" aria-label="Toggle navigation menu" aria-expanded="false">&#9776;</button>
 <div class="sidebar-menu" id="sidebarMenu">
 <a href="dashboardd.html">Home</a>
 <a href="#mealplans">Meal Plans</a>
@@ -80,7 +81,7 @@
 </section>
 
 <!-- Main Grid -->
-<main class="container grid cols-3 dashboard-layout">
+<main class="container grid cols-3 dashboard-layout" id="mainContent">
 
 <!-- LEFT: Meal Planner -->
 <section class="card planner-section" id="mealplans">

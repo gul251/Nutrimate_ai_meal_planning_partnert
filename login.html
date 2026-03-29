@@ -8,18 +8,19 @@
 </head>
 
 <body>
+  <a class="skip-link" href="#loginMain">Skip to main content</a>
   <div class="login-container">
-    <div class="login-section">
+    <div class="login-section" id="loginMain">
       <h2>Login to Your Dashboard</h2>
       <form id="loginForm">
         <div class="form-group">
           <label for="email">Email</label>
-          <input type="email" id="email" placeholder="Enter your email..." required>
+          <input type="email" id="email" placeholder="Enter your email..." autocomplete="email" required>
 
           <div class="password-box">
             <label for="password">Password</label>
-            <input type="password" id="password" placeholder="Enter your password..." required>
-            <span class="toggle-password" onclick="togglePassword()" aria-label="Toggle password visibility" role="button" tabindex="0">👁</span>
+            <input type="password" id="password" placeholder="Enter your password..." autocomplete="current-password" required>
+            <button type="button" class="toggle-password" onclick="togglePassword()" aria-label="Show password" aria-pressed="false">Show</button>
           </div>
         </div>
 
@@ -72,7 +73,14 @@
     // Toggle password visibility
     function togglePassword() {
       const pass = document.getElementById("password");
-      pass.type = pass.type === "password" ? "text" : "password";
+      const toggleBtn = document.querySelector('.toggle-password');
+      const showing = pass.type !== "password";
+      pass.type = showing ? "password" : "text";
+      if (toggleBtn) {
+        toggleBtn.textContent = showing ? 'Show' : 'Hide';
+        toggleBtn.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+        toggleBtn.setAttribute('aria-pressed', showing ? 'false' : 'true');
+      }
     }
 
     // Handle login form submission

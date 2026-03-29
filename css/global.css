@@ -67,6 +67,32 @@ button:disabled {
   cursor: not-allowed;
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--color-secondary);
+  outline-offset: 2px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -48px;
+  background: var(--color-text);
+  color: var(--color-accent);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  z-index: 10000;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 12px;
+}
+
 /* ========== LOGIN PAGE STYLES ========== */
 .login-container {
   display: flex;
@@ -157,6 +183,12 @@ button:disabled {
   top: 35px;
   transform: translateY(-50%);
   cursor: pointer;
+  background: transparent;
+  border: 0;
+  color: var(--color-primary);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 4px;
 }
 
 .options {
@@ -567,6 +599,17 @@ button:disabled {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
