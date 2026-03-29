@@ -29,11 +29,18 @@
 }
 
 body {
+  display: block;
   font-family: var(--font-family-base);
   margin: 0;
+  min-height: 100vh;
   background: var(--color-accent);
   color: var(--color-text);
   line-height: 1.5;
+}
+
+.container-body {
+  width: 100%;
+  min-height: 100vh;
 }
 .news{
     width: 100%;
@@ -42,18 +49,16 @@ body {
   padding-top: 5px;
   display: flex;
    justify-content: center;
+   align-items: center;
+   gap: 18px;
     background: var(--color-secondary);
-    
+
 }
 .news span{
-  display: inline-flex;
-  gap: 10px;
+  display: inline-block;
   white-space: nowrap;
-  animation: moveRight 6s linear infinite;
     color: var(--color-accent);
-    align-items: center;
-
-    background: var(--color-secondary);
+    font-weight: 500;
 }
 /* Animation */
 @keyframes moveRight {
@@ -335,7 +340,7 @@ textarea:focus-visible {
 }
 
 .planner-section {
-  min-height: 400px;
+  min-height: 0;
 }
 
 .planner-controls {
@@ -504,6 +509,8 @@ textarea:focus-visible {
   .news {
     justify-content: flex-start;
     padding-left: 12px;
+    gap: 12px;
+    overflow-x: auto;
   }
 
   .footer-top {
@@ -537,6 +544,7 @@ textarea:focus-visible {
   padding-bottom: 20px;
   background: var(--color-primary);
   color: var(--color-accent);
+  margin-top: 20px;
 }
 
 .footer h3{
@@ -553,6 +561,8 @@ textarea:focus-visible {
   width: 100%;
   display: flex;
   justify-content: space-around;
+  align-items: flex-start;
+  gap: 18px;
   margin-bottom: 20px;
 }
 .quicklinks{
@@ -573,6 +583,10 @@ font-size: 15px;
 .footer-contact{
 flex: 1;
 margin-right: 3%;
+}
+
+.footer-contact p {
+  margin-bottom: 8px;
 }
 .socialmedia-icons{
  padding-bottom: 20px;
@@ -596,10 +610,15 @@ margin-right: 3%;
 .links{
   width: 100%;          /* NEW */
   padding-top: 5px; 
+  padding-bottom: 6px;
   flex: 1;
    border-top: 1px solid #A3E635;
    text-decoration: none;
   text-align: center;
+}
+
+.links h4 {
+  margin-bottom: 6px;
 }
 .links p{
   font-size: 16px;
