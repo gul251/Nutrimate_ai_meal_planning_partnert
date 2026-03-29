@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NutriMate — Dashboard</title>
 <link rel="icon" href="data:,">
+<link rel="stylesheet" href="css/global.css">
 <link rel="stylesheet" href="css/dashboardstyle.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -24,16 +25,16 @@
 <!-- Header -->
 <header class="header">
 <div class="logo"><h3>NutriMate</h3></div>
-<navbar class="nav">
+<nav class="nav" aria-label="Primary navigation">
 <ul>
 <li><a href="dashboardd.html">Home</a></li>
-<li><a href="#howitworks">How It Works</a></li>
+<li><a href="howitworks.html">How It Works</a></li>
 <li><a href="#mealplans">Meal Plans</a></li>
 <li><a href="#aiplans">AI Planner</a></li>
 <li><a href="#goals">Goals</a></li>
 <li><a href="#footer">Contact</a></li>
 </ul>
-</navbar>
+</nav>
 <div class="button">
 <button id="loginBtn" class="login" onclick="window.location.href='login.html'">Login</button>
 <button id="logoutBtn" class="loginout">Logout</button>
@@ -204,11 +205,11 @@
 <!-- Footer -->
 <footer class="footer" id="footer">
 <div class="footer-top">
-<h3>Nutri<white class="white">Mate</white></h3>
+<h3>Nutri<span class="white">Mate</span></h3>
 <div class="quicklinks">
 <ul>
 <li><a href="dashboardd.html">Home</a></li>
-<li><a href="#howitworks">How It Works</a></li>
+<li><a href="howitworks.html">How It Works</a></li>
 <li><a href="#mealplans">Meal Plans</a></li>
 <li><a href="#aiplans">AI Planner</a></li>
 <li><a href="#goals">Goals</a></li>
