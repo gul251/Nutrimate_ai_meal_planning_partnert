@@ -115,6 +115,12 @@ textarea:focus-visible {
   background-color: var(--color-accent);
 }
 
+.login-section form {
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto;
+}
+
 .login-section h2 {
   font-size: 25px;
   font-weight: 700;
@@ -138,8 +144,6 @@ textarea:focus-visible {
   flex-direction: column;
   gap: 12px;
   margin-bottom: 16px;
-  margin-left: 20px;
-  margin-right: 20px;
 }
 
 .form-group label {
@@ -163,6 +167,10 @@ textarea:focus-visible {
   width: 100%;
 }
 
+.password-box input {
+  padding-right: 64px;
+}
+
 .form-group input:focus {
   border-color: var(--color-success-dark);
   box-shadow: 0 0 4px rgba(46, 125, 50, 0.3);
@@ -180,7 +188,7 @@ textarea:focus-visible {
 .toggle-password {
   position: absolute;
   right: 12px;
-  top: 35px;
+  top: 70%;
   transform: translateY(-50%);
   cursor: pointer;
   background: transparent;
@@ -197,8 +205,12 @@ textarea:focus-visible {
   align-items: center;
   font-size: 13px;
   margin-bottom: 16px;
-  margin-left: 20px;
-  margin-right: 20px;
+}
+
+.options label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .options a {
@@ -207,7 +219,7 @@ textarea:focus-visible {
 }
 
 .login-btn {
-  width: 95%;
+  width: 100%;
   padding: 12px;
   background-color: var(--color-secondary);
   color: white;
@@ -216,7 +228,6 @@ textarea:focus-visible {
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s;
-  margin: 0 auto;
 }
 
 .login-btn:hover {
@@ -227,13 +238,14 @@ textarea:focus-visible {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .social-btn {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
   gap: 10px;
   padding: 10px;
   border-radius: var(--radius-md);
@@ -266,7 +278,7 @@ textarea:focus-visible {
 
 .signup {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 18px;
   font-size: 14px;
 }
 
