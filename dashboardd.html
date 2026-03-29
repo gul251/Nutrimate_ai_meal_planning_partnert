@@ -80,17 +80,17 @@
 </section>
 
 <!-- Main Grid -->
-<main class="container grid cols-3" style="grid-template-columns:2fr 1fr;">
+<main class="container grid cols-3 dashboard-layout">
 
 <!-- LEFT: Meal Planner -->
-<section class="card" style="min-height:400px" id="mealplans">
+<section class="card planner-section" id="mealplans">
 <h3>Daily Planner & Meals</h3>
-<div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px">
-<div style="min-width:220px;">
+<div class="planner-controls">
+<div class="field-col field-date">
 <label>Selected Date</label>
 <input type="date" id="planDate">
 </div>
-<div style="flex:1;min-width:120px">
+<div class="field-col field-slot">
 <label>Meal Slot</label>
 <select id="mealSlot">
 <option value="breakfast">Breakfast</option>
@@ -99,20 +99,20 @@
 <option value="snack">Snack</option>
 </select>
 </div>
-<div style="min-width:160px">
+<div class="field-col field-search">
 <label>Search / Add Meal</label>
 <div class="row"><input type="text" id="searchMeal" placeholder="Search or type new meal"><button id="addCustomMealBtn">Add</button></div>
 </div>
 </div>
 
-<div class="card" style="padding:10px;margin-bottom:12px">
+<div class="card today-card">
 <strong>Today's Meals</strong>
-<div id="todayMeals" style="margin-top:10px"></div>
-<div style="margin-top:12px" class="flex">
+<div id="todayMeals" class="today-meals"></div>
+<div class="flex totals-row">
 <div class="pill">Total Calories: <span id="totalCals">0</span></div>
 <div class="pill">Protein: <span id="totalProtein">0</span> g</div>
 <div class="pill">Estimated Cost: Rs <span id="totalCost">0</span></div>
-<button id="clearDayBtn" style="margin-left:auto;background:#A3E635">Clear Day</button>
+<button id="clearDayBtn" class="right btn-accent">Clear Day</button>
 </div>
 </div>
 
@@ -123,7 +123,7 @@
 </section>
 
 <!-- RIGHT: Profile / Goals / Favorites / Grocery / Progress -->
-<aside style="display:grid;gap:12px" id="profile">
+<aside class="dashboard-side" id="profile">
 
 <!-- Profile -->
 <div class="card">
@@ -150,9 +150,9 @@
 <option value="vegan">Vegan</option>
 <option value="keto">Keto</option>
 </select>
-<div style="display:flex;gap:8px;margin-top:10px">
+<div class="profile-actions">
 <button id="calcGoalBtn">Calculate Goals</button>
-<button id="loadBtn" style="background:#A3E635">Load</button>
+<button id="loadBtn" class="btn-accent">Load</button>
 </div>
 </div>
 
@@ -169,25 +169,25 @@
 <input id="calTarget" type="number">
 <label>Protein Target (g)</label>
 <input id="proteinTarget" type="number">
-<div style="display:flex;gap:8px;margin-top:10px">
+<div class="goals-actions">
 <button id="saveGoalsBtn">Save Goals</button>
-<button id="suggestMealsBtn" style="background:#A3E635">Suggest Meals</button>
+<button id="suggestMealsBtn" class="btn-accent">Suggest Meals</button>
 </div>
 </div>
 
 <!-- Favorites -->
 <div class="card">
 <h3>Favorites</h3>
-<div id="favoritesList" style="max-height:200px;overflow:auto"></div>
+<div id="favoritesList" class="scroll-box"></div>
 </div>
 
 <!-- Grocery -->
 <div class="card">
 <h3>Grocery List</h3>
 <div id="groceryList"></div>
-<div style="margin-top:8px" class="flex">
+<div class="flex grocery-actions">
 <button id="generateGrocery">Generate from Today</button>
-<button id="clearGrocery" style="background:#A3E635">Clear</button>
+<button id="clearGrocery" class="btn-accent">Clear</button>
 </div>
 </div>
 
@@ -196,7 +196,7 @@
 <h3>Progress</h3>
 <label>Record Weight (kg)</label>
 <div class="row"><input id="recordWeight" type="number"><button id="saveWeight">Save</button></div>
-<canvas id="weightChart" width="300" height="120" style="margin-top:8px"></canvas>
+<canvas id="weightChart" width="300" height="120" class="weight-chart"></canvas>
 </div>
 
 </aside>
