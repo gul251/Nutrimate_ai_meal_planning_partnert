@@ -25,7 +25,7 @@
 <div class="logo"><h3>NutriMate</h3></div>
 <navbar class="nav">
 <ul>
-<li><a href="dashboardd.php">Home</a></li>
+<li><a href="dashboardd.html">Home</a></li>
 <li><a href="#howitworks">How It Works</a></li>
 <li><a href="#mealplans">Meal Plans</a></li>
 <li><a href="#aiplans">AI Planner</a></li>
@@ -35,7 +35,7 @@
 </navbar>
 <div class="button">
 <button id="loginBtn" class="login" onclick="window.location.href='login.html'">Login</button>
-<button id="logout" class="loginout" onclick="window.location.href='welcome.html'">Logout</button>
+<button id="logoutBtn" class="loginout">Logout</button>
 </div>
 </header>
 
@@ -43,23 +43,23 @@
 <div class="sidebar-container">
 <div class="hamburger" id="menuBtn">&#9776;</div>
 <div class="sidebar-menu" id="sidebarMenu">
-<a href="dashboardd.php">Home</a>
+<a href="dashboardd.html">Home</a>
 <a href="#mealplans">Meal Plans</a>
 <a href="#aiplans">AI Planner</a>
 <a href="#goals">Goals</a>
 <a href="#footer">Contact</a>
 <a href="#profile">Profile</a>
-<a href="login.html">Logout</a>
+<a href="#" id="sidebarLogout">Logout</a>
 </div>
 </div>
 
 <!-- Main Section / Slider -->
 <section id="mainSection">
 <div class="slider">
-<img src="img1.jpeg" alt="NutriMate 1" class="active">
-<img src="img2.jpeg" alt="NutriMate 2">
-<img src="img3.jpeg" alt="NutriMate 3">
-<img src="img4.jpeg" alt="NutriMate 4">
+<img src="assets/images/download%20(1).jpeg" alt="NutriMate 1" class="active">
+<img src="assets/images/Healthy%20lifestyle.jpeg" alt="NutriMate 2">
+<img src="assets/images/USA%20Weight%20Loss%20Juice%20Loved%20in%20Chicago.jpeg" alt="NutriMate 3">
+<img src="assets/images/download%20(1).jpeg" alt="NutriMate 4">
 </div>
 <div class="dots">
 <span class="dot active"></span>
@@ -115,7 +115,7 @@
 </div>
 
 <div>
-<h3>AI Suggested Meals</h3>
+<h3 id="aiplans">AI Suggested Meals</h3>
 <div class="meal-list card" id="aiSuggestions"></div>
 </div>
 </section>
@@ -206,7 +206,7 @@
 <h3>Nutri<white class="white">Mate</white></h3>
 <div class="quicklinks">
 <ul>
-<li><a href="dashboardd.php">Home</a></li>
+<li><a href="dashboardd.html">Home</a></li>
 <li><a href="#howitworks">How It Works</a></li>
 <li><a href="#mealplans">Meal Plans</a></li>
 <li><a href="#aiplans">AI Planner</a></li>

@@ -1,31 +1,35 @@
 // ================== NutriMate Dashboard - Firebase Integration ==================
 document.addEventListener("DOMContentLoaded", async () => {
-
   // Check authentication - redirect to login if not authenticated
   const user = await checkAuth(true);
-  if (!user) return; // Will redirect if no user
+  if (!user) return;
 
   // ---------- MENU BAR ----------
   const menuBtn = document.getElementById("menuBtn");
   const sidebarMenu = document.getElementById("sidebarMenu");
 
-  menuBtn.addEventListener("click", () => {
-    sidebarMenu.classList.toggle("open");
-  });
+  if (menuBtn && sidebarMenu) {
+    menuBtn.addEventListener("click", () => {
+      sidebarMenu.classList.toggle("open");
+    });
+  }
 
   // ---------- IMAGE SLIDER ----------
-  const images = document.querySelectorAll('.slider img');
-  const dots = document.querySelectorAll('.dot');
+  const images = document.querySelectorAll(".slider img");
+  const dots = document.querySelectorAll(".dot");
   let current = 0;
 
-  function nextSlide() {
-    images[current].classList.remove('active');
-    dots[current].classList.remove('active');
-    current = (current + 1) % images.length;
-    images[current].classList.add('active');
-    dots[current].classList.add('active');
+  if (images.length > 0 && dots.length === images.length) {
+    function nextSlide() {
+      images[current].classList.remove("active");
+      dots[current].classList.remove("active");
+      current = (current + 1) % images.length;
+      images[current].classList.add("active");
+      dots[current].classList.add("active");
+    }
+
+    setInterval(nextSlide, 3000);
   }
-  setInterval(nextSlide, 3000);
 
   // ---------- PROFILE ----------
   const loadBtn = document.getElementById("loadBtn");
@@ -34,143 +38,171 @@ document.addEventListener("DOMContentLoaded", async () => {
   async function loadProfile() {
     try {
       const profile = await getUserProfile();
-      if (profile) {
-        document.getElementById('name').value = profile.name || '';
-        document.getElementById('age').value = profile.age || '';
-        document.getElementById('height').value = profile.height || '';
-        document.getElementById('weight').value = profile.weight || '';
-        document.getElementById('activity').value = profile.activity || '';
-        document.getElementById('dietType').value = profile.diet || profile.goal || '';
+      if (!profile) return;
+
+      document.getElementById("name").value = profile.name || "";
+      document.getElementById("age").value = profile.age || "";
+      document.getElementById("height").value = profile.height || "";
+      document.getElementById("weight").value = profile.weight || "";
+      document.getElementById("activity").value = profile.activity || "sedentary";
+      document.getElementById("dietType").value = profile.diet || "omnivore";
+
+      if (profile.goals) {
+        const calTarget = document.getElementById("calTarget");
+        const proteinTarget = document.getElementById("proteinTarget");
+        if (calTarget) calTarget.value = profile.goals.calorieTarget || "";
+        if (proteinTarget) proteinTarget.value = profile.goals.proteinTarget || "";
       }
     } catch (error) {
-      console.error('Error loading profile:', error);
+      console.error("Error loading profile:", error);
     }
   }
 
   // Auto-load profile on page load
   loadProfile();
-
   loadBtn?.addEventListener("click", loadProfile);
 
   saveProfileBtn?.addEventListener("click", async () => {
     try {
       const profileData = {
-        name: document.getElementById('name').value,
-        age: parseInt(document.getElementById('age').value) || 0,
-        height: parseFloat(document.getElementById('height').value) || 0,
-        weight: parseFloat(document.getElementById('weight').value) || 0,
-        activity: document.getElementById('activity').value,
-        diet: document.getElementById('dietType').value
+        name: document.getElementById("name").value.trim(),
+        age: parseInt(document.getElementById("age").value, 10) || 0,
+        height: parseFloat(document.getElementById("height").value) || 0,
+        weight: parseFloat(document.getElementById("weight").value) || 0,
+        activity: document.getElementById("activity").value,
+        diet: document.getElementById("dietType").value,
+        goal: document.getElementById("goalType")?.value || "maintain"
       };
-      
+
       await updateUserProfile(profileData);
     } catch (error) {
-      console.error('Error saving profile:', error);
+      console.error("Error saving profile:", error);
     }
   });
 
-  // ---------- MEALS DATABASE ----------
-  const addMealDb = document.getElementById("addMealDb");
-  const mealsDbArea = document.getElementById("mealsDbArea");
+  // ---------- DAILY PLANNER ----------
+  const planDate = document.getElementById("planDate");
+  const mealSlot = document.getElementById("mealSlot");
+  const addMealBtn = document.getElementById("addCustomMealBtn") || document.getElementById("addMealDb");
+  const mealNameInput = document.getElementById("searchMeal") || document.getElementById("dbName");
+  const mealsArea = document.getElementById("todayMeals") || document.getElementById("mealsDbArea");
+  const totalCals = document.getElementById("totalCals");
+  const totalProtein = document.getElementById("totalProtein");
+
+  if (planDate && !planDate.value) {
+    planDate.value = new Date().toISOString().split("T")[0];
+  }
+
+  function updateTotals(meals) {
+    const calories = meals.reduce((sum, meal) => sum + (parseInt(meal.calories, 10) || 0), 0);
+    const protein = meals.reduce((sum, meal) => sum + (parseInt(meal.protein, 10) || 0), 0);
+
+    if (totalCals) totalCals.textContent = String(calories);
+    if (totalProtein) totalProtein.textContent = String(protein);
+  }
 
   async function fetchMeals() {
+    if (!mealsArea) return;
+
     try {
-      const meals = await getMealPlans();
-      mealsDbArea.innerHTML = "";
-      
+      const selectedDate = planDate?.value || null;
+      const meals = await getMealPlans(selectedDate);
+      mealsArea.innerHTML = "";
+
       if (meals.length === 0) {
-        mealsDbArea.innerHTML = "<p>No meals added yet. Add your first meal!</p>";
+        mealsArea.innerHTML = "<p>No meals added for this date yet.</p>";
+        updateTotals([]);
         return;
       }
 
-      meals.forEach(meal => {
+      meals.forEach((meal) => {
         const div = document.createElement("div");
         div.classList.add("meal-card");
         div.innerHTML = `
-          <strong>${meal.name || 'Unnamed Meal'}</strong> | 
-          Cal: ${meal.calories || 0} | 
-          Protein: ${meal.protein || 0}g | 
-          ${meal.date || 'No date'}
+          <strong>${meal.name || "Unnamed Meal"}</strong>
+          <span>(${meal.mealType || "custom"})</span> |
+          Cal: ${meal.calories || 0} |
+          Protein: ${meal.protein || 0}g |
+          ${meal.date || "No date"}
           <button class="deleteMealBtn" data-id="${meal.id}">Delete</button>
         `;
-        mealsDbArea.appendChild(div);
+        mealsArea.appendChild(div);
       });
 
-      // Delete meal
-      document.querySelectorAll(".deleteMealBtn").forEach(btn => {
+      updateTotals(meals);
+
+      mealsArea.querySelectorAll(".deleteMealBtn").forEach((btn) => {
         btn.addEventListener("click", async () => {
           const id = btn.dataset.id;
-          if (confirm('Delete this meal?')) {
+          if (!id) return;
+          if (confirm("Delete this meal?")) {
             await deleteMealPlan(id);
-            fetchMeals();
+            await fetchMeals();
           }
         });
       });
     } catch (error) {
-      console.error('Error fetching meals:', error);
-      mealsDbArea.innerHTML = "<p>Error loading meals</p>";
+      console.error("Error fetching meals:", error);
+      mealsArea.innerHTML = "<p>Error loading meals.</p>";
+      updateTotals([]);
     }
   }
 
-  addMealDb?.addEventListener("click", async () => {
-    const name = document.getElementById("dbName").value;
-    const calories = document.getElementById("dbCals").value;
-    const protein = document.getElementById("dbProtein").value;
+  planDate?.addEventListener("change", fetchMeals);
 
-    if(!name) {
+  addMealBtn?.addEventListener("click", async () => {
+    const name = mealNameInput?.value?.trim();
+
+    if (!name) {
       showMessage("Meal name required", "error");
       return;
     }
 
     const mealData = {
       name,
-      calories: parseInt(calories) || 0,
-      protein: parseInt(protein) || 0,
-      date: new Date().toISOString().split('T')[0],
-      mealType: 'custom'
+      calories: 0,
+      protein: 0,
+      date: planDate?.value || new Date().toISOString().split("T")[0],
+      mealType: mealSlot?.value || "custom"
     };
 
     try {
       await addMealPlan(mealData);
-      fetchMeals();
-      
-      // Clear form
-      document.getElementById("dbName").value="";
-      document.getElementById("dbCals").value="";
-      document.getElementById("dbProtein").value="";
-      
+      if (mealNameInput) mealNameInput.value = "";
+      await fetchMeals();
       showMessage("Meal added successfully!", "success");
     } catch (error) {
-      console.error('Error adding meal:', error);
+      console.error("Error adding meal:", error);
     }
   });
 
-  fetchMeals(); // initial load
+  await fetchMeals();
 
   // ---------- GOALS ----------
   const saveGoalsBtn = document.getElementById("saveGoalsBtn");
   saveGoalsBtn?.addEventListener("click", async () => {
     try {
       const goals = {
-        calorieTarget: parseInt(document.getElementById("calorieTarget")?.value) || 0,
-        proteinTarget: parseInt(document.getElementById("proteinTarget")?.value) || 0
+        calorieTarget: parseInt(document.getElementById("calTarget")?.value, 10) || 0,
+        proteinTarget: parseInt(document.getElementById("proteinTarget")?.value, 10) || 0,
+        goalType: document.getElementById("goalType")?.value || "maintain"
       };
       await saveGoals(goals);
     } catch (error) {
-      console.error('Error saving goals:', error);
+      console.error("Error saving goals:", error);
     }
   });
 
   // ---------- DAY PLANS ----------
   const clearDayBtn = document.getElementById("clearDayBtn");
   clearDayBtn?.addEventListener("click", async () => {
-    if(confirm("Clear all meals for today?")){
-      const today = new Date().toISOString().split('T')[0];
-      const meals = await getMealPlans(today);
+    const selectedDate = planDate?.value || new Date().toISOString().split("T")[0];
+    if (confirm(`Clear all meals for ${selectedDate}?`)) {
+      const meals = await getMealPlans(selectedDate);
       for (const meal of meals) {
         await deleteMealPlan(meal.id);
       }
-      fetchMeals();
+      await fetchMeals();
       showMessage("Day cleared!", "success");
     }
   });
@@ -178,23 +210,25 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ---------- GROCERY ----------
   const generateGrocery = document.getElementById("generateGrocery");
   const clearGrocery = document.getElementById("clearGrocery");
-  generateGrocery?.addEventListener("click", ()=> {
+  generateGrocery?.addEventListener("click", () => {
     showMessage("Grocery list generation coming soon!", "info");
   });
-  clearGrocery?.addEventListener("click", ()=> {
+  clearGrocery?.addEventListener("click", () => {
     showMessage("Grocery list cleared", "info");
   });
 
   // ---------- PROGRESS ----------
   const saveWeight = document.getElementById("saveWeight");
-  saveWeight?.addEventListener("click", async ()=> {
-    const weight = document.getElementById("weight").value;
-    const date = new Date().toISOString().split('T')[0];
+  const recordWeight = document.getElementById("recordWeight") || document.getElementById("weight");
+
+  saveWeight?.addEventListener("click", async () => {
+    const weight = recordWeight?.value;
+    const date = new Date().toISOString().split("T")[0];
     if (weight) {
       try {
         await addWeightLog(weight, date);
       } catch (error) {
-        console.error('Error saving weight:', error);
+        console.error("Error saving weight:", error);
       }
     }
   });
@@ -202,50 +236,62 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ---------- AI SUGGESTIONS ----------
   const suggestMealsBtn = document.getElementById("suggestMealsBtn");
   suggestMealsBtn?.addEventListener("click", async () => {
-    const aiArea = document.getElementById("mealsDbArea");
-    
+    const aiArea = document.getElementById("aiSuggestions") || mealsArea;
+
     if (!aiArea) {
       showMessage("Display area not found", "error");
       return;
     }
 
-    // Show loading state
-    aiArea.innerHTML = "<p>🤖 Generating AI meal plan... Please wait...</p>";
+    if (typeof generateMealPlan !== "function" || typeof displayMealPlan !== "function") {
+      showMessage("AI module not loaded. Create js/ai.js from template.", "error");
+      return;
+    }
+
+    aiArea.innerHTML = "<p>Generating AI meal plan... Please wait...</p>";
     suggestMealsBtn.disabled = true;
     suggestMealsBtn.textContent = "Generating...";
 
     try {
-      // Get user profile
       const profile = await getUserProfile();
-      
+
       if (!profile) {
         showMessage("Please complete your profile first", "error");
         aiArea.innerHTML = "<p>Please fill out your profile information to get personalized meal suggestions.</p>";
         return;
       }
 
-      // Generate meal plan using AI
       const mealPlan = await generateMealPlan(profile);
-      
-      // Display the AI-generated meal plan
-      displayMealPlan("mealsDbArea", mealPlan);
+      if (!mealPlan) {
+        aiArea.innerHTML = "<p>Unable to generate a meal plan. Check your AI API key and try again.</p>";
+        return;
+      }
+
+      displayMealPlan(aiArea.id, mealPlan);
       showMessage("AI meal plan generated!", "success");
-      
     } catch (error) {
-      console.error('AI generation error:', error);
-      aiArea.innerHTML = "<p>❌ Failed to generate meal plan. Please check your API key in js/ai.js</p>";
+      console.error("AI generation error:", error);
+      aiArea.innerHTML = "<p>Failed to generate meal plan. Please check your API key in js/ai.js</p>";
     } finally {
-      // Re-enable button
       suggestMealsBtn.disabled = false;
       suggestMealsBtn.textContent = "Suggest Meals";
     }
   });
 
   // ---------- LOGOUT ----------
-  // Add logout button handler if it exists
-  const logoutBtn = document.getElementById("logoutBtn");
+  const logoutBtn = document.getElementById("logoutBtn") || document.getElementById("logout");
   if (logoutBtn) {
-    logoutBtn.addEventListener("click", logout);
+    logoutBtn.addEventListener("click", async (event) => {
+      event.preventDefault();
+      await logout();
+    });
   }
 
+  const sidebarLogout = document.getElementById("sidebarLogout");
+  if (sidebarLogout) {
+    sidebarLogout.addEventListener("click", async (event) => {
+      event.preventDefault();
+      await logout();
+    });
+  }
 });
