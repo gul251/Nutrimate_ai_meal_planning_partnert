@@ -67,12 +67,14 @@ body {
 
 .header{
   background: var(--color-primary);
-  
-    display: flex;
-    justify-content: space-between;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 64px;
 }
 .logo{
-  padding-top: 16px;
+  padding-top: 0;
     margin-left: 3%;
     color: var(--color-accent);
   
@@ -87,6 +89,7 @@ body {
 }
 .nav ul{
   display: flex;
+  gap: 6px;
 }
 .nav ul li{  
       justify-content: space-between;
@@ -103,13 +106,14 @@ padding: 8px;
     color: var(--color-secondary);
 }
 .button{
-    margin-right: 3%;
-align-items: center;
-    justify-items: center;
+  margin-right: 3%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 .button button{
-    margin-top: 10%;
-    margin-left: 5px;
+  margin-top: 0;
+  margin-left: 0;
     justify-items: center;
     align-items: center;
     color: var(--color-primary);
@@ -124,7 +128,8 @@ align-items: center;
 }
 
 .sidebar-container {
-    z-index: 1000;
+  display: none;
+  z-index: 1000;
   position: fixed;
   margin-left: 3%;
   margin-top: 20px;
@@ -134,7 +139,7 @@ align-items: center;
   font-size: 20px;
   cursor: pointer;
   background: none;
-  color: #F8FAFC;
+  color: var(--color-accent);
   padding: 3px 8px;
   border-radius: 6px;
   border: 1.5px solid var(--color-primary);
@@ -314,6 +319,48 @@ align-items: center;
         align-items:flex-start}
         .hero .text h1{
           font-size:22px}}
+
+@media (max-width: 980px) {
+  .nav {
+    display: none;
+  }
+
+  .sidebar-container {
+    display: block;
+  }
+
+  .header {
+    padding: 0 10px;
+  }
+
+  .button {
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .news {
+    justify-content: flex-start;
+    padding-left: 12px;
+  }
+
+  .footer-top {
+    flex-direction: column;
+    gap: 16px;
+    padding: 0 16px;
+  }
+
+  .quicklinks,
+  .socialmedia-icons,
+  .footer-contact {
+    margin: 0;
+    width: 100%;
+  }
+
+  .quicklinks ul {
+    padding-left: 0;
+  }
+}
 
 
 .hero-left{
