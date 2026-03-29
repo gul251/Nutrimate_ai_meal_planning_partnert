@@ -9,8 +9,28 @@ document.addEventListener("DOMContentLoaded", async () => {
   const sidebarMenu = document.getElementById("sidebarMenu");
 
   if (menuBtn && sidebarMenu) {
+    const closeSidebar = () => {
+      sidebarMenu.classList.remove("open");
+      menuBtn.setAttribute("aria-expanded", "false");
+    };
+
+    menuBtn.setAttribute("aria-expanded", "false");
+
     menuBtn.addEventListener("click", () => {
       sidebarMenu.classList.toggle("open");
+      menuBtn.setAttribute("aria-expanded", sidebarMenu.classList.contains("open") ? "true" : "false");
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!sidebarMenu.classList.contains("open")) return;
+      if (sidebarMenu.contains(event.target) || menuBtn.contains(event.target)) return;
+      closeSidebar();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeSidebar();
+      }
     });
   }
 
@@ -83,11 +103,22 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ---------- DAILY PLANNER ----------
   const planDate = document.getElementById("planDate");
   const mealSlot = document.getElementById("mealSlot");
-  const addMealBtn = document.getElementById("addCustomMealBtn") || document.getElementById("addMealDb");
-  const mealNameInput = document.getElementById("searchMeal") || document.getElementById("dbName");
-  const mealsArea = document.getElementById("todayMeals") || document.getElementById("mealsDbArea");
+  const addMealBtn = document.getElementById("addCustomMealBtn");
+  const mealNameInput = document.getElementById("searchMeal");
+  const mealsArea = document.getElementById("todayMeals");
   const totalCals = document.getElementById("totalCals");
   const totalProtein = document.getElementById("totalProtein");
+  const totalCost = document.getElementById("totalCost");
+
+  function escapeHTML(value) {
+    const raw = String(value ?? "");
+    return raw
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/\"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
 
   if (planDate && !planDate.value) {
     planDate.value = new Date().toISOString().split("T")[0];
@@ -96,9 +127,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   function updateTotals(meals) {
     const calories = meals.reduce((sum, meal) => sum + (parseInt(meal.calories, 10) || 0), 0);
     const protein = meals.reduce((sum, meal) => sum + (parseInt(meal.protein, 10) || 0), 0);
+    const cost = meals.reduce((sum, meal) => sum + (parseFloat(meal.cost) || 0), 0);
 
     if (totalCals) totalCals.textContent = String(calories);
     if (totalProtein) totalProtein.textContent = String(protein);
+    if (totalCost) totalCost.textContent = String(Math.round(cost));
   }
 
   async function fetchMeals() {
@@ -118,12 +151,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       meals.forEach((meal) => {
         const div = document.createElement("div");
         div.classList.add("meal-card");
+        const safeName = escapeHTML(meal.name || "Unnamed Meal");
+        const safeType = escapeHTML(meal.mealType || "custom");
+        const safeDate = escapeHTML(meal.date || "No date");
         div.innerHTML = `
-          <strong>${meal.name || "Unnamed Meal"}</strong>
-          <span>(${meal.mealType || "custom"})</span> |
+          <strong>${safeName}</strong>
+          <span>(${safeType})</span> |
           Cal: ${meal.calories || 0} |
           Protein: ${meal.protein || 0}g |
-          ${meal.date || "No date"}
+          ${safeDate}
           <button class="deleteMealBtn" data-id="${meal.id}">Delete</button>
         `;
         mealsArea.appendChild(div);
@@ -219,7 +255,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // ---------- PROGRESS ----------
   const saveWeight = document.getElementById("saveWeight");
-  const recordWeight = document.getElementById("recordWeight") || document.getElementById("weight");
+  const recordWeight = document.getElementById("recordWeight");
 
   saveWeight?.addEventListener("click", async () => {
     const weight = recordWeight?.value;
@@ -236,7 +272,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ---------- AI SUGGESTIONS ----------
   const suggestMealsBtn = document.getElementById("suggestMealsBtn");
   suggestMealsBtn?.addEventListener("click", async () => {
-    const aiArea = document.getElementById("aiSuggestions") || mealsArea;
+    const aiArea = document.getElementById("aiSuggestions");
 
     if (!aiArea) {
       showMessage("Display area not found", "error");
@@ -244,7 +280,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     if (typeof generateMealPlan !== "function" || typeof displayMealPlan !== "function") {
-      showMessage("AI module not loaded. Create js/ai.js from template.", "error");
+      showMessage("AI module is unavailable right now. Please refresh and try again.", "error");
       return;
     }
 
@@ -296,7 +332,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   // ---------- LOGOUT ----------
-  const logoutBtn = document.getElementById("logoutBtn") || document.getElementById("logout");
+  const logoutBtn = document.getElementById("logoutBtn");
   if (logoutBtn) {
     logoutBtn.addEventListener("click", async (event) => {
       event.preventDefault();
