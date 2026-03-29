@@ -42,10 +42,11 @@ async function updateUserProfile(profileData) {
       throw new Error("No authenticated user");
     }
 
-    await db.collection('users').doc(user.uid).update({
+    await db.collection('users').doc(user.uid).set({
       ...profileData,
+      email: user.email || profileData.email || "",
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
+    }, { merge: true });
 
     console.log("✅ Profile updated successfully");
     showMessage("Profile saved successfully!", "success");
@@ -302,10 +303,10 @@ async function saveGoals(goals) {
       throw new Error("No authenticated user");
     }
 
-    await db.collection('users').doc(user.uid).update({
+    await db.collection('users').doc(user.uid).set({
       goals: goals,
       goalsUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
+    }, { merge: true });
 
     console.log("✅ Goals saved");
     showMessage("Goals updated!", "success");

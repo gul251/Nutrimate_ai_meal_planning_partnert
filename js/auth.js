@@ -62,10 +62,11 @@ async function login(email, password) {
 
     console.log("✅ User logged in:", user.uid);
 
-    // Update last login timestamp
-    await db.collection('users').doc(user.uid).update({
+    // Ensure user profile doc exists and update last login timestamp.
+    await db.collection('users').doc(user.uid).set({
+      email: user.email || email,
       lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-    });
+    }, { merge: true });
 
     // Show success message
     showMessage("Login successful! Redirecting...", "success");

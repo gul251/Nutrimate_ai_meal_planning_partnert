@@ -253,12 +253,29 @@ document.addEventListener("DOMContentLoaded", async () => {
     suggestMealsBtn.textContent = "Generating...";
 
     try {
-      const profile = await getUserProfile();
+      let profile = await getUserProfile();
 
       if (!profile) {
-        showMessage("Please complete your profile first", "error");
-        aiArea.innerHTML = "<p>Please fill out your profile information to get personalized meal suggestions.</p>";
-        return;
+        // Fallback: use current form fields if profile doc is missing.
+        const fallbackProfile = {
+          name: document.getElementById("name")?.value?.trim() || "",
+          age: parseInt(document.getElementById("age")?.value, 10) || 0,
+          height: parseFloat(document.getElementById("height")?.value) || 0,
+          weight: parseFloat(document.getElementById("weight")?.value) || 0,
+          activity: document.getElementById("activity")?.value || "moderate",
+          diet: document.getElementById("dietType")?.value || "omnivore",
+          goal: document.getElementById("goalType")?.value || "maintain",
+          foodTypes: []
+        };
+
+        if (!fallbackProfile.name && !fallbackProfile.weight) {
+          showMessage("Please complete your profile first", "error");
+          aiArea.innerHTML = "<p>Please fill out your profile information to get personalized meal suggestions.</p>";
+          return;
+        }
+
+        await updateUserProfile(fallbackProfile);
+        profile = fallbackProfile;
       }
 
       const mealPlan = await generateMealPlan(profile);
