@@ -52,8 +52,33 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // ---------- PROFILE ----------
+  const loginBtn = document.getElementById("loginBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
   const loadBtn = document.getElementById("loadBtn");
-  const saveProfileBtn = document.getElementById("calcGoalBtn");
+  const calculateGoalsBtn = document.getElementById("calcGoalBtn");
+
+  if (loginBtn) loginBtn.style.display = "none";
+  if (logoutBtn) logoutBtn.style.display = "inline-block";
+
+  function calculateTargets(profileData) {
+    const weight = Math.max(35, parseFloat(profileData.weight) || 70);
+    const activity = String(profileData.activity || "moderate").toLowerCase();
+    const goal = String(profileData.goal || "maintain").toLowerCase();
+
+    let multiplier = 1.4;
+    if (activity.includes("sedentary")) multiplier = 1.2;
+    else if (activity.includes("light")) multiplier = 1.35;
+    else if (activity.includes("active")) multiplier = 1.65;
+
+    let calorieTarget = weight * 24 * multiplier;
+    if (goal.includes("loss") || goal.includes("lose")) calorieTarget -= 300;
+    if (goal.includes("gain") || goal.includes("muscle")) calorieTarget += 300;
+
+    calorieTarget = Math.max(1200, Math.min(3500, Math.round(calorieTarget)));
+    const proteinTarget = Math.max(50, Math.round(weight * 1.6));
+
+    return { calorieTarget, proteinTarget };
+  }
 
   async function loadProfile() {
     try {
@@ -70,8 +95,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (profile.goals) {
         const calTarget = document.getElementById("calTarget");
         const proteinTarget = document.getElementById("proteinTarget");
+        const goalType = document.getElementById("goalType");
         if (calTarget) calTarget.value = profile.goals.calorieTarget || "";
         if (proteinTarget) proteinTarget.value = profile.goals.proteinTarget || "";
+        if (goalType) goalType.value = profile.goals.goalType || profile.goal || "maintain";
       }
     } catch (error) {
       console.error("Error loading profile:", error);
@@ -82,21 +109,34 @@ document.addEventListener("DOMContentLoaded", async () => {
   loadProfile();
   loadBtn?.addEventListener("click", loadProfile);
 
-  saveProfileBtn?.addEventListener("click", async () => {
+  calculateGoalsBtn?.addEventListener("click", async () => {
     try {
       const profileData = {
-        name: document.getElementById("name").value.trim(),
-        age: parseInt(document.getElementById("age").value, 10) || 0,
-        height: parseFloat(document.getElementById("height").value) || 0,
-        weight: parseFloat(document.getElementById("weight").value) || 0,
-        activity: document.getElementById("activity").value,
-        diet: document.getElementById("dietType").value,
+        name: document.getElementById("name")?.value?.trim() || "",
+        age: parseInt(document.getElementById("age")?.value, 10) || 0,
+        height: parseFloat(document.getElementById("height")?.value) || 0,
+        weight: parseFloat(document.getElementById("weight")?.value) || 0,
+        activity: document.getElementById("activity")?.value || "moderate",
+        diet: document.getElementById("dietType")?.value || "omnivore",
         goal: document.getElementById("goalType")?.value || "maintain"
       };
 
-      await updateUserProfile(profileData);
+      const targets = calculateTargets(profileData);
+      const calTarget = document.getElementById("calTarget");
+      const proteinTarget = document.getElementById("proteinTarget");
+      if (calTarget) calTarget.value = String(targets.calorieTarget);
+      if (proteinTarget) proteinTarget.value = String(targets.proteinTarget);
+
+      await updateUserProfile({
+        ...profileData,
+        goals: {
+          calorieTarget: targets.calorieTarget,
+          proteinTarget: targets.proteinTarget,
+          goalType: profileData.goal
+        }
+      });
     } catch (error) {
-      console.error("Error saving profile:", error);
+      console.error("Error calculating goals:", error);
     }
   });
 
@@ -105,6 +145,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const mealSlot = document.getElementById("mealSlot");
   const addMealBtn = document.getElementById("addCustomMealBtn");
   const mealNameInput = document.getElementById("searchMeal");
+  const mealCaloriesInput = document.getElementById("mealCalories");
+  const mealProteinInput = document.getElementById("mealProtein");
+  const mealCostInput = document.getElementById("mealCost");
   const mealsArea = document.getElementById("todayMeals");
   const totalCals = document.getElementById("totalCals");
   const totalProtein = document.getElementById("totalProtein");
@@ -154,11 +197,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         const safeName = escapeHTML(meal.name || "Unnamed Meal");
         const safeType = escapeHTML(meal.mealType || "custom");
         const safeDate = escapeHTML(meal.date || "No date");
+        const safeCost = Number.isFinite(parseFloat(meal.cost)) ? Math.round(parseFloat(meal.cost)) : 0;
         div.innerHTML = `
           <strong>${safeName}</strong>
           <span>(${safeType})</span> |
           Cal: ${meal.calories || 0} |
           Protein: ${meal.protein || 0}g |
+          Cost: Rs ${safeCost} |
           ${safeDate}
           <button class="deleteMealBtn" data-id="${meal.id}">Delete</button>
         `;
@@ -194,10 +239,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
+    const calories = Math.max(0, parseInt(mealCaloriesInput?.value, 10) || 0);
+    const protein = Math.max(0, parseInt(mealProteinInput?.value, 10) || 0);
+    const cost = Math.max(0, parseFloat(mealCostInput?.value) || 0);
+
     const mealData = {
       name,
-      calories: 0,
-      protein: 0,
+      calories,
+      protein,
+      cost,
       date: planDate?.value || new Date().toISOString().split("T")[0],
       mealType: mealSlot?.value || "custom"
     };
@@ -205,6 +255,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     try {
       await addMealPlan(mealData);
       if (mealNameInput) mealNameInput.value = "";
+      if (mealCaloriesInput) mealCaloriesInput.value = "";
+      if (mealProteinInput) mealProteinInput.value = "";
+      if (mealCostInput) mealCostInput.value = "";
       await fetchMeals();
       showMessage("Meal added successfully!", "success");
     } catch (error) {
@@ -236,7 +289,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (confirm(`Clear all meals for ${selectedDate}?`)) {
       const meals = await getMealPlans(selectedDate);
       for (const meal of meals) {
-        await deleteMealPlan(meal.id);
+        await deleteMealPlan(meal.id, true);
       }
       await fetchMeals();
       showMessage("Day cleared!", "success");
@@ -258,14 +311,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   const recordWeight = document.getElementById("recordWeight");
 
   saveWeight?.addEventListener("click", async () => {
-    const weight = recordWeight?.value;
+    const weight = parseFloat(recordWeight?.value || "");
     const date = new Date().toISOString().split("T")[0];
-    if (weight) {
-      try {
-        await addWeightLog(weight, date);
-      } catch (error) {
-        console.error("Error saving weight:", error);
-      }
+
+    if (!Number.isFinite(weight) || weight <= 0) {
+      showMessage("Enter a valid positive weight", "error");
+      return;
+    }
+
+    try {
+      await addWeightLog(weight, date);
+      if (recordWeight) recordWeight.value = "";
+    } catch (error) {
+      console.error("Error saving weight:", error);
     }
   });
 
@@ -304,7 +362,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           foodTypes: []
         };
 
-        if (!fallbackProfile.name && !fallbackProfile.weight) {
+        if (!fallbackProfile.name || fallbackProfile.weight <= 0) {
           showMessage("Please complete your profile first", "error");
           aiArea.innerHTML = "<p>Please fill out your profile information to get personalized meal suggestions.</p>";
           return;
@@ -332,7 +390,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   // ---------- LOGOUT ----------
-  const logoutBtn = document.getElementById("logoutBtn");
   if (logoutBtn) {
     logoutBtn.addEventListener("click", async (event) => {
       event.preventDefault();

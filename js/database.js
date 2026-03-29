@@ -128,9 +128,10 @@ async function getMealPlans(date = null) {
 /**
  * Delete a meal plan
  * @param {string} mealPlanId - ID of meal plan to delete
+ * @param {boolean} suppressToast - Skip success/error toasts when true
  * @returns {Promise<void>}
  */
-async function deleteMealPlan(mealPlanId) {
+async function deleteMealPlan(mealPlanId, suppressToast = false) {
   try {
     const user = getCurrentUser();
     if (!user) {
@@ -141,10 +142,14 @@ async function deleteMealPlan(mealPlanId) {
       .collection('mealPlans').doc(mealPlanId).delete();
 
     console.log("✅ Meal plan deleted");
-    showMessage("Meal removed", "success");
+    if (!suppressToast) {
+      showMessage("Meal removed", "success");
+    }
   } catch (error) {
     console.error("❌ Error deleting meal plan:", error);
-    showMessage("Failed to delete meal", "error");
+    if (!suppressToast) {
+      showMessage("Failed to delete meal", "error");
+    }
     throw error;
   }
 }
