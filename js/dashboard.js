@@ -111,11 +111,33 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   calculateGoalsBtn?.addEventListener("click", async () => {
     try {
+      const name = document.getElementById("name")?.value?.trim() || "";
+      const age = parseInt(document.getElementById("age")?.value, 10) || 0;
+      const height = parseFloat(document.getElementById("height")?.value) || 0;
+      const weight = parseFloat(document.getElementById("weight")?.value) || 0;
+
+      if (!name || name.length < 2) {
+        showMessage("Enter a valid name (2+ chars)", "error");
+        return;
+      }
+      if (age < 5 || age > 120) {
+        showMessage("Age must be 5-120", "error");
+        return;
+      }
+      if (weight <= 0 || weight > 500) {
+        showMessage("Weight must be 1-500 kg", "error");
+        return;
+      }
+      if (height <= 0 || height > 300) {
+        showMessage("Height must be 1-300 cm", "error");
+        return;
+      }
+
       const profileData = {
-        name: document.getElementById("name")?.value?.trim() || "",
-        age: parseInt(document.getElementById("age")?.value, 10) || 0,
-        height: parseFloat(document.getElementById("height")?.value) || 0,
-        weight: parseFloat(document.getElementById("weight")?.value) || 0,
+        name,
+        age,
+        height,
+        weight,
         activity: document.getElementById("activity")?.value || "moderate",
         diet: document.getElementById("dietType")?.value || "omnivore",
         goal: document.getElementById("goalType")?.value || "maintain"
@@ -137,6 +159,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     } catch (error) {
       console.error("Error calculating goals:", error);
+      showMessage("Failed to calculate goals. Check profile data.", "error");
     }
   });
 
@@ -153,6 +176,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const totalProtein = document.getElementById("totalProtein");
   const totalCost = document.getElementById("totalCost");
 
+  let currentEditingMealId = null;
+
   function escapeHTML(value) {
     const raw = String(value ?? "");
     return raw
@@ -161,6 +186,58 @@ document.addEventListener("DOMContentLoaded", async () => {
       .replace(/>/g, "&gt;")
       .replace(/\"/g, "&quot;")
       .replace(/'/g, "&#39;");
+  }
+
+  function validateMealInputs() {
+    const name = mealNameInput?.value?.trim() || "";
+    const calories = parseInt(mealCaloriesInput?.value, 10) || 0;
+    const protein = parseInt(mealProteinInput?.value, 10) || 0;
+    const cost = parseFloat(mealCostInput?.value) || 0;
+
+    if (!name) {
+      showMessage("Meal name is required", "error");
+      return null;
+    }
+    if (name.length > 100) {
+      showMessage("Meal name too long (max 100 chars)", "error");
+      return null;
+    }
+    if (calories < 0 || calories > 5000) {
+      showMessage("Calories must be 0-5000", "error");
+      return null;
+    }
+    if (protein < 0 || protein > 500) {
+      showMessage("Protein must be 0-500g", "error");
+      return null;
+    }
+    if (cost < 0 || cost > 10000) {
+      showMessage("Cost must be Rs 0-10000", "error");
+      return null;
+    }
+
+    return { name, calories, protein, cost };
+  }
+
+  function clearMealForm() {
+    if (mealNameInput) mealNameInput.value = "";
+    if (mealCaloriesInput) mealCaloriesInput.value = "";
+    if (mealProteinInput) mealProteinInput.value = "";
+    if (mealCostInput) mealCostInput.value = "";
+    currentEditingMealId = null;
+    const addBtn = document.getElementById("addCustomMealBtn");
+    if (addBtn) addBtn.textContent = "Add";
+  }
+
+  function beginEditMeal(mealId, mealData) {
+    currentEditingMealId = mealId;
+    if (mealNameInput) mealNameInput.value = mealData.name || "";
+    if (mealCaloriesInput) mealCaloriesInput.value = mealData.calories || 0;
+    if (mealProteinInput) mealProteinInput.value = mealData.protein || 0;
+    if (mealCostInput) mealCostInput.value = mealData.cost || 0;
+    if (mealSlot) mealSlot.value = mealData.mealType || "custom";
+    const addBtn = document.getElementById("addCustomMealBtn");
+    if (addBtn) addBtn.textContent = "Update";
+    mealNameInput?.focus();
   }
 
   if (planDate && !planDate.value) {
@@ -205,12 +282,24 @@ document.addEventListener("DOMContentLoaded", async () => {
           Protein: ${meal.protein || 0}g |
           Cost: Rs ${safeCost} |
           ${safeDate}
+          <button class="editMealBtn" data-id="${meal.id}">Edit</button>
           <button class="deleteMealBtn" data-id="${meal.id}">Delete</button>
         `;
         mealsArea.appendChild(div);
       });
 
       updateTotals(meals);
+
+      mealsArea.querySelectorAll(".editMealBtn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = btn.dataset.id;
+          if (!id) return;
+          const mealData = meals.find(m => m.id === id);
+          if (mealData) {
+            beginEditMeal(id, mealData);
+          }
+        });
+      });
 
       mealsArea.querySelectorAll(".deleteMealBtn").forEach((btn) => {
         btn.addEventListener("click", async () => {
@@ -232,17 +321,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   planDate?.addEventListener("change", fetchMeals);
 
   addMealBtn?.addEventListener("click", async () => {
-    const name = mealNameInput?.value?.trim();
+    const validated = validateMealInputs();
+    if (!validated) return;
 
-    if (!name) {
-      showMessage("Meal name required", "error");
-      return;
-    }
-
-    const calories = Math.max(0, parseInt(mealCaloriesInput?.value, 10) || 0);
-    const protein = Math.max(0, parseInt(mealProteinInput?.value, 10) || 0);
-    const cost = Math.max(0, parseFloat(mealCostInput?.value) || 0);
-
+    const { name, calories, protein, cost } = validated;
     const mealData = {
       name,
       calories,
@@ -253,15 +335,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
     try {
-      await addMealPlan(mealData);
-      if (mealNameInput) mealNameInput.value = "";
-      if (mealCaloriesInput) mealCaloriesInput.value = "";
-      if (mealProteinInput) mealProteinInput.value = "";
-      if (mealCostInput) mealCostInput.value = "";
+      if (currentEditingMealId) {
+        await updateMealPlan(currentEditingMealId, mealData);
+        clearMealForm();
+      } else {
+        await addMealPlan(mealData);
+        clearMealForm();
+      }
       await fetchMeals();
-      showMessage("Meal added successfully!", "success");
     } catch (error) {
-      console.error("Error adding meal:", error);
+      console.error("Error saving meal:", error);
     }
   });
 
@@ -271,14 +354,27 @@ document.addEventListener("DOMContentLoaded", async () => {
   const saveGoalsBtn = document.getElementById("saveGoalsBtn");
   saveGoalsBtn?.addEventListener("click", async () => {
     try {
+      const calTarget = parseInt(document.getElementById("calTarget")?.value, 10) || 0;
+      const proteinTarget = parseInt(document.getElementById("proteinTarget")?.value, 10) || 0;
+
+      if (calTarget < 800 || calTarget > 5000) {
+        showMessage("Calorie target must be 800-5000", "error");
+        return;
+      }
+      if (proteinTarget < 20 || proteinTarget > 500) {
+        showMessage("Protein target must be 20-500g", "error");
+        return;
+      }
+
       const goals = {
-        calorieTarget: parseInt(document.getElementById("calTarget")?.value, 10) || 0,
-        proteinTarget: parseInt(document.getElementById("proteinTarget")?.value, 10) || 0,
+        calorieTarget,
+        proteinTarget,
         goalType: document.getElementById("goalType")?.value || "maintain"
       };
       await saveGoals(goals);
     } catch (error) {
       console.error("Error saving goals:", error);
+      showMessage("Failed to save goals. Check values.", "error");
     }
   });
 

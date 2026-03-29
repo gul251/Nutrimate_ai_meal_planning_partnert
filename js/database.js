@@ -126,6 +126,36 @@ async function getMealPlans(date = null) {
 }
 
 /**
+ * Update an existing meal plan
+ * @param {string} mealPlanId - ID of meal plan to update
+ * @param {object} updates - Fields to update {name, calories, protein, cost, mealType}
+ * @returns {Promise<void>}
+ */
+async function updateMealPlan(mealPlanId, updates) {
+  try {
+    const user = getCurrentUser();
+    if (!user) {
+      throw new Error("No authenticated user");
+    }
+
+    const safeUpdates = {
+      ...updates,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    await db.collection('users').doc(user.uid)
+      .collection('mealPlans').doc(mealPlanId).update(safeUpdates);
+
+    console.log("✅ Meal plan updated");
+    showMessage("Meal updated successfully", "success");
+  } catch (error) {
+    console.error("❌ Error updating meal plan:", error);
+    showMessage("Failed to update meal", "error");
+    throw error;
+  }
+}
+
+/**
  * Delete a meal plan
  * @param {string} mealPlanId - ID of meal plan to delete
  * @param {boolean} suppressToast - Skip success/error toasts when true
