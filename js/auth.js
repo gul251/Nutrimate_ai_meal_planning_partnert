@@ -62,10 +62,11 @@ async function login(email, password) {
 
     console.log("✅ User logged in:", user.uid);
 
-    // Update last login timestamp
-    await db.collection('users').doc(user.uid).update({
+    // Ensure user profile doc exists and update last login timestamp.
+    await db.collection('users').doc(user.uid).set({
+      email: user.email || email,
       lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-    });
+    }, { merge: true });
 
     // Show success message
     showMessage("Login successful! Redirecting...", "success");
@@ -198,61 +199,79 @@ function handleAuthError(error) {
 function showMessage(message, type = "info") {
   // Check if a message container exists, if not create one
   let messageDiv = document.getElementById('authMessage');
+  ensureToastStyles();
   
   if (!messageDiv) {
     messageDiv = document.createElement('div');
     messageDiv.id = 'authMessage';
-    messageDiv.style.cssText = `
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 15px 30px;
-      border-radius: 8px;
-      font-weight: 500;
-      z-index: 9999;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      animation: slideDown 0.3s ease-out;
-    `;
+    messageDiv.className = 'nutrimate-toast';
+    messageDiv.setAttribute('role', 'status');
+    messageDiv.setAttribute('aria-live', 'polite');
     document.body.appendChild(messageDiv);
   }
 
   // Set message and styling based on type
   messageDiv.textContent = message;
-  messageDiv.style.display = 'block';
+  messageDiv.classList.remove('nutrimate-toast--success', 'nutrimate-toast--error', 'nutrimate-toast--info');
+  messageDiv.classList.add('nutrimate-toast--visible');
 
   if (type === "success") {
-    messageDiv.style.backgroundColor = "#A3E635";
-    messageDiv.style.color = "white";
+    messageDiv.classList.add('nutrimate-toast--success');
   } else if (type === "error") {
-    messageDiv.style.backgroundColor = "#ef4444";
-    messageDiv.style.color = "white";
+    messageDiv.classList.add('nutrimate-toast--error');
   } else {
-    messageDiv.style.backgroundColor = "#0D9488";
-    messageDiv.style.color = "white";
+    messageDiv.classList.add('nutrimate-toast--info');
   }
 
   // Auto-hide after 4 seconds
   setTimeout(() => {
-    messageDiv.style.display = 'none';
+    messageDiv.classList.remove('nutrimate-toast--visible');
   }, 4000);
 }
 
-// Add CSS animation for message
-const style = document.createElement('style');
-style.textContent = `
-  @keyframes slideDown {
-    from {
+function ensureToastStyles() {
+  if (document.getElementById('nutrimateToastStyles')) return;
+
+  const style = document.createElement('style');
+  style.id = 'nutrimateToastStyles';
+  style.textContent = `
+    .nutrimate-toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-10px);
+      padding: 14px 24px;
+      border-radius: 10px;
+      font-weight: 600;
+      z-index: 9999;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.18);
       opacity: 0;
-      transform: translateX(-50%) translateY(-20px);
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
     }
-    to {
+
+    .nutrimate-toast--visible {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
     }
-  }
-`;
-document.head.appendChild(style);
+
+    .nutrimate-toast--success {
+      background: #a3e635;
+      color: #1f2937;
+    }
+
+    .nutrimate-toast--error {
+      background: #ef4444;
+      color: #ffffff;
+    }
+
+    .nutrimate-toast--info {
+      background: #0d9488;
+      color: #ffffff;
+    }
+  `;
+  document.head.appendChild(style);
+}
 
 // Enable session persistence (user stays logged in after closing browser)
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)

@@ -4,24 +4,23 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login Page</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/global.css">
 </head>
 
 <body>
+  <a class="skip-link" href="#loginMain">Skip to main content</a>
   <div class="login-container">
-    <div class="login-section">
+    <div class="login-section" id="loginMain">
       <h2>Login to Your Dashboard</h2>
       <form id="loginForm">
         <div class="form-group">
-          
-          <input type="email" id="email" placeholder="Enter your email..." required>
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="Enter your email..." autocomplete="email" required>
 
-          
           <div class="password-box">
-            <input type="password" id="password" placeholder="Enter your password..." required>
-           
-            <span class="toggle-password" onclick="togglePassword()">👁</span>
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password..." autocomplete="current-password" required>
+            <button type="button" class="toggle-password" onclick="togglePassword()" aria-label="Show password" aria-pressed="false">Show</button>
           </div>
         </div>
 
@@ -30,7 +29,7 @@
           <a href="#">Forgot Password?</a>
         </div>
 
-        <button type="submit" class="login-btn">Login </button>
+        <button type="submit" class="login-btn">Login</button>
 
         <div class="social-login">
           <button type="button" class="social-btn google-btn">
@@ -52,7 +51,7 @@
     </div>
     <div class="info-section">
       <div class="logo">NutriMate</div>
-      <img src="🥗 Ready to kickstart your healthy eating journey_.jpeg" alt="Healthy Food Illustration">
+      <img src="assets/images/Healthy%20lifestyle.jpeg" alt="Healthy meal planning illustration">
       <h3>Your AI Meal Planning Partner</h3>
      
     </div>
@@ -74,7 +73,14 @@
     // Toggle password visibility
     function togglePassword() {
       const pass = document.getElementById("password");
-      pass.type = pass.type === "password" ? "text" : "password";
+      const toggleBtn = document.querySelector('.toggle-password');
+      const showing = pass.type !== "password";
+      pass.type = showing ? "password" : "text";
+      if (toggleBtn) {
+        toggleBtn.textContent = showing ? 'Show' : 'Hide';
+        toggleBtn.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+        toggleBtn.setAttribute('aria-pressed', showing ? 'false' : 'true');
+      }
     }
 
     // Handle login form submission

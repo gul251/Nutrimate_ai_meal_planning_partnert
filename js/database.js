@@ -42,10 +42,11 @@ async function updateUserProfile(profileData) {
       throw new Error("No authenticated user");
     }
 
-    await db.collection('users').doc(user.uid).update({
+    await db.collection('users').doc(user.uid).set({
       ...profileData,
+      email: user.email || profileData.email || "",
       updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
+    }, { merge: true });
 
     console.log("✅ Profile updated successfully");
     showMessage("Profile saved successfully!", "success");
@@ -94,17 +95,26 @@ async function getMealPlans(date = null) {
       throw new Error("No authenticated user");
     }
 
-    let query = db.collection('users').doc(user.uid).collection('mealPlans');
+    const collectionRef = db.collection('users').doc(user.uid).collection('mealPlans');
+    let snapshot;
 
+    // Avoid where(date)+orderBy(createdAt) to prevent required composite index.
     if (date) {
-      query = query.where('date', '==', date);
+      snapshot = await collectionRef.where('date', '==', date).get();
+    } else {
+      snapshot = await collectionRef.orderBy('createdAt', 'desc').get();
     }
 
-    const snapshot = await query.orderBy('createdAt', 'desc').get();
-    
     const mealPlans = [];
     snapshot.forEach(doc => {
       mealPlans.push({ id: doc.id, ...doc.data() });
+    });
+
+    // Keep newest-first order even for date-filtered query.
+    mealPlans.sort((a, b) => {
+      const aMs = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
+      const bMs = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
+      return bMs - aMs;
     });
 
     console.log(`✅ Loaded ${mealPlans.length} meal plans`);
@@ -116,11 +126,42 @@ async function getMealPlans(date = null) {
 }
 
 /**
- * Delete a meal plan
- * @param {string} mealPlanId - ID of meal plan to delete
+ * Update an existing meal plan
+ * @param {string} mealPlanId - ID of meal plan to update
+ * @param {object} updates - Fields to update {name, calories, protein, cost, mealType}
  * @returns {Promise<void>}
  */
-async function deleteMealPlan(mealPlanId) {
+async function updateMealPlan(mealPlanId, updates) {
+  try {
+    const user = getCurrentUser();
+    if (!user) {
+      throw new Error("No authenticated user");
+    }
+
+    const safeUpdates = {
+      ...updates,
+      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    await db.collection('users').doc(user.uid)
+      .collection('mealPlans').doc(mealPlanId).update(safeUpdates);
+
+    console.log("✅ Meal plan updated");
+    showMessage("Meal updated successfully", "success");
+  } catch (error) {
+    console.error("❌ Error updating meal plan:", error);
+    showMessage("Failed to update meal", "error");
+    throw error;
+  }
+}
+
+/**
+ * Delete a meal plan
+ * @param {string} mealPlanId - ID of meal plan to delete
+ * @param {boolean} suppressToast - Skip success/error toasts when true
+ * @returns {Promise<void>}
+ */
+async function deleteMealPlan(mealPlanId, suppressToast = false) {
   try {
     const user = getCurrentUser();
     if (!user) {
@@ -131,10 +172,14 @@ async function deleteMealPlan(mealPlanId) {
       .collection('mealPlans').doc(mealPlanId).delete();
 
     console.log("✅ Meal plan deleted");
-    showMessage("Meal removed", "success");
+    if (!suppressToast) {
+      showMessage("Meal removed", "success");
+    }
   } catch (error) {
     console.error("❌ Error deleting meal plan:", error);
-    showMessage("Failed to delete meal", "error");
+    if (!suppressToast) {
+      showMessage("Failed to delete meal", "error");
+    }
     throw error;
   }
 }
@@ -293,10 +338,10 @@ async function saveGoals(goals) {
       throw new Error("No authenticated user");
     }
 
-    await db.collection('users').doc(user.uid).update({
+    await db.collection('users').doc(user.uid).set({
       goals: goals,
       goalsUpdatedAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
+    }, { merge: true });
 
     console.log("✅ Goals saved");
     showMessage("Goals updated!", "success");

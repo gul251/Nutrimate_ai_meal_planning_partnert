@@ -4,39 +4,41 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Create Account - NutriMate</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/global.css">
 </head>
 <body>
+  <a class="skip-link" href="#signupMain">Skip to main content</a>
   <div class="signup-container">
-  <div class="register-container">
+  <div class="register-container" id="signupMain">
     <h2>Create Your NutriMate Account</h2>
 
     <form id="signupForm" class="form">
      
-      <label>Full Name:</label>
-      <input type="text" name="name" id="name" required>
+      <label for="name">Full Name:</label>
+      <input type="text" name="name" id="name" autocomplete="name" required>
 
-      <label>Email:</label>
-      <input type="email" name="email" id="email" required>
+      <label for="email">Email:</label>
+      <input type="email" name="email" id="email" autocomplete="email" required>
 
-      <label>Password:</label>
-      <input type="password" name="password" id="password" required>
+      <label for="password">Password:</label>
+      <input type="password" name="password" id="password" autocomplete="new-password" minlength="6" required>
 
-      <label>Weight (kg):</label>
-      <input type="number" name="weight" id="weight" required>
+      <label for="weight">Weight (kg):</label>
+      <input type="number" name="weight" id="weight" min="1" required>
 
-      <label>Goal:</label>
+      <label for="goal">Goal:</label>
       <select name="goal" id="goal" required>
         <option value="Lose Weight">Lose Weight</option>
         <option value="Gain Muscle">Gain Muscle</option>
         <option value="Maintain Weight">Maintain Weight</option>
       </select>
 
-      <p>Select Food Type(s):</p>
-      <label><input type="checkbox" name="foodType" value="Vegetarian"> Vegetarian</label><br>
-      <label><input type="checkbox" name="foodType" value="Non-Vegetarian"> Non-Vegetarian</label><br>
-      <label><input type="checkbox" name="foodType" value="Vegan"> Vegan</label>
+      <fieldset class="food-type-group">
+        <legend>Select Food Type(s):</legend>
+        <label class="checkbox-row"><input type="checkbox" name="foodType" value="Vegetarian"> Vegetarian</label>
+        <label class="checkbox-row"><input type="checkbox" name="foodType" value="Non-Vegetarian"> Non-Vegetarian</label>
+        <label class="checkbox-row"><input type="checkbox" name="foodType" value="Vegan"> Vegan</label>
+      </fieldset>
 
       <button type="submit">Create Account</button>
       <p>Already have an account? <a href="login.html">Login here</a></p>
@@ -44,7 +46,7 @@
   </div>
 
   <div class="register-image">
-
+    <img src="assets/images/The%20Do%27s%20%26%20Don%27ts%20of%20Starting%20a%20Diet.jpeg" alt="Healthy food preparation">
   </div>
 
   </div>

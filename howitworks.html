@@ -5,23 +5,22 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>NutriMate — How It Works</title>
   <meta name="description" content="NutriMate - Learn how our AI meal planning works">
-  <!-- Link to external CSS -->
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="css/global.css">
   <link rel="stylesheet" href="css/dashboardstyle.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 
 <body>
 <div class="container-body">
+<a class="skip-link" href="#howMain">Skip to main content</a>
 
 <div class="news">
 <span>Nutrimate Foods.</span>
-      <span>Healthy & Vegeterian.</span>
+  <span>Healthy & Vegetarian.</span>
       <span>Free Delivery All Over Pakistan.</span>
 </div>
 
@@ -29,50 +28,50 @@
 <div class="logo">
     <h3>NutriMate</h3>
 </div>
-<navbar class="nav">
+<nav class="nav" aria-label="Primary navigation">
            <ul>
 
   <li><a href="dashboardd.html">Home</a></li>
   <li><a href="howitworks.html">How It Works</a></li>
-  <li><a href="#mealplans">Meal Plans</a></li>
-  <li><a href="#aiplans">AI Planner</a></li>
-  <li><a href="#goals">Goals</a></li>
+  <li><a href="dashboardd.html#mealplans">Meal Plans</a></li>
+  <li><a href="dashboardd.html#aiplans">AI Planner</a></li>
+  <li><a href="dashboardd.html#goals">Goals</a></li>
   <li><a href="#footer">Contact</a></li>
             </ul>
-</navbar>
+</nav>
 <div class="button">
-    <button id="loginBtn" class="login" onclick="window.location.href='login.html'">Login</button>
-    <button   id="logout" class="loginout" onclick="window.location.href='welcome.html'">Logout</button>
+    <button type="button" id="loginBtn" class="login" onclick="window.location.href='login.html'">Login</button>
+    <button type="button" id="logoutBtn" class="loginout" onclick="window.location.href='welcome.html'">Logout</button>
 </div>
 </header>
 
-<div class="sidebar-container">
-  <div class="hamburger" id="menuBtn">
+<div class="sidebar-container" aria-label="Mobile navigation">
+  <button class="hamburger" id="menuBtn" aria-label="Toggle navigation" aria-expanded="false" type="button">
     &#9776; <!-- three bars -->
-  </div>
+  </button>
 
-  <div class="sidebar-menu" id="sidebarMenu">
+  <nav class="sidebar-menu" id="sidebarMenu" aria-label="Sidebar navigation">
     <a href="dashboardd.html">Home</a>
-    <a href="#mealplans">Meal Plans</a>
-    <a href="#aiplans">AI Planner</a>
-    <a href="#goals">Goals</a>
+    <a href="dashboardd.html#mealplans">Meal Plans</a>
+    <a href="dashboardd.html#aiplans">AI Planner</a>
+    <a href="dashboardd.html#goals">Goals</a>
     <a href="#footer">Contact</a>
-    <a href="#profile">Profile</a>
-    <a href="login.html">Logout</a>
-  </div>
+    <a href="dashboardd.html#profile">Profile</a>
+    <a href="#" id="sidebarLogout">Logout</a>
+  </nav>
 </div>
 
 
-  <div class="how-container">
+  <main class="how-container" id="howMain" role="main">
 
-    <div class="how-header">
+    <section class="how-header">
       <h1>How NutriMate Works</h1>
       <p>Simple steps to plan meals and track your health easily</p>
-    </div>
+    </section>
 
-    <div class="steps">
+    <section class="steps" aria-label="How it works steps">
 
-      <div class="step">
+      <article class="step">
         <div class="step-number">1</div>
         <div class="step-content">
           <h3>Create Your Profile</h3>
@@ -81,9 +80,9 @@
             and diet preference. This helps NutriMate understand your body needs.
           </p>
         </div>
-      </div>
+      </article>
 
-      <div class="step">
+      <article class="step">
         <div class="step-number">2</div>
         <div class="step-content">
           <h3>Analyze Health Data</h3>
@@ -92,9 +91,9 @@
             protein needs, and overall nutrition requirements.
           </p>
         </div>
-      </div>
+      </article>
 
-      <div class="step">
+      <article class="step">
         <div class="step-number">3</div>
         <div class="step-content">
           <h3>Get Personalized Meal Plans</h3>
@@ -103,9 +102,9 @@
             that match your calorie and diet targets.
           </p>
         </div>
-      </div>
+      </article>
 
-      <div class="step">
+      <article class="step">
         <div class="step-number">4</div>
         <div class="step-content">
           <h3>Track Daily Meals</h3>
@@ -114,9 +113,9 @@
             and track calories, protein, and cost in one place.
           </p>
         </div>
-      </div>
+      </article>
 
-      <div class="step">
+      <article class="step">
         <div class="step-number">5</div>
         <div class="step-content">
           <h3>Monitor Progress</h3>
@@ -125,23 +124,23 @@
             motivated and consistent with your health goals.
           </p>
         </div>
-      </div>
+      </article>
 
-    </div>
+    </section>
 
-  </div>
+  </main>
 <footer class="footer" id="footer">
  <div class="footer-top">
-    <h3>Nutri<white class="white">Mate</white></h3>
+    <h3>Nutri<span class="white">Mate</span></h3>
 
   <div class="quicklinks">
    <ul>
 
   <li><a href="dashboardd.html">Home</a></li>
   <li><a href="howitworks.html">How It Works</a></li>
-  <li><a href="#mealplans">Meal Plans</a></li>
-  <li><a href="#aiplans">AI Planner</a></li>
-  <li><a href="#goals">Goals</a></li>
+  <li><a href="dashboardd.html#mealplans">Meal Plans</a></li>
+  <li><a href="dashboardd.html#aiplans">AI Planner</a></li>
+  <li><a href="dashboardd.html#goals">Goals</a></li>
   <li><a href="#footer">Contact</a></li>
             </ul>
   </div>
@@ -172,7 +171,47 @@
 
   </div>  
 </body>
-<!-- Link to external JS (save script.js separately) -->
- <script src="dashboard.js"></script>
+<script>
+  const menuBtn = document.getElementById("menuBtn");
+  const sidebarMenu = document.getElementById("sidebarMenu");
+  const sidebarLogout = document.getElementById("sidebarLogout");
+
+  function closeMenu() {
+    sidebarMenu?.classList.remove("open");
+    menuBtn?.setAttribute("aria-expanded", "false");
+  }
+
+  menuBtn?.addEventListener("click", () => {
+    sidebarMenu?.classList.toggle("open");
+    menuBtn.setAttribute("aria-expanded", sidebarMenu?.classList.contains("open") ? "true" : "false");
+  });
+
+  sidebarMenu?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      closeMenu();
+    });
+  });
+
+  sidebarLogout?.addEventListener("click", (event) => {
+    event.preventDefault();
+    closeMenu();
+    window.location.href = "welcome.html";
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!sidebarMenu?.classList.contains("open")) return;
+    const clickedInsideMenu = sidebarMenu.contains(event.target);
+    const clickedToggle = menuBtn?.contains(event.target);
+    if (!clickedInsideMenu && !clickedToggle) {
+      closeMenu();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeMenu();
+    }
+  });
+</script>
 </html>
 
