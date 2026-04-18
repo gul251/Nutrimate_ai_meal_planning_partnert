@@ -112,6 +112,29 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
+  function formatRelativeCooldown(cooldownUntil) {
+    const value = Number(cooldownUntil || 0);
+    if (!Number.isFinite(value) || value <= Date.now()) return "none";
+    const ms = value - Date.now();
+    const minutes = Math.ceil(ms / (60 * 1000));
+    if (minutes < 60) return `${minutes} min`;
+    const hours = Math.ceil(minutes / 60);
+    return `${hours} hour${hours > 1 ? "s" : ""}`;
+  }
+
+  function humanizeAiReason(reason) {
+    const map = {
+      same_day_cached: "Used cached plan",
+      missing_key: "Provider key not configured",
+      quota_cooldown: "Cooldown active after quota limit",
+      daily_limit_reached: "Daily request cap reached",
+      quota_limit: "Provider quota/rate limit reached",
+      provider_unavailable: "Provider unavailable",
+      proxy_unavailable: "Proxy endpoint unavailable"
+    };
+    return map[String(reason || "").trim()] || (reason || "N/A");
+  }
+
   function updateAiStatusBanner() {
     const statusEl = document.getElementById("aiStatus");
     if (!statusEl) return;
@@ -125,18 +148,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     const status = getAiPlannerStatus();
     if (status.mode === "missing_key") {
       statusEl.className = "ai-status-banner warning";
-      statusEl.textContent = "AI key not configured. Using local fallback meal plans.";
+      statusEl.textContent = "AI provider key is missing, so local fallback plans are active.";
       return;
     }
 
     if (status.mode === "fallback_only") {
       statusEl.className = "ai-status-banner warning";
-      statusEl.textContent = `AI usage limited right now (${status.requestsUsed}/${status.requestsLimit} today). Local fallback remains available.`;
+      const cooldownLabel = formatRelativeCooldown(status.cooldownUntil);
+      statusEl.textContent = `AI is in fallback mode (${status.requestsUsed}/${status.requestsLimit} used today, cooldown: ${cooldownLabel}). Local plans still work.`;
       return;
     }
 
     statusEl.className = "ai-status-banner ready";
-    statusEl.textContent = `AI ready (${status.requestsUsed}/${status.requestsLimit} used today).`;
+    statusEl.textContent = `AI is ready (${status.requestsUsed}/${status.requestsLimit} used today via ${status.providerMode || "provider"}).`;
   }
 
   function updateAiDiagnosticsPanel() {
@@ -149,7 +173,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     const diagnostics = getAiDiagnostics();
-    textEl.textContent = JSON.stringify(diagnostics, null, 2);
+    const status = diagnostics?.status || {};
+    const lastResult = diagnostics?.lastResult || {};
+    const summaryLines = [
+      `Mode: ${status.mode || "unknown"}`,
+      `Provider: ${status.providerMode || "unknown"}`,
+      `Requests: ${status.requestsUsed ?? 0}/${status.requestsLimit ?? "?"}`,
+      `Cooldown: ${formatRelativeCooldown(status.cooldownUntil)}`,
+      `Last Source: ${lastResult.source || "n/a"}`,
+      `Last Reason: ${humanizeAiReason(lastResult.reason)}`
+    ];
+
+    textEl.textContent = `${summaryLines.join("\n")}\n\nRaw JSON:\n${JSON.stringify(diagnostics, null, 2)}`;
   }
 
   // Auto-load profile on page load
