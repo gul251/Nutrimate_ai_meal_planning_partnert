@@ -99,21 +99,12 @@ padding: 8px;
     color: var(--color-primary);
     background: var(--color-accent);
     border: 1px solid var(--color-secondary);
-    border-radius: 4px;
-    padding: 5px 8px;
+    border-radius: var(--radius-md);
+    padding: var(--control-padding-y) var(--space-md);
     cursor: pointer;
 }
 .button button:hover{
   color: var(--color-secondary);
-}
-
-a:focus-visible,
-button:focus-visible,
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
-  outline: 3px solid var(--color-secondary);
-  outline-offset: 2px;
 }
 
 .sidebar-container {
@@ -275,14 +266,38 @@ textarea:focus-visible {
     label{
       display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
     input[type=text], input[type=number], select, textarea{
-      width:100%;padding:8px;border-radius:8px;border:1px solid #e5e7eb}
+      width: 100%;
+      min-height: var(--control-height);
+      padding: var(--control-padding-y) var(--control-padding-x);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input[type=text]:focus,
+    input[type=number]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--color-primary);
+      box-shadow: var(--focus-ring);
+      outline: none;
+    }
     .row{
       display:flex;gap:10px}
       .card strong{
         color: var(--color-primary);
       }
     button{
-      background:var(--green);color:white;border:0;padding:8px 12px;border-radius:8px;cursor:pointer}
+      background: var(--green);
+      color: var(--color-surface);
+      border: 0;
+      min-height: var(--control-height);
+      padding: var(--control-padding-y) var(--space-md);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
     .meal-list{
       display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
     .meal{
