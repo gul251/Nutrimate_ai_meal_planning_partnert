@@ -2,14 +2,14 @@
 
 /* Color Palette:
    primary: #0D9488
-   secondary: #A3E635 
+  secondary: #F59E0B
    accent: #F8FAFC
    text: #0F172A
 */
 
 :root {
   --color-primary: #0D9488;
-  --color-secondary: #A3E635;
+  --color-secondary: #F59E0B;
   --color-accent: #F8FAFC;
   --color-text: #0F172A;
   --color-muted: #4B5563;
@@ -40,7 +40,7 @@
   --control-height: 44px;
   --control-padding-y: 10px;
   --control-padding-x: 12px;
-  --focus-ring: 0 0 0 3px rgba(163, 230, 53, 0.35);
+  --focus-ring: 0 0 0 3px rgba(245, 158, 11, 0.32);
 
   /* Shared aliases already used in dashboard styles */
   --card: #FFFFFF;

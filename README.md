@@ -250,7 +250,7 @@ firestore/
 ## 🎨 Color Palette
 
 - **Primary:** `#0D9488` (Teal)
-- **Secondary:** `#A3E635` (Lime Green)
+- **Secondary:** `#F59E0B` (Amber)
 - **Accent:** `#F8FAFC` (Light Gray)
 - **Text:** `#0F172A` (Dark Blue)
 

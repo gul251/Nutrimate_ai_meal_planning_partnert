@@ -256,7 +256,7 @@ function ensureToastStyles() {
     }
 
     .nutrimate-toast--success {
-      background: #a3e635;
+      background: #f59e0b;
       color: #1f2937;
     }
 
