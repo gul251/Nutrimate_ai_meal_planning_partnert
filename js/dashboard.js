@@ -85,10 +85,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       const profile = await getUserProfile();
       if (!profile) return;
 
+      const getValidNumber = (value, min, max) => {
+        const parsed = parseFloat(value);
+        if (!Number.isFinite(parsed)) return "";
+        if (parsed < min || parsed > max) return "";
+        return String(parsed);
+      };
+
       document.getElementById("name").value = profile.name || "";
-      document.getElementById("age").value = profile.age || "";
-      document.getElementById("height").value = profile.height || "";
-      document.getElementById("weight").value = profile.weight || "";
+      document.getElementById("age").value = getValidNumber(profile.age, 5, 120);
+      document.getElementById("height").value = getValidNumber(profile.height, 1, 300);
+      document.getElementById("weight").value = getValidNumber(profile.weight, 1, 500);
       document.getElementById("activity").value = profile.activity || "sedentary";
       document.getElementById("dietType").value = profile.diet || "omnivore";
 
@@ -251,9 +258,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function validateMealInputs() {
     const name = mealNameInput?.value?.trim() || "";
-    const calories = parseInt(mealCaloriesInput?.value, 10) || 0;
-    const protein = parseInt(mealProteinInput?.value, 10) || 0;
-    const cost = parseFloat(mealCostInput?.value) || 0;
+    const caloriesRaw = mealCaloriesInput?.value?.trim() || "";
+    const proteinRaw = mealProteinInput?.value?.trim() || "";
+    const costRaw = mealCostInput?.value?.trim() || "";
+
+    const parseOptionalNumber = (raw, fallback = 0) => {
+      if (!raw) return fallback;
+      const parsed = Number(raw);
+      return Number.isFinite(parsed) ? parsed : NaN;
+    };
+
+    const calories = parseOptionalNumber(caloriesRaw, 0);
+    const protein = parseOptionalNumber(proteinRaw, 0);
+    const cost = parseOptionalNumber(costRaw, 0);
 
     if (!name) {
       showMessage("Meal name is required", "error");
@@ -263,6 +280,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       showMessage("Meal name too long (max 100 chars)", "error");
       return null;
     }
+    if (!Number.isFinite(calories)) {
+      showMessage("Calories must be a valid number", "error");
+      return null;
+    }
+    if (!Number.isFinite(protein)) {
+      showMessage("Protein must be a valid number", "error");
+      return null;
+    }
+    if (!Number.isFinite(cost)) {
+      showMessage("Cost must be a valid number", "error");
+      return null;
+    }
+
     if (calories < 0 || calories > 5000) {
       showMessage("Calories must be 0-5000", "error");
       return null;
@@ -276,7 +306,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       return null;
     }
 
-    return { name, calories, protein, cost };
+    return {
+      name,
+      calories: Math.round(calories),
+      protein: Math.round(protein),
+      cost: Math.round(cost * 100) / 100
+    };
   }
 
   function clearMealForm() {
@@ -486,6 +521,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (!Number.isFinite(weight) || weight <= 0) {
       showMessage("Enter a valid positive weight", "error");
+      return;
+    }
+
+    if (weight > 500) {
+      showMessage("Weight must be 1-500 kg", "error");
       return;
     }
 
