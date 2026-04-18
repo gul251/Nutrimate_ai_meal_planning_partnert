@@ -132,26 +132,26 @@ cd Nutrimate_ai_meal_planning_partnert
    };
    ```
 
-### Step 3: Google Gemini AI Setup
+### Step 3: Google Gemini AI Setup (Proxy-First)
 
-1. **Get Gemini API Key**
-   - Go to https://aistudio.google.com/app/apikey
-   - Click "Get API Key" → "Create API key in new project"
-   - Copy the API key
+1. **Deploy AI Proxy (recommended for security + reliability)**
+   - Use `backend/cloudflare-worker.js`
+   - Follow `backend/README.md`
+   - Set worker secret: `GEMINI_API_KEY`
+   - Deploy and copy your worker URL
 
-2. **Create AI Configuration File**
-   - Copy `js/ai.example.js` and rename it to `js/ai.js`:
-   ```bash
-   # PowerShell
-   Copy-Item js\ai.example.js js\ai.js
-   
-   # Or just duplicate the file manually
-   ```
+2. **Configure Frontend Proxy URL**
    - Open `js/ai.js`
-   - Replace the placeholder:
+   - Set:
    ```javascript
-   const GEMINI_API_KEY = "YOUR_ACTUAL_GEMINI_API_KEY";
+   const NUTRIMATE_AI_PROXY_URL = "https://your-worker-name.your-subdomain.workers.dev";
    ```
+
+3. **Optional Direct Key (local testing only)**
+   - Go to https://aistudio.google.com/app/apikey
+   - Create a Gemini key
+   - Set `GEMINI_API_KEY` in `js/ai.js` only if you cannot use proxy yet
+   - Do not commit real keys to git
 
 ### Step 4: Run Locally
 
@@ -205,6 +205,8 @@ npx http-server -p 8000
 - Click "Suggest Meals" button
 - AI will generate personalized meal suggestions based on your profile
 - Meals are displayed with calorie information
+- If AI is limited/unavailable, NutriMate automatically shows a local fallback plan
+- Use the "AI Diagnostics" panel on dashboard to inspect current AI mode/status
 
 ### 5. Add Custom Meals
 - Enter meal name, calories, and protein

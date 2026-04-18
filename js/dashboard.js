@@ -132,10 +132,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     statusEl.textContent = `AI ready (${status.requestsUsed}/${status.requestsLimit} used today).`;
   }
 
+  function updateAiDiagnosticsPanel() {
+    const textEl = document.getElementById("aiDiagnosticsText");
+    if (!textEl) return;
+
+    if (typeof getAiDiagnostics !== "function") {
+      textEl.textContent = "Diagnostics unavailable. Ensure js/ai.js is loaded.";
+      return;
+    }
+
+    const diagnostics = getAiDiagnostics();
+    textEl.textContent = JSON.stringify(diagnostics, null, 2);
+  }
+
   // Auto-load profile on page load
   loadProfile();
   updateAiStatusBanner();
+  updateAiDiagnosticsPanel();
   setInterval(updateAiStatusBanner, 5 * 60 * 1000);
+  setInterval(updateAiDiagnosticsPanel, 5 * 60 * 1000);
   loadBtn?.addEventListener("click", loadProfile);
 
   calculateGoalsBtn?.addEventListener("click", async () => {
@@ -469,6 +484,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     aiArea.innerHTML = "<p>Generating AI meal plan... Please wait...</p>";
     updateAiStatusBanner();
+    updateAiDiagnosticsPanel();
     suggestMealsBtn.disabled = true;
     suggestMealsBtn.textContent = "Generating...";
 
@@ -520,6 +536,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       suggestMealsBtn.disabled = false;
       suggestMealsBtn.textContent = "Suggest Meals";
       updateAiStatusBanner();
+      updateAiDiagnosticsPanel();
     }
   });
 

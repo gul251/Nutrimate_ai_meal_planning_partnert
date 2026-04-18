@@ -461,6 +461,32 @@ textarea:focus-visible {
   background: #fffbeb;
   color: #78350f;
 }
+
+.ai-diagnostics {
+  margin: 0 0 12px;
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+  background: #f8fafc;
+  padding: 8px 10px;
+}
+
+.ai-diagnostics summary {
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+.ai-diagnostics pre {
+  margin: 8px 0 0;
+  padding: 8px;
+  background: #ffffff;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  font-size: 12px;
+  overflow-x: auto;
+  color: #1f2937;
+}
     
     @media(max-width:800px){.cols-3{
       grid-template-columns:1fr}
