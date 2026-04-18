@@ -222,6 +222,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   let currentEditingMealId = null;
 
+  function setButtonBusy(button, busyText) {
+    if (!button) return;
+    if (!button.dataset.defaultText) {
+      button.dataset.defaultText = button.textContent || "";
+    }
+    button.disabled = true;
+    button.textContent = busyText;
+  }
+
+  function restoreButton(button) {
+    if (!button) return;
+    button.disabled = false;
+    if (button.dataset.defaultText) {
+      button.textContent = button.dataset.defaultText;
+    }
+  }
+
   function escapeHTML(value) {
     const raw = String(value ?? "");
     return raw
@@ -302,6 +319,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!mealsArea) return;
 
     try {
+      mealsArea.innerHTML = '<p class="loading-inline">Loading meals...</p>';
       const selectedDate = planDate?.value || null;
       const meals = await getMealPlans(selectedDate);
       mealsArea.innerHTML = "";
@@ -379,6 +397,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
     try {
+      setButtonBusy(addMealBtn, currentEditingMealId ? "Updating..." : "Saving...");
       if (currentEditingMealId) {
         await updateMealPlan(currentEditingMealId, mealData);
         clearMealForm();
@@ -389,6 +408,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       await fetchMeals();
     } catch (error) {
       console.error("Error saving meal:", error);
+      showMessage("Failed to save meal. Please try again.", "error");
+    } finally {
+      restoreButton(addMealBtn);
     }
   });
 
@@ -398,6 +420,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const saveGoalsBtn = document.getElementById("saveGoalsBtn");
   saveGoalsBtn?.addEventListener("click", async () => {
     try {
+      setButtonBusy(saveGoalsBtn, "Saving...");
       const calTarget = parseInt(document.getElementById("calTarget")?.value, 10) || 0;
       const proteinTarget = parseInt(document.getElementById("proteinTarget")?.value, 10) || 0;
 
@@ -419,6 +442,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (error) {
       console.error("Error saving goals:", error);
       showMessage("Failed to save goals. Check values.", "error");
+    } finally {
+      restoreButton(saveGoalsBtn);
     }
   });
 
@@ -427,12 +452,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   clearDayBtn?.addEventListener("click", async () => {
     const selectedDate = planDate?.value || new Date().toISOString().split("T")[0];
     if (confirm(`Clear all meals for ${selectedDate}?`)) {
-      const meals = await getMealPlans(selectedDate);
-      for (const meal of meals) {
-        await deleteMealPlan(meal.id, true);
+      try {
+        setButtonBusy(clearDayBtn, "Clearing...");
+        const meals = await getMealPlans(selectedDate);
+        for (const meal of meals) {
+          await deleteMealPlan(meal.id, true);
+        }
+        await fetchMeals();
+        showMessage("Day cleared!", "success");
+      } finally {
+        restoreButton(clearDayBtn);
       }
-      await fetchMeals();
-      showMessage("Day cleared!", "success");
     }
   });
 
@@ -482,11 +512,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    aiArea.innerHTML = "<p>Generating AI meal plan... Please wait...</p>";
+    aiArea.innerHTML = '<p class="loading-inline">Generating AI meal plan... Please wait...</p>';
     updateAiStatusBanner();
     updateAiDiagnosticsPanel();
-    suggestMealsBtn.disabled = true;
-    suggestMealsBtn.textContent = "Generating...";
+    setButtonBusy(suggestMealsBtn, "Generating...");
 
     try {
       let profile = await getUserProfile();
@@ -533,8 +562,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.error("AI generation error:", error);
       aiArea.innerHTML = "<p>Failed to generate meal plan. Please check your API key in js/ai.js</p>";
     } finally {
-      suggestMealsBtn.disabled = false;
-      suggestMealsBtn.textContent = "Suggest Meals";
+      restoreButton(suggestMealsBtn);
       updateAiStatusBanner();
       updateAiDiagnosticsPanel();
     }
