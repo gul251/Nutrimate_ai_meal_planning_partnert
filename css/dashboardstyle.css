@@ -1,29 +1,4 @@
 /* NutriMate Dashboard Styles */
-:root {
-  --color-primary: #0D9488;
-  --color-secondary: #A3E635;
-  --color-accent: #F8FAFC;
-  --color-text: #0F172A;
-  --color-muted: #4B5563;
-  --color-border: #E5E7EB;
-  --color-surface: #FFFFFF;
-
-  --font-family-base: 'Roboto', sans-serif;
-  --font-family-display: 'Montserrat', sans-serif;
-
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-
-  --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 6px 18px rgba(20, 30, 40, 0.06);
-
-  /* Existing aliases used throughout this stylesheet */
-  --card: #FFFFFF;
-  --green: #0D9488;
-  --muted: #4B5563;
-}
-
 * {
   box-sizing: border-box;
 }
