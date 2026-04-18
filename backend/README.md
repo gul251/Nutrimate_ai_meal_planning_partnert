@@ -5,11 +5,23 @@ This backend proxy keeps your Gemini API key secret and returns meal plans to th
 ## 1) Deploy the worker
 1. Install Wrangler CLI: `npm i -g wrangler`
 2. Login: `wrangler login`
-3. In this folder, create a worker project or use this file as your entry file.
+3. Use the included `wrangler.toml` and run commands from `backend/` folder.
 4. Add secrets:
    - `wrangler secret put GEMINI_API_KEY`
    - Optional: `wrangler secret put ALLOWED_ORIGIN` (example: `https://your-project.web.app`)
 5. Deploy: `wrangler deploy`
+
+### Quick command sequence (PowerShell)
+```powershell
+cd backend
+npm i -g wrangler
+wrangler login
+wrangler secret put GEMINI_API_KEY
+wrangler secret put ALLOWED_ORIGIN
+wrangler deploy
+```
+
+After deploy, copy the worker URL from terminal output (usually `https://<name>.<subdomain>.workers.dev`).
 
 ## 2) Configure frontend
 In `js/ai.js`, set:
