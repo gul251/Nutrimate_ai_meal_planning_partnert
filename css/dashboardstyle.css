@@ -69,6 +69,8 @@ body {
 }
 .logo h3{
   color: var(--color-accent);
+  margin: 0;
+  line-height: 1;
 }
 .nav{align-items: center;
     display: flex;
