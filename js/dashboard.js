@@ -105,8 +105,37 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
+  function updateAiStatusBanner() {
+    const statusEl = document.getElementById("aiStatus");
+    if (!statusEl) return;
+
+    if (typeof getAiPlannerStatus !== "function") {
+      statusEl.className = "ai-status-banner warning";
+      statusEl.textContent = "AI planner script not loaded. Local suggestions will still work.";
+      return;
+    }
+
+    const status = getAiPlannerStatus();
+    if (status.mode === "missing_key") {
+      statusEl.className = "ai-status-banner warning";
+      statusEl.textContent = "AI key not configured. Using local fallback meal plans.";
+      return;
+    }
+
+    if (status.mode === "fallback_only") {
+      statusEl.className = "ai-status-banner warning";
+      statusEl.textContent = `AI usage limited right now (${status.requestsUsed}/${status.requestsLimit} today). Local fallback remains available.`;
+      return;
+    }
+
+    statusEl.className = "ai-status-banner ready";
+    statusEl.textContent = `AI ready (${status.requestsUsed}/${status.requestsLimit} used today).`;
+  }
+
   // Auto-load profile on page load
   loadProfile();
+  updateAiStatusBanner();
+  setInterval(updateAiStatusBanner, 5 * 60 * 1000);
   loadBtn?.addEventListener("click", loadProfile);
 
   calculateGoalsBtn?.addEventListener("click", async () => {
@@ -367,7 +396,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       const goals = {
-        calorieTarget,
+        calorieTarget: calTarget,
         proteinTarget,
         goalType: document.getElementById("goalType")?.value || "maintain"
       };
@@ -439,6 +468,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     aiArea.innerHTML = "<p>Generating AI meal plan... Please wait...</p>";
+    updateAiStatusBanner();
     suggestMealsBtn.disabled = true;
     suggestMealsBtn.textContent = "Generating...";
 
@@ -475,13 +505,21 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       displayMealPlan(aiArea.id, mealPlan);
-      showMessage("AI meal plan generated!", "success");
+      const meta = typeof getLastMealPlanMeta === "function" ? getLastMealPlanMeta() : null;
+      if (meta?.source === "ai") {
+        showMessage("AI meal plan generated!", "success");
+      } else if (meta?.source === "cache") {
+        showMessage("Showing your cached plan for today.", "info");
+      } else {
+        showMessage("Using local fallback meal plan.", "info");
+      }
     } catch (error) {
       console.error("AI generation error:", error);
       aiArea.innerHTML = "<p>Failed to generate meal plan. Please check your API key in js/ai.js</p>";
     } finally {
       suggestMealsBtn.disabled = false;
       suggestMealsBtn.textContent = "Suggest Meals";
+      updateAiStatusBanner();
     }
   });
 

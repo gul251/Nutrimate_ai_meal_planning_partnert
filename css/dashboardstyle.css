@@ -439,6 +439,28 @@ textarea:focus-visible {
 .meal-plan-content {
   line-height: 1.6;
 }
+
+.ai-status-banner {
+  margin: 0 0 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: #f8fafc;
+  color: var(--color-text);
+  font-size: 14px;
+}
+
+.ai-status-banner.ready {
+  border-color: #99f6e4;
+  background: #ecfeff;
+  color: #134e4a;
+}
+
+.ai-status-banner.warning {
+  border-color: #fde68a;
+  background: #fffbeb;
+  color: #78350f;
+}
     
     @media(max-width:800px){.cols-3{
       grid-template-columns:1fr}
