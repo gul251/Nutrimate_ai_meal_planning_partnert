@@ -18,6 +18,7 @@ body {
   min-height: 100vh;
 }
 .news{
+  display: none;
   width: 100%;
   overflow: hidden;
   padding: 7px 12px;
