@@ -47,7 +47,7 @@ Nutrimate_ai_meal_planning_partnert/
 ├── welcome.html                # Landing page
 ├── login.html                  # Login page
 ├── createaccount.html          # Signup page
-├── dashboardd.html             # Main dashboard
+├── dashboard.html             # Main dashboard
 ├── howitworks.html             # How it works page
 │
 ├── .gitignore                  # Git ignore rules
