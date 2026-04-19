@@ -2,14 +2,14 @@
 
 /* Color Palette:
    primary: #0D9488
-   secondary: #A3E635 
+  secondary: #F59E0B
    accent: #F8FAFC
    text: #0F172A
 */
 
 :root {
   --color-primary: #0D9488;
-  --color-secondary: #A3E635;
+  --color-secondary: #F59E0B;
   --color-accent: #F8FAFC;
   --color-text: #0F172A;
   --color-muted: #4B5563;
@@ -19,16 +19,28 @@
   --color-info-soft: #E8F5E9;
 
   --font-family-base: 'Roboto', sans-serif;
-  --font-family-display: 'Bebas', sans-serif;
+  --font-family-display: 'Montserrat', sans-serif;
 
-  --radius-sm: 5px;
+  --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-xl: 15px;
   --radius-2xl: 30px;
 
   --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 6px 18px rgba(20, 30, 40, 0.06);
+
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+
+  --control-height: 44px;
+  --control-padding-y: 10px;
+  --control-padding-x: 12px;
+  --focus-ring: 0 0 0 3px rgba(245, 158, 11, 0.32);
 
   /* Shared aliases already used in dashboard styles */
   --card: #FFFFFF;
@@ -65,6 +77,77 @@ nav {
 button:disabled {
   opacity: 0.65;
   cursor: not-allowed;
+}
+
+.btn,
+.login-btn,
+.register-container button,
+.welcome-right button,
+.social-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--control-height);
+  padding: var(--control-padding-y) var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn--primary,
+.login-btn,
+.register-container button,
+.welcome-right button {
+  background: var(--color-primary);
+  color: var(--color-surface);
+}
+
+.btn--primary:hover,
+.login-btn:hover,
+.register-container button:hover,
+.welcome-right button:hover {
+  background: #0b7f75;
+}
+
+.btn--secondary {
+  background: var(--color-secondary);
+  color: var(--color-text);
+}
+
+.btn--danger {
+  background: #ef4444;
+  color: var(--color-surface);
+}
+
+.btn--outline {
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  color: var(--color-text);
+}
+
+.form-control,
+.form-group input,
+.register-container .form input,
+.register-container .form select {
+  min-height: var(--control-height);
+  width: 100%;
+  padding: var(--control-padding-y) var(--control-padding-x);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-control:focus,
+.form-group input:focus,
+.register-container .form input:focus,
+.register-container .form select:focus {
+  border-color: var(--color-primary);
+  box-shadow: var(--focus-ring);
 }
 
 a:focus-visible,
@@ -157,13 +240,6 @@ textarea:focus-visible {
 }
 
 .form-group input {
-  min-height: 42px;
-  padding: 10px 12px;
-  border: 1px solid var(--color-secondary);
-  border-radius: var(--radius-md);
-  font-size: 14px;
-  outline: none;
-  transition: 0.3s;
   width: 100%;
 }
 
@@ -172,8 +248,7 @@ textarea:focus-visible {
 }
 
 .form-group input:focus {
-  border-color: var(--color-success-dark);
-  box-shadow: 0 0 4px rgba(46, 125, 50, 0.3);
+  border-color: var(--color-primary);
 }
 
 .password-box {
@@ -220,18 +295,11 @@ textarea:focus-visible {
 
 .login-btn {
   width: 100%;
-  padding: 12px;
-  background-color: var(--color-secondary);
-  color: white;
-  border: none;
-  border-radius: var(--radius-md);
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
+  font-weight: 700;
 }
 
 .login-btn:hover {
-  background-color: var(--color-primary);
+  background-color: #0b7f75;
 }
 
 .social-login {
@@ -242,19 +310,12 @@ textarea:focus-visible {
 }
 
 .social-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 100%;
   gap: 10px;
-  padding: 10px;
-  border-radius: var(--radius-md);
-  font-weight: 500;
   border: 1px solid #ddd;
-  cursor: pointer;
-  transition: 0.3s;
   margin-left: 0;
   margin-right: 0;
+  font-weight: 500;
 }
 
 .social-btn img {
@@ -385,12 +446,8 @@ textarea:focus-visible {
 
 .register-container .form input,
 .register-container .form select {
-  border: 1px solid var(--color-secondary);
   width: 100%;
-  padding: 10px;
   margin: 8px 0;
-  border-radius: var(--radius-sm);
-  font-size: 14px;
 }
 
 .register-container .form input[type="checkbox"] {
@@ -436,18 +493,12 @@ textarea:focus-visible {
 
 .register-container button {
   width: 100%;
-  padding: 10px;
-  background: var(--color-secondary);
-  color: white;
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
   font-weight: 600;
   margin-top: 15px;
 }
 
 .register-container button:hover {
-  background: var(--color-primary);
+  background: #0b7f75;
 }
 
 .register-image {
@@ -519,18 +570,12 @@ textarea:focus-visible {
 
 .welcome-right button {
   width: 100%;
-  padding: 12px;
-  background: var(--color-secondary);
-  color: white;
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
   font-weight: 600;
   font-size: 16px;
 }
 
 .welcome-right button:hover {
-  background: var(--color-primary);
+  background: #0b7f75;
 }
 
 /* ========== RESPONSIVE DESIGN ========== */

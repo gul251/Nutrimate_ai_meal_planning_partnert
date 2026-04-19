@@ -85,10 +85,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       const profile = await getUserProfile();
       if (!profile) return;
 
+      const getValidNumber = (value, min, max) => {
+        const parsed = parseFloat(value);
+        if (!Number.isFinite(parsed)) return "";
+        if (parsed < min || parsed > max) return "";
+        return String(parsed);
+      };
+
       document.getElementById("name").value = profile.name || "";
-      document.getElementById("age").value = profile.age || "";
-      document.getElementById("height").value = profile.height || "";
-      document.getElementById("weight").value = profile.weight || "";
+      document.getElementById("age").value = getValidNumber(profile.age, 5, 120);
+      document.getElementById("height").value = getValidNumber(profile.height, 1, 300);
+      document.getElementById("weight").value = getValidNumber(profile.weight, 1, 500);
       document.getElementById("activity").value = profile.activity || "sedentary";
       document.getElementById("dietType").value = profile.diet || "omnivore";
 
@@ -105,8 +112,87 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
+  function formatRelativeCooldown(cooldownUntil) {
+    const value = Number(cooldownUntil || 0);
+    if (!Number.isFinite(value) || value <= Date.now()) return "none";
+    const ms = value - Date.now();
+    const minutes = Math.ceil(ms / (60 * 1000));
+    if (minutes < 60) return `${minutes} min`;
+    const hours = Math.ceil(minutes / 60);
+    return `${hours} hour${hours > 1 ? "s" : ""}`;
+  }
+
+  function humanizeAiReason(reason) {
+    const map = {
+      same_day_cached: "Used cached plan",
+      missing_key: "Provider key not configured",
+      quota_cooldown: "Cooldown active after quota limit",
+      daily_limit_reached: "Daily request cap reached",
+      quota_limit: "Provider quota/rate limit reached",
+      provider_unavailable: "Provider unavailable",
+      proxy_unavailable: "Proxy endpoint unavailable"
+    };
+    return map[String(reason || "").trim()] || (reason || "N/A");
+  }
+
+  function updateAiStatusBanner() {
+    const statusEl = document.getElementById("aiStatus");
+    if (!statusEl) return;
+
+    if (typeof getAiPlannerStatus !== "function") {
+      statusEl.className = "ai-status-banner warning";
+      statusEl.textContent = "AI planner script not loaded. Local suggestions will still work.";
+      return;
+    }
+
+    const status = getAiPlannerStatus();
+    if (status.mode === "missing_key") {
+      statusEl.className = "ai-status-banner warning";
+      statusEl.textContent = "AI provider key is missing, so local fallback plans are active.";
+      return;
+    }
+
+    if (status.mode === "fallback_only") {
+      statusEl.className = "ai-status-banner warning";
+      const cooldownLabel = formatRelativeCooldown(status.cooldownUntil);
+      statusEl.textContent = `AI is in fallback mode (${status.requestsUsed}/${status.requestsLimit} used today, cooldown: ${cooldownLabel}). Local plans still work.`;
+      return;
+    }
+
+    statusEl.className = "ai-status-banner ready";
+    statusEl.textContent = `AI is ready (${status.requestsUsed}/${status.requestsLimit} used today via ${status.providerMode || "provider"}).`;
+  }
+
+  function updateAiDiagnosticsPanel() {
+    const textEl = document.getElementById("aiDiagnosticsText");
+    if (!textEl) return;
+
+    if (typeof getAiDiagnostics !== "function") {
+      textEl.textContent = "Diagnostics unavailable. Ensure js/ai.js is loaded.";
+      return;
+    }
+
+    const diagnostics = getAiDiagnostics();
+    const status = diagnostics?.status || {};
+    const lastResult = diagnostics?.lastResult || {};
+    const summaryLines = [
+      `Mode: ${status.mode || "unknown"}`,
+      `Provider: ${status.providerMode || "unknown"}`,
+      `Requests: ${status.requestsUsed ?? 0}/${status.requestsLimit ?? "?"}`,
+      `Cooldown: ${formatRelativeCooldown(status.cooldownUntil)}`,
+      `Last Source: ${lastResult.source || "n/a"}`,
+      `Last Reason: ${humanizeAiReason(lastResult.reason)}`
+    ];
+
+    textEl.textContent = `${summaryLines.join("\n")}\n\nRaw JSON:\n${JSON.stringify(diagnostics, null, 2)}`;
+  }
+
   // Auto-load profile on page load
   loadProfile();
+  updateAiStatusBanner();
+  updateAiDiagnosticsPanel();
+  setInterval(updateAiStatusBanner, 5 * 60 * 1000);
+  setInterval(updateAiDiagnosticsPanel, 5 * 60 * 1000);
   loadBtn?.addEventListener("click", loadProfile);
 
   calculateGoalsBtn?.addEventListener("click", async () => {
@@ -178,6 +264,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   let currentEditingMealId = null;
 
+  function setButtonBusy(button, busyText) {
+    if (!button) return;
+    if (!button.dataset.defaultText) {
+      button.dataset.defaultText = button.textContent || "";
+    }
+    button.disabled = true;
+    button.textContent = busyText;
+  }
+
+  function restoreButton(button) {
+    if (!button) return;
+    button.disabled = false;
+    if (button.dataset.defaultText) {
+      button.textContent = button.dataset.defaultText;
+    }
+  }
+
   function escapeHTML(value) {
     const raw = String(value ?? "");
     return raw
@@ -190,9 +293,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function validateMealInputs() {
     const name = mealNameInput?.value?.trim() || "";
-    const calories = parseInt(mealCaloriesInput?.value, 10) || 0;
-    const protein = parseInt(mealProteinInput?.value, 10) || 0;
-    const cost = parseFloat(mealCostInput?.value) || 0;
+    const caloriesRaw = mealCaloriesInput?.value?.trim() || "";
+    const proteinRaw = mealProteinInput?.value?.trim() || "";
+    const costRaw = mealCostInput?.value?.trim() || "";
+
+    const parseOptionalNumber = (raw, fallback = 0) => {
+      if (!raw) return fallback;
+      const parsed = Number(raw);
+      return Number.isFinite(parsed) ? parsed : NaN;
+    };
+
+    const calories = parseOptionalNumber(caloriesRaw, 0);
+    const protein = parseOptionalNumber(proteinRaw, 0);
+    const cost = parseOptionalNumber(costRaw, 0);
 
     if (!name) {
       showMessage("Meal name is required", "error");
@@ -202,6 +315,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       showMessage("Meal name too long (max 100 chars)", "error");
       return null;
     }
+    if (!Number.isFinite(calories)) {
+      showMessage("Calories must be a valid number", "error");
+      return null;
+    }
+    if (!Number.isFinite(protein)) {
+      showMessage("Protein must be a valid number", "error");
+      return null;
+    }
+    if (!Number.isFinite(cost)) {
+      showMessage("Cost must be a valid number", "error");
+      return null;
+    }
+
     if (calories < 0 || calories > 5000) {
       showMessage("Calories must be 0-5000", "error");
       return null;
@@ -215,7 +341,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       return null;
     }
 
-    return { name, calories, protein, cost };
+    return {
+      name,
+      calories: Math.round(calories),
+      protein: Math.round(protein),
+      cost: Math.round(cost * 100) / 100
+    };
   }
 
   function clearMealForm() {
@@ -258,6 +389,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!mealsArea) return;
 
     try {
+      mealsArea.innerHTML = '<p class="loading-inline">Loading meals...</p>';
       const selectedDate = planDate?.value || null;
       const meals = await getMealPlans(selectedDate);
       mealsArea.innerHTML = "";
@@ -335,6 +467,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
 
     try {
+      setButtonBusy(addMealBtn, currentEditingMealId ? "Updating..." : "Saving...");
       if (currentEditingMealId) {
         await updateMealPlan(currentEditingMealId, mealData);
         clearMealForm();
@@ -345,6 +478,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       await fetchMeals();
     } catch (error) {
       console.error("Error saving meal:", error);
+      showMessage("Failed to save meal. Please try again.", "error");
+    } finally {
+      restoreButton(addMealBtn);
     }
   });
 
@@ -354,6 +490,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const saveGoalsBtn = document.getElementById("saveGoalsBtn");
   saveGoalsBtn?.addEventListener("click", async () => {
     try {
+      setButtonBusy(saveGoalsBtn, "Saving...");
       const calTarget = parseInt(document.getElementById("calTarget")?.value, 10) || 0;
       const proteinTarget = parseInt(document.getElementById("proteinTarget")?.value, 10) || 0;
 
@@ -367,7 +504,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       const goals = {
-        calorieTarget,
+        calorieTarget: calTarget,
         proteinTarget,
         goalType: document.getElementById("goalType")?.value || "maintain"
       };
@@ -375,6 +512,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (error) {
       console.error("Error saving goals:", error);
       showMessage("Failed to save goals. Check values.", "error");
+    } finally {
+      restoreButton(saveGoalsBtn);
     }
   });
 
@@ -383,12 +522,17 @@ document.addEventListener("DOMContentLoaded", async () => {
   clearDayBtn?.addEventListener("click", async () => {
     const selectedDate = planDate?.value || new Date().toISOString().split("T")[0];
     if (confirm(`Clear all meals for ${selectedDate}?`)) {
-      const meals = await getMealPlans(selectedDate);
-      for (const meal of meals) {
-        await deleteMealPlan(meal.id, true);
+      try {
+        setButtonBusy(clearDayBtn, "Clearing...");
+        const meals = await getMealPlans(selectedDate);
+        for (const meal of meals) {
+          await deleteMealPlan(meal.id, true);
+        }
+        await fetchMeals();
+        showMessage("Day cleared!", "success");
+      } finally {
+        restoreButton(clearDayBtn);
       }
-      await fetchMeals();
-      showMessage("Day cleared!", "success");
     }
   });
 
@@ -415,6 +559,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
+    if (weight > 500) {
+      showMessage("Weight must be 1-500 kg", "error");
+      return;
+    }
+
     try {
       await addWeightLog(weight, date);
       if (recordWeight) recordWeight.value = "";
@@ -438,9 +587,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    aiArea.innerHTML = "<p>Generating AI meal plan... Please wait...</p>";
-    suggestMealsBtn.disabled = true;
-    suggestMealsBtn.textContent = "Generating...";
+    aiArea.innerHTML = '<p class="loading-inline">Generating AI meal plan... Please wait...</p>';
+    updateAiStatusBanner();
+    updateAiDiagnosticsPanel();
+    setButtonBusy(suggestMealsBtn, "Generating...");
 
     try {
       let profile = await getUserProfile();
@@ -475,13 +625,21 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
 
       displayMealPlan(aiArea.id, mealPlan);
-      showMessage("AI meal plan generated!", "success");
+      const meta = typeof getLastMealPlanMeta === "function" ? getLastMealPlanMeta() : null;
+      if (meta?.source === "ai") {
+        showMessage("AI meal plan generated!", "success");
+      } else if (meta?.source === "cache") {
+        showMessage("Showing your cached plan for today.", "info");
+      } else {
+        showMessage("Using local fallback meal plan.", "info");
+      }
     } catch (error) {
       console.error("AI generation error:", error);
       aiArea.innerHTML = "<p>Failed to generate meal plan. Please check your API key in js/ai.js</p>";
     } finally {
-      suggestMealsBtn.disabled = false;
-      suggestMealsBtn.textContent = "Suggest Meals";
+      restoreButton(suggestMealsBtn);
+      updateAiStatusBanner();
+      updateAiDiagnosticsPanel();
     }
   });
 
