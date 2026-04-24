@@ -1,142 +1,123 @@
 import pandas as pd
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
+import joblib
 
-# Load file
-df = pd.read_excel('Datasets Nutrimate.xlsx')
-
-# 🔍 STEP 1: Check actual column names
-print("Original Columns:", df.columns.tolist())
-
-# 🔧 STEP 2: Clean column names (spaces + lowercase)
+# =========================
+# LOAD DATA
+# =========================
+df = pd.read_excel("Datasets Nutrimate.xlsx")
 df.columns = df.columns.str.strip().str.lower()
 
-print("Cleaned Columns:", df.columns.tolist())
+# =========================
+# CLEAN DATA
+# =========================
+df = df.drop_duplicates()
 
-# ❗ STEP 3: Rename columns manually (IMPORTANT)
-df.rename(columns={
-    'gender ': 'gender',
-    ' gender': 'gender',
-    'genders': 'gender',
-}, inplace=True)
+for col in ['age', 'weight', 'height']:
+    df[col] = pd.to_numeric(df[col], errors='coerce')
 
-# 🔍 STEP 4: Check again
-print("Final Columns:", df.columns.tolist())
+df = df.dropna(subset=['age', 'weight', 'height', 'meal'])
 
-# ❌ Safety check
-if 'gender' not in df.columns:
-    raise Exception("❌ 'gender' column NOT FOUND — check spelling in Excel")
+df = df[df['height'] > 0]
+df = df[df['weight'] > 0]
 
-# ✅ STEP 5: Apply mapping
+# =========================
+# FEATURE ENGINEERING
+# =========================
+df['gender'] = df['gender'].astype(str).str.lower().fillna("unknown")
 
-df['gender'] = df['gender'].astype(str).str.strip().str.lower().map({
-  'male': 0,
-    'female': 1
-}).fillna(-1)
-
-# Safe fill for missing values
-df.fillna("Unknown", inplace=True)
-
-# Convert height to numeric first
-df['height'] = pd.to_numeric(df['height'], errors='coerce')
-
-# Now convert feet to meters
+# height conversion (feet → meters)
 df['height'] = df['height'] * 0.3048
 
-# Recalculate BMI
+# BMI
 df['bmi'] = df['weight'] / (df['height'] ** 2)
 
-# BMI Risk Score
-def bmi_category(bmi):
-    if bmi < 18.5:
-        return "Underweight"
-    elif bmi < 25:
-        return "Normal"
-    elif bmi < 30:
-        return "Overweight"
-    else:
-        return "Obese"
+# BMI grouping (safe)
+df['bmi_level'] = pd.cut(
+    df['bmi'],
+    bins=[0, 18.5, 25, 30, 100],
+    labels=['under', 'normal', 'over', 'obese']
+).astype(str)
 
-df['bmi_category'] = df['bmi'].apply(bmi_category)
+# Extra powerful feature
+df['bmi_age'] = df['bmi'] * df['age']
 
-# bmi_risk
-def bmi_risk(bmi):
-    if bmi < 18.5:
-        return "Low Risk"
-    elif bmi < 25:
-        return "Healthy Risk"
-    elif bmi < 30:
-        return "Medium Risk"
-    else:
-        return "High Risk"
+# =========================
+# FEATURES & TARGET
+# =========================
+features = [
+    'age',
+    'weight',
+    'height',
+    'gender',
+    'bmi',
+    'goal',
+    'disease',
+    'bmi_level',
+    'bmi_age'
+]
 
-df['bmi_risk'] = df['bmi'].apply(bmi_risk)
-
-# Age Group Classification
-df['age'] = pd.to_numeric(df['age'], errors='coerce')
-
-def age_group(age):
-    if age <= 18:
-        return "Teen"
-    elif age <= 35:
-        return "Young Adult"
-    elif age <= 55:
-        return "Adult"
-    else:
-        return "Senior"
-
-df['age_group'] = df['age'].apply(age_group)
-
-# Diet Priority Tag
-# Smart Feature Column
-df['priority_tag'] = df['goal'].astype(str) + "_" + df['bmi_category'].astype(str)
-df['ai_input'] = df['age_group'].astype(str) + "_" + df['gender'].astype(str) + "_" + df['bmi_category'].astype(str)
-
-# Quick Insight Print
-print("\nBMI Category Count:\n", df['bmi_category'].value_counts())
-print("\nAge Groups:\n", df['age_group'].value_counts())
-
-num_cols = df.select_dtypes(include=['float64', 'int64']).columns
-df[num_cols] = df[num_cols].fillna(0)
-
-cat_cols = df.select_dtypes(include=['string', 'object']).columns
-df[cat_cols] = df[cat_cols].fillna("Unknown")
-
-print(df.head())
-
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder
-from sklearn.tree import DecisionTreeClassifier
-
-
-# STEP 1: ENCODING (TEXT → NUMBER)
-le_goal = LabelEncoder()
-df['goal'] = le_goal.fit_transform(df['goal'].astype(str))
-
-le_meal = LabelEncoder()
-df['meal'] = le_meal.fit_transform(df['meal'].astype(str))
-
-
-# STEP 2: FEATURES & TARGET
-X = df[['age', 'weight', 'height', 'gender', 'bmi', 'goal']]
+X = df[features]
 y = df['meal']
 
+# =========================
+# PREPROCESSING
+# =========================
+categorical = ['gender', 'goal', 'disease', 'bmi_level']
 
-# STEP 3: TRAIN TEST SPLIT
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
+preprocessor = ColumnTransformer([
+    ('cat', OneHotEncoder(handle_unknown='ignore'), categorical)
+], remainder='passthrough')
+
+# =========================
+# MODEL (OPTIMIZED)
+# =========================
+model = RandomForestClassifier(
+    n_estimators=1000,
+    max_depth=25,
+    min_samples_split=3,
+    class_weight='balanced_subsample',
+    random_state=42,
+    n_jobs=-1
 )
 
+pipeline = Pipeline([
+    ('preprocess', preprocessor),
+    ('model', model)
+])
 
-# STEP 4: MODEL TRAINING
-model = DecisionTreeClassifier()
-model.fit(X_train, y_train)
+# =========================
+# TRAIN TEST SPLIT
+# =========================
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.2,
+    random_state=42
+)
 
-# STEP 5: MODEL ACCURACY
-accuracy = model.score(X_test, y_test)
-print("\nMODEL ACCURACY:", accuracy)
+# =========================
+# TRAIN
+# =========================
+pipeline.fit(X_train, y_train)
 
+# =========================
+# EVALUATION
+# =========================
+acc = pipeline.score(X_test, y_test)
+print("\nMODEL ACCURACY:", acc)
 
-# STEP 6: TEST PREDICTION
-sample = [[25, 70, 1.70, 0, 22, 1]]  # example input
-prediction = model.predict(sample)
+# CROSS VALIDATION (REAL SCORE)
+cv_scores = cross_val_score(pipeline, X, y, cv=5)
+print("CROSS VALIDATION ACCURACY:", cv_scores.mean())
 
-print("Recommended Meal:", le_meal.inverse_transform(prediction))
+# =========================
+# SAVE MODEL
+# =========================
+joblib.dump(pipeline, "meal_model.pkl")
+
+print("\nMODEL TRAINED + SAVED SUCCESSFULLY 🚀")
