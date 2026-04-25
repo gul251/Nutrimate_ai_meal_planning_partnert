@@ -1,7 +1,0 @@
-name = "nutrimate-ai-proxy"
-main = "cloudflare-worker.js"
-compatibility_date = "2026-04-18"
-workers_dev = true
-
-# Optional: set your custom route/zone later if needed.
-# routes = [{ pattern = "api.example.com/nutrimate-ai", zone_name = "example.com" }]
