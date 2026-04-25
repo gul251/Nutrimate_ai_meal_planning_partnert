@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NutriMate — How It Works</title>
+  <meta name="description" content="NutriMate - Learn how our AI meal planning works">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboardstyle.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+
+<body>
+<div class="container-body">
+<a class="skip-link" href="#howMain">Skip to main content</a>
+
+<div class="news">
+<span>Nutrimate Foods.</span>
+  <span>Healthy & Vegetarian.</span>
+      <span>Free Delivery All Over Pakistan.</span>
+</div>
+
+<header class="header">
+<div class="logo">
+    <h3>NutriMate</h3>
+</div>
+<nav class="nav" aria-label="Primary navigation">
+           <ul>
+
+  <li><a href="dashboard.html">Home</a></li>
+  <li><a href="howitworks.html">How It Works</a></li>
+  <li><a href="about.html">About</a></li>
+  <li><a href="dashboard.html#mealplans">Meal Plans</a></li>
+  <li><a href="dashboard.html#aiplans">AI Planner</a></li>
+  <li><a href="dashboard.html#goals">Goals</a></li>
+  <li><a href="faq.html">FAQ</a></li>
+  <li><a href="contact.html">Contact</a></li>
+            </ul>
+</nav>
+<div class="button">
+    <button type="button" id="loginBtn" class="login" onclick="window.location.href='login.html'">Login</button>
+    <button type="button" id="logoutBtn" class="loginout" onclick="window.location.href='welcome.html'">Logout</button>
+</div>
+</header>
+
+<div class="sidebar-container" aria-label="Mobile navigation">
+  <button class="hamburger" id="menuBtn" aria-label="Toggle navigation" aria-expanded="false" type="button">
+    &#9776; <!-- three bars -->
+  </button>
+
+  <nav class="sidebar-menu" id="sidebarMenu" aria-label="Sidebar navigation">
+    <a href="dashboard.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="dashboard.html#mealplans">Meal Plans</a>
+    <a href="dashboard.html#aiplans">AI Planner</a>
+    <a href="dashboard.html#goals">Goals</a>
+    <a href="faq.html">FAQ</a>
+    <a href="contact.html">Contact</a>
+    <a href="dashboard.html#profile">Profile</a>
+    <a href="welcome.html" id="sidebarLogout">Logout</a>
+  </nav>
+</div>
+
+
+  <main class="how-container" id="howMain" role="main">
+
+    <section class="how-header">
+      <h1>How NutriMate Works</h1>
+      <p>Simple steps to plan meals and track your health easily</p>
+    </section>
+
+    <section class="steps" aria-label="How it works steps">
+
+      <article class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3>Create Your Profile</h3>
+          <p>
+            Enter your basic details such as age, height, weight, activity level,
+            and diet preference. This helps NutriMate understand your body needs.
+          </p>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3>Analyze Health Data</h3>
+          <p>
+            NutriMate analyzes your information to calculate calories,
+            protein needs, and overall nutrition requirements.
+          </p>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3>Get Personalized Meal Plans</h3>
+          <p>
+            Based on your goals, NutriMate suggests daily meal plans
+            that match your calorie and diet targets.
+          </p>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h3>Track Daily Meals</h3>
+          <p>
+            Add your meals for breakfast, lunch, dinner, or snacks
+            and track calories, protein, and cost in one place.
+          </p>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-number">5</div>
+        <div class="step-content">
+          <h3>Monitor Progress</h3>
+          <p>
+            Record your weight and view progress over time to stay
+            motivated and consistent with your health goals.
+          </p>
+        </div>
+      </article>
+
+    </section>
+
+  </main>
+<footer class="footer" id="footer">
+ <div class="footer-top">
+    <h3>Nutri<span class="white">Mate</span></h3>
+
+  <div class="quicklinks">
+   <ul>
+
+  <li><a href="dashboard.html">Home</a></li>
+  <li><a href="howitworks.html">How It Works</a></li>
+  <li><a href="about.html">About</a></li>
+  <li><a href="dashboard.html#mealplans">Meal Plans</a></li>
+  <li><a href="dashboard.html#aiplans">AI Planner</a></li>
+  <li><a href="dashboard.html#goals">Goals</a></li>
+  <li><a href="faq.html">FAQ</a></li>
+  <li><a href="contact.html">Contact</a></li>
+            </ul>
+  </div>
+
+  <div class="socialmedia-icons">
+  <a href="https://www.tiktok.com/@nutrimate" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-tiktok"></i>Nutrimate</a> <br>
+  <a href="https://www.instagram.com/nutrimate" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i>Nutrimate</a> <br>
+  <a href="https://www.facebook.com/nutrimate" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook"></i>Nutrimate</a> <br>
+  <a href="https://wa.me/92367895467" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp"></i>nutrimate</a> <br>
+  <a href="mailto:nutrimte.test@gmail.com"><i class="fa-solid fa-envelope"></i>nutrimte.test@gmail.com</a>
+ </div>
+
+<div class="footer-contact">
+  <p><b>Phone No:</b>+92367895467</p>
+  <p><b>Email:</b>nutrimte.test@gmail.com</p>
+ </div>
+
+ 
+       </div>
+      <div class="links">
+        <h4>© 2026 NutriMate</h4>
+        <a href="privacy-policy.html">Privacy Policy</a> |
+        <a href="terms.html">Terms</a> |
+        <a href="about.html">About</a> |
+        <a href="faq.html">FAQ</a> |
+        <a href="contact.html">Contact</a>
+      </div>
+     
+    </footer>
+
+  </div>  
+</body>
+<script>
+  const menuBtn = document.getElementById("menuBtn");
+  const sidebarMenu = document.getElementById("sidebarMenu");
+  const sidebarLogout = document.getElementById("sidebarLogout");
+
+  function closeMenu() {
+    sidebarMenu?.classList.remove("open");
+    menuBtn?.setAttribute("aria-expanded", "false");
+  }
+
+  menuBtn?.addEventListener("click", () => {
+    sidebarMenu?.classList.toggle("open");
+    menuBtn.setAttribute("aria-expanded", sidebarMenu?.classList.contains("open") ? "true" : "false");
+  });
+
+  sidebarMenu?.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      closeMenu();
+    });
+  });
+
+  sidebarLogout?.addEventListener("click", (event) => {
+    event.preventDefault();
+    closeMenu();
+    window.location.href = "welcome.html";
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!sidebarMenu?.classList.contains("open")) return;
+    const clickedInsideMenu = sidebarMenu.contains(event.target);
+    const clickedToggle = menuBtn?.contains(event.target);
+    if (!clickedInsideMenu && !clickedToggle) {
+      closeMenu();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeMenu();
+    }
+  });
+</script>
+</html>
+

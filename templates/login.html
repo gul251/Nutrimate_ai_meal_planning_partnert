@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login Page</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+</head>
+
+<body>
+  <a class="skip-link" href="#loginMain">Skip to main content</a>
+  <div class="login-container">
+    <div class="login-section" id="loginMain">
+      <h2>Login to Your Dashboard</h2>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="Enter your email..." autocomplete="email" required>
+
+          <div class="password-box">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Enter your password..." autocomplete="current-password" required>
+            <button type="button" class="toggle-password" onclick="togglePassword()" aria-label="Show password" aria-pressed="false">Show</button>
+          </div>
+        </div>
+
+        <div class="options">
+          <label><input type="checkbox"> Remember me</label>
+          <a href="mailto:nutrimte.test@gmail.com?subject=Password%20Reset%20Request">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="login-btn">Login</button>
+
+        <div class="social-login">
+          <button type="button" class="social-btn google-btn">
+            <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google Icon">
+            Continue with Google
+          </button>
+          <button type="button" class="social-btn facebook-btn">
+            <img src="https://www.svgrepo.com/show/448224/facebook.svg" alt="Facebook Icon">
+            Continue with Facebook
+          </button>
+        </div>
+
+        <div class="signup">
+          Don’t have an account? <a href="createaccount.html">Create Account</a>
+        </div>
+      </form>
+
+     
+    </div>
+    <div class="info-section">
+      <div class="logo">NutriMate</div>
+      <img src="assets/images/Healthy%20lifestyle.jpeg" alt="Healthy meal planning illustration">
+      <h3>Your AI Meal Planning Partner</h3>
+     
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  
+  <!-- Firebase Configuration -->
+  <script src="static/js/config.js"></script>
+  <script src="js/auth.js"></script>
+
+  <script>
+    // Redirect if already logged in
+    redirectIfAuthenticated();
+
+    // Toggle password visibility
+    function togglePassword() {
+      const pass = document.getElementById("password");
+      const toggleBtn = document.querySelector('.toggle-password');
+      const showing = pass.type !== "password";
+      pass.type = showing ? "password" : "text";
+      if (toggleBtn) {
+        toggleBtn.textContent = showing ? 'Show' : 'Hide';
+        toggleBtn.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+        toggleBtn.setAttribute('aria-pressed', showing ? 'false' : 'true');
+      }
+    }
+
+    // Handle login form submission
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const loginBtn = document.querySelector('.login-btn');
+
+      // Disable button and show loading state
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Logging in...';
+
+      try {
+        await login(email, password);
+        // Success handled in auth.js (auto-redirects)
+      } catch (error) {
+        // Error handled in auth.js (shows message)
+        console.error('Login failed:', error);
+      } finally {
+        // Re-enable button
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Login';
+      }
+    });
+  </script>
+</body>
+</html>
