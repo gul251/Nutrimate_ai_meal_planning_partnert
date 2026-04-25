@@ -45,9 +45,17 @@
   </nav>
 
 <div class="button">
-    <button type="button" onclick="location.href='{{ url_for(&quot;login&quot;) }}'">Login</button>
-    <button type="button" onclick="location.href='{{ url_for(&quot;welcome&quot;) }}'">Logout</button>
-  </div>
+
+  <button type="button" onclick="location.href='{{ url_for('login') }}'">
+    Login
+  </button>
+
+  <button type="button" onclick="location.href='{{ url_for('logout') }}'">
+    Logout
+  </button>
+
+</div>
+
 </header>
 
 <!-- SIDEBAR -->
@@ -69,57 +77,87 @@
 </div>
 
 <!-- MAIN -->
-<main id="contactMain" role="main">
+<main class="how-container" id="contactMain" role="main">
+  <section class="how-header">
+    <h1>Contact NutriMate</h1>
+    <p>Reach us for support, project collaboration, or feature feedback.</p>
+  </section>
 
-<section class="how-header">
-  <h1>Contact NutriMate</h1>
-  <p>Reach us for support, project collaboration, or feedback.</p>
-</section>
+  <section class="steps" aria-label="Contact options">
+    <article class="step">
+      <div class="step-number">1</div>
+      <div class="step-content">
+        <h3>Email Support</h3>
+        <p>For general support and account-related questions, email us at <a href="mailto:nutrimte.test@gmail.com">nutrimte.test@gmail.com</a>.</p>
+      </div>
+    </article>
 
+    <article class="step">
+      <div class="step-number">2</div>
+      <div class="step-content">
+        <h3>WhatsApp</h3>
+        <p>For quick communication, message us on WhatsApp at <a href="https://wa.me/92367895467" target="_blank" rel="noopener noreferrer">+92 367 895 467</a>.</p>
+      </div>
+    </article>
+
+    <article class="step">
+      <div class="step-number">3</div>
+      <div class="step-content">
+        <h3>Social Media</h3>
+        <p>Stay connected on TikTok, Instagram, and Facebook for product updates and wellness tips.</p>
+      </div>
+    </article>
+
+    <article class="step">
+      <div class="step-number">4</div>
+      <div class="step-content">
+        <h3>Project Collaboration</h3>
+        <p>If you are interested in contributing to NutriMate, include your profile and proposal in your email subject line for faster response.</p>
+      </div>
+    </article>
+  </section>
 </main>
 
 <!-- FOOTER -->
+<!-- FOOTER -->
 <footer class="footer">
 
-  <div class="footer-top">
-    <h3>Nutri<span class="white">Mate</span></h3>
+<div class="footer-top">
 
-    <div class="quicklinks">
-      <ul>
-        <li><a href="{{ url_for('dashboard') }}">Home</a></li>
-        <li><a href="{{ url_for('howitworks') }}">How It Works</a></li>
-        <li><a href="{{ url_for('about') }}">About</a></li>
-        <li><a href="{{ url_for('faq') }}">FAQ</a></li>
-        <li><a href="{{ url_for('contact') }}">Contact</a></li>
-      </ul>
-    </div>
+<h3>Nutri<span class="white">Mate</span></h3>
 
-    <div class="socialmedia-icons">
-      <a href="https://www.tiktok.com/@nutrimate" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
-      <a href="https://www.instagram.com/nutrimate" target="_blank"><i class="fa-brands fa-instagram"></i></a>
-      <a href="https://www.facebook.com/nutrimate" target="_blank"><i class="fa-brands fa-facebook"></i></a>
-      <a href="https://wa.me/92367895467" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
-    </div>
+<ul>
+<li><a href="{{ url_for('dashboard') }}">Home</a></li>
+<li><a href="{{ url_for('howitworks') }}">How It Works</a></li>
+<li><a href="{{ url_for('about') }}">About</a></li>
+<li><a href="#mealplans">Meal Plans</a></li>
+<li><a href="#aiplans">AI Planner</a></li>
+<li><a href="#goals">Goals</a></li>
+<li><a href="{{ url_for('faq') }}">FAQ</a></li>
+<li><a href="{{ url_for('contact') }}">Contact</a></li>
+</ul>
 
-    <div class="footer-contact">
-      <p><b>Phone:</b> +92 367 895 467</p>
-      <p><b>Email:</b> nutrimte.test@gmail.com</p>
-    </div>
-  </div>
+<div class="socialmedia-icons">
+<i class="fa-brands fa-tiktok"></i>
+<i class="fa-brands fa-instagram"></i>
+<i class="fa-brands fa-facebook"></i>
+<i class="fa-brands fa-whatsapp"></i>
+</div>
 
-  <div class="links">
-    <h4>© 2026 NutriMate</h4>
+</div>
 
-    <!-- FIXED FLASK LINKS -->
-    <a href="{{ url_for('privacy') }}">Privacy Policy</a> |
-    <a href="{{ url_for('terms') }}">Terms</a> |
-    <a href="{{ url_for('about') }}">About</a> |
-    <a href="{{ url_for('faq') }}">FAQ</a> |
-    <a href="{{ url_for('contact') }}">Contact</a>
-  </div>
+<div class="links">
+<h4>© 2026 NutriMate</h4>
+
+<a href="{{ url_for('privacy') }}">Privacy Policy</a> |
+<a href="{{ url_for('terms') }}">Terms</a> |
+<a href="{{ url_for('about') }}">About</a> |
+<a href="{{ url_for('faq') }}">FAQ</a> |
+<a href="{{ url_for('contact') }}">Contact</a>
+
+</div>
 
 </footer>
-
 </div>
 
 </body>

@@ -46,11 +46,18 @@
   </nav>
 
   <!-- ✅ FIXED BUTTON (NO ERROR) -->
- <div class="button">
-    <button type="button" onclick="location.href='{{ url_for(&quot;login&quot;) }}'">Login</button>
-    <button type="button" onclick="location.href='{{ url_for(&quot;welcome&quot;) }}'">Logout</button>
-  </div>
-  
+<div class="button">
+
+  <button type="button" onclick="location.href='{{ url_for('login') }}'">
+    Login
+  </button>
+
+  <button type="button" onclick="location.href='{{ url_for('logout') }}'">
+    Logout
+  </button>
+
+</div>
+
 </header>
 
 <!-- SIDEBAR -->
@@ -70,21 +77,18 @@
   </div>
 </div>
 
-<!-- MAIN -->
-<main class="how-container" id="privacyMain">
-
+<main class="how-container" id="privacyMain" role="main">
   <section class="how-header">
     <h1>Privacy Policy</h1>
     <p>How NutriMate collects, uses, and protects your information.</p>
   </section>
 
-  <section class="steps">
-
+  <section class="steps" aria-label="Privacy sections">
     <article class="step">
       <div class="step-number">1</div>
       <div class="step-content">
         <h3>Information We Collect</h3>
-        <p>We collect your account details, profile data, and meal entries.</p>
+        <p>We collect your account details (name, email), profile data (age, weight, height, diet, activity), meal entries, and progress logs that you submit inside the app.</p>
       </div>
     </article>
 
@@ -92,12 +96,43 @@
       <div class="step-number">2</div>
       <div class="step-content">
         <h3>How We Use Your Data</h3>
-        <p>We use your data to personalize meal suggestions and track progress.</p>
+        <p>We use this data to personalize meal suggestions, calculate goals, and show your progress. Data is used only to provide app features and improve your experience.</p>
       </div>
     </article>
 
-  </section>
+    <article class="step">
+      <div class="step-number">3</div>
+      <div class="step-content">
+        <h3>Storage and Security</h3>
+        <p>Your app data is stored in Firebase services with authenticated access controls. We use HTTPS communication for secure data transfer between your browser and backend services.</p>
+      </div>
+    </article>
 
+    <article class="step">
+      <div class="step-number">4</div>
+      <div class="step-content">
+        <h3>AI Processing</h3>
+        <p>When AI suggestions are enabled, profile details required for suggestions may be sent to our AI provider through secure backend routes. If AI is unavailable, local fallback suggestions are used.</p>
+      </div>
+    </article>
+
+    <article class="step">
+      <div class="step-number">5</div>
+      <div class="step-content">
+        <h3>Your Control</h3>
+        <p>You can update profile data at any time. For account/data removal requests, contact us at <a href="mailto:nutrimte.test@gmail.com">nutrimte.test@gmail.com</a>.</p>
+      </div>
+    </article>
+
+    <article class="step">
+      <div class="step-number">6</div>
+      <div class="step-content">
+        <h3>Policy Updates</h3>
+        <p>We may update this policy as the project evolves. Significant changes will be reflected on this page with an updated revision date.</p>
+        <p><strong>Last updated:</strong> April 18, 2026</p>
+      </div>
+    </article>
+  </section>
 </main>
 
 <!-- FOOTER -->

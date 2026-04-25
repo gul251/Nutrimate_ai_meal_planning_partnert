@@ -54,9 +54,16 @@
 </nav>
 
 <div class="button">
-    <button type="button" onclick="location.href='{{ url_for(&quot;login&quot;) }}'">Login</button>
-    <button type="button" onclick="location.href='{{ url_for(&quot;welcome&quot;) }}'">Logout</button>
-  </div>
+
+  <button type="button" onclick="location.href='{{ url_for('login') }}'">
+    Login
+  </button>
+
+  <button type="button" onclick="location.href='{{ url_for('logout') }}'">
+    Logout
+  </button>
+
+</div>
 
 </header>
 
