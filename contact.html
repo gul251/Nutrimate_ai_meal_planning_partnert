@@ -4,15 +4,21 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>NutriMate - Contact</title>
-  <meta name="description" content="Contact NutriMate for support, collaboration, or project feedback." />
+
   <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="css/global.css">
-  <link rel="stylesheet" href="css/dashboardstyle.css">
+
+  <!-- CSS (FLASK SAFE) -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboardstyle.css') }}">
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
+
 <div class="container-body">
+
 <a class="skip-link" href="#contactMain">Skip to main content</a>
 
 <div class="news">
@@ -21,158 +27,100 @@
   <span>Free Delivery All Over Pakistan.</span>
 </div>
 
+<!-- HEADER -->
 <header class="header">
   <div class="logo"><h3>NutriMate</h3></div>
-  <nav class="nav" aria-label="Primary navigation">
+
+  <nav class="nav">
     <ul>
-      <li><a href="dashboard.html">Home</a></li>
-      <li><a href="howitworks.html">How It Works</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="dashboard.html#mealplans">Meal Plans</a></li>
-      <li><a href="dashboard.html#aiplans">AI Planner</a></li>
-      <li><a href="dashboard.html#goals">Goals</a></li>
-      <li><a href="faq.html">FAQ</a></li>
-      <li><a href="contact.html">Contact</a></li>
+      <li><a href="{{ url_for('dashboard') }}">Home</a></li>
+      <li><a href="{{ url_for('howitworks') }}">How It Works</a></li>
+      <li><a href="{{ url_for('about') }}">About</a></li>
+      <li><a href="{{ url_for('dashboard') }}#mealplans">Meal Plans</a></li>
+      <li><a href="{{ url_for('dashboard') }}#aiplans">AI Planner</a></li>
+      <li><a href="{{ url_for('dashboard') }}#goals">Goals</a></li>
+      <li><a href="{{ url_for('faq') }}">FAQ</a></li>
+      <li><a href="{{ url_for('contact') }}">Contact</a></li>
     </ul>
   </nav>
-  <div class="button">
-    <button type="button" id="loginBtn" class="login" onclick="window.location.href='login.html'">Login</button>
-    <button type="button" id="logoutBtn" class="loginout" onclick="window.location.href='welcome.html'">Logout</button>
+
+<div class="button">
+    <button type="button" onclick="location.href='{{ url_for(&quot;login&quot;) }}'">Login</button>
+    <button type="button" onclick="location.href='{{ url_for(&quot;welcome&quot;) }}'">Logout</button>
   </div>
 </header>
 
-<div class="sidebar-container" aria-label="Mobile navigation">
-  <button class="hamburger" id="menuBtn" aria-label="Toggle navigation" aria-expanded="false" type="button">&#9776;</button>
-  <nav class="sidebar-menu" id="sidebarMenu" aria-label="Sidebar navigation">
-    <a href="dashboard.html">Home</a>
-    <a href="howitworks.html">How It Works</a>
-    <a href="about.html">About</a>
-    <a href="dashboard.html#mealplans">Meal Plans</a>
-    <a href="dashboard.html#aiplans">AI Planner</a>
-    <a href="dashboard.html#goals">Goals</a>
-    <a href="faq.html">FAQ</a>
-    <a href="contact.html">Contact</a>
-    <a href="dashboard.html#profile">Profile</a>
-    <a href="welcome.html">Logout</a>
+<!-- SIDEBAR -->
+<div class="sidebar-container">
+  <button class="hamburger" id="menuBtn">&#9776;</button>
+
+  <nav class="sidebar-menu" id="sidebarMenu">
+    <a href="{{ url_for('dashboard') }}">Home</a>
+    <a href="{{ url_for('howitworks') }}">How It Works</a>
+    <a href="{{ url_for('about') }}">About</a>
+    <a href="{{ url_for('dashboard') }}#mealplans">Meal Plans</a>
+    <a href="{{ url_for('dashboard') }}#aiplans">AI Planner</a>
+    <a href="{{ url_for('dashboard') }}#goals">Goals</a>
+    <a href="{{ url_for('faq') }}">FAQ</a>
+    <a href="{{ url_for('contact') }}">Contact</a>
+    <a href="{{ url_for('dashboard') }}#profile">Profile</a>
+    <a href="{{ url_for('welcome') }}">Logout</a>
   </nav>
 </div>
 
-<main class="how-container" id="contactMain" role="main">
-  <section class="how-header">
-    <h1>Contact NutriMate</h1>
-    <p>Reach us for support, project collaboration, or feature feedback.</p>
-  </section>
+<!-- MAIN -->
+<main id="contactMain" role="main">
 
-  <section class="steps" aria-label="Contact options">
-    <article class="step">
-      <div class="step-number">1</div>
-      <div class="step-content">
-        <h3>Email Support</h3>
-        <p>For general support and account-related questions, email us at <a href="mailto:nutrimte.test@gmail.com">nutrimte.test@gmail.com</a>.</p>
-      </div>
-    </article>
+<section class="how-header">
+  <h1>Contact NutriMate</h1>
+  <p>Reach us for support, project collaboration, or feedback.</p>
+</section>
 
-    <article class="step">
-      <div class="step-number">2</div>
-      <div class="step-content">
-        <h3>WhatsApp</h3>
-        <p>For quick communication, message us on WhatsApp at <a href="https://wa.me/92367895467" target="_blank" rel="noopener noreferrer">+92 367 895 467</a>.</p>
-      </div>
-    </article>
-
-    <article class="step">
-      <div class="step-number">3</div>
-      <div class="step-content">
-        <h3>Social Media</h3>
-        <p>Stay connected on TikTok, Instagram, and Facebook for product updates and wellness tips.</p>
-      </div>
-    </article>
-
-    <article class="step">
-      <div class="step-number">4</div>
-      <div class="step-content">
-        <h3>Project Collaboration</h3>
-        <p>If you are interested in contributing to NutriMate, include your profile and proposal in your email subject line for faster response.</p>
-      </div>
-    </article>
-  </section>
 </main>
 
-<footer class="footer" id="footer">
+<!-- FOOTER -->
+<footer class="footer">
+
   <div class="footer-top">
     <h3>Nutri<span class="white">Mate</span></h3>
+
     <div class="quicklinks">
       <ul>
-        <li><a href="dashboard.html">Home</a></li>
-        <li><a href="howitworks.html">How It Works</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="dashboard.html#mealplans">Meal Plans</a></li>
-        <li><a href="dashboard.html#aiplans">AI Planner</a></li>
-        <li><a href="dashboard.html#goals">Goals</a></li>
-        <li><a href="faq.html">FAQ</a></li>
-        <li><a href="contact.html">Contact</a></li>
+        <li><a href="{{ url_for('dashboard') }}">Home</a></li>
+        <li><a href="{{ url_for('howitworks') }}">How It Works</a></li>
+        <li><a href="{{ url_for('about') }}">About</a></li>
+        <li><a href="{{ url_for('faq') }}">FAQ</a></li>
+        <li><a href="{{ url_for('contact') }}">Contact</a></li>
       </ul>
     </div>
 
     <div class="socialmedia-icons">
-      <a href="https://www.tiktok.com/@nutrimate" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-tiktok"></i>Nutrimate</a><br>
-      <a href="https://www.instagram.com/nutrimate" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i>Nutrimate</a><br>
-      <a href="https://www.facebook.com/nutrimate" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook"></i>Nutrimate</a><br>
-      <a href="https://wa.me/92367895467" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-whatsapp"></i>nutrimate</a><br>
-      <a href="mailto:nutrimte.test@gmail.com"><i class="fa-solid fa-envelope"></i>nutrimte.test@gmail.com</a>
+      <a href="https://www.tiktok.com/@nutrimate" target="_blank"><i class="fa-brands fa-tiktok"></i></a>
+      <a href="https://www.instagram.com/nutrimate" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+      <a href="https://www.facebook.com/nutrimate" target="_blank"><i class="fa-brands fa-facebook"></i></a>
+      <a href="https://wa.me/92367895467" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
     </div>
 
     <div class="footer-contact">
-      <p><b>Phone No:</b>+92367895467</p>
-      <p><b>Email:</b>nutrimte.test@gmail.com</p>
+      <p><b>Phone:</b> +92 367 895 467</p>
+      <p><b>Email:</b> nutrimte.test@gmail.com</p>
     </div>
   </div>
 
   <div class="links">
-    <h4>&copy; 2026 NutriMate</h4>
-    <a href="privacy-policy.html">Privacy Policy</a> |
-    <a href="terms.html">Terms</a> |
-    <a href="about.html">About</a> |
-    <a href="faq.html">FAQ</a> |
-    <a href="contact.html">Contact</a>
+    <h4>© 2026 NutriMate</h4>
+
+    <!-- FIXED FLASK LINKS -->
+    <a href="{{ url_for('privacy') }}">Privacy Policy</a> |
+    <a href="{{ url_for('terms') }}">Terms</a> |
+    <a href="{{ url_for('about') }}">About</a> |
+    <a href="{{ url_for('faq') }}">FAQ</a> |
+    <a href="{{ url_for('contact') }}">Contact</a>
   </div>
+
 </footer>
+
 </div>
 
-<script>
-  const menuBtn = document.getElementById("menuBtn");
-  const sidebarMenu = document.getElementById("sidebarMenu");
-
-  function closeMenu() {
-    sidebarMenu?.classList.remove("open");
-    menuBtn?.setAttribute("aria-expanded", "false");
-  }
-
-  menuBtn?.addEventListener("click", () => {
-    sidebarMenu?.classList.toggle("open");
-    menuBtn.setAttribute("aria-expanded", sidebarMenu?.classList.contains("open") ? "true" : "false");
-  });
-
-  sidebarMenu?.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", () => {
-      closeMenu();
-    });
-  });
-
-  document.addEventListener("click", (event) => {
-    if (!sidebarMenu?.classList.contains("open")) return;
-    const clickedInsideMenu = sidebarMenu.contains(event.target);
-    const clickedToggle = menuBtn?.contains(event.target);
-    if (!clickedInsideMenu && !clickedToggle) {
-      closeMenu();
-    }
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      closeMenu();
-    }
-  });
-</script>
 </body>
 </html>

@@ -49,6 +49,13 @@ def login():
 def welcome():
     return render_template('welcome.html')
 
+@app.route('/privacy')
+def privacy():
+    return render_template('privacy.html')
+
+@app.route('/terms')
+def terms():
+    return render_template('terms.html')
 
 # OPTIONAL: FIX FOR HOME ERROR (IMPORTANT)
 @app.route('/home')
