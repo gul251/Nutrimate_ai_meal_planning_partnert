@@ -4,7 +4,7 @@ import pandas as pd
 
 app = Flask(__name__)
 
-# ================= MODEL LOAD (SAFE) =================
+# ================= MODEL =================
 try:
     model = joblib.load("model.pkl")
     print("✅ Model loaded successfully")
@@ -45,19 +45,33 @@ def login():
     return render_template('login.html')
 
 
+# ✅ FIXED LOGOUT
+@app.route('/logout')
+def logout():
+    return render_template('welcome.html')
+
+
 @app.route('/welcome')
 def welcome():
     return render_template('welcome.html')
+
+
+# ✅ ADD THIS (IMPORTANT - tumhara error fix)
+@app.route('/createaccount')
+def createaccount():
+    return render_template('createaccount.html')
+
 
 @app.route('/privacy')
 def privacy():
     return render_template('privacy.html')
 
+
 @app.route('/terms')
 def terms():
     return render_template('terms.html')
 
-# OPTIONAL: FIX FOR HOME ERROR (IMPORTANT)
+
 @app.route('/home')
 def home():
     return render_template('dashboard.html')
@@ -72,11 +86,9 @@ def predict():
             return jsonify({"success": False, "error": "Model not loaded"})
 
         data = request.get_json()
-
         if not data:
             return jsonify({"success": False, "error": "No input data received"})
 
-        # ---------- SAFE INPUT ----------
         age = float(data.get('age', 25))
         weight = float(data.get('weight', 70))
         height = float(data.get('height', 170))
@@ -84,14 +96,11 @@ def predict():
         activity = data.get('activity', 'moderate')
         disease = data.get('disease', 'none')
 
-        # ---------- HEIGHT FIX ----------
         if height > 3:
             height = height / 100
 
-        # ---------- BMI ----------
         bmi = weight / (height ** 2)
 
-        # ---------- INPUT DF ----------
         input_df = pd.DataFrame([{
             "age": age,
             "weight": weight,
@@ -102,7 +111,6 @@ def predict():
             "disease": disease
         }])
 
-        # ---------- PREDICTION ----------
         prediction = model.predict(input_df)
 
         return jsonify({
@@ -111,12 +119,8 @@ def predict():
         })
 
     except Exception as e:
-        return jsonify({
-            "success": False,
-            "error": str(e)
-        })
+        return jsonify({"success": False, "error": str(e)})
 
 
-# ================= RUN =================
 if __name__ == "__main__":
     app.run(debug=True)
