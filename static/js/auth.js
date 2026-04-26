@@ -144,7 +144,7 @@ function redirectIfAuthenticated() {
   auth.onAuthStateChanged((user) => {
     if (user) {
       const currentPage = window.location.pathname.split('/').pop();
-      if (currentPage === '/login' || currentPage === '/createaccount' || currentPage === '/') {
+      if (window.location.pathname === '/login' || window.location.pathname === '/createaccount' || window.location.pathname === '/') {
         console.log("✅ User already logged in, redirecting to dashboard");
         window.location.href = '/dashboard';
       }
