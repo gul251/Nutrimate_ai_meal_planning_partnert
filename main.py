@@ -22,7 +22,6 @@ for col in ['age', 'weight', 'height']:
     df[col] = pd.to_numeric(df[col], errors='coerce')
 
 df = df.dropna(subset=['age', 'weight', 'height', 'meal'])
-
 df = df[df['height'] > 0]
 df = df[df['weight'] > 0]
 
@@ -30,21 +29,23 @@ df = df[df['weight'] > 0]
 # FEATURE ENGINEERING
 # =========================
 df['gender'] = df['gender'].astype(str).str.lower().fillna("unknown")
+df['goal']   = df['goal'].astype(str).str.lower().str.strip()
+df['disease'] = df['disease'].astype(str).str.lower().str.strip().fillna("none")
 
-# height conversion (feet → meters)
+# NOTE: Dataset stores height in feet — convert to meters
 df['height'] = df['height'] * 0.3048
 
 # BMI
 df['bmi'] = df['weight'] / (df['height'] ** 2)
 
-# BMI grouping (safe)
+# BMI level
 df['bmi_level'] = pd.cut(
     df['bmi'],
     bins=[0, 18.5, 25, 30, 100],
     labels=['under', 'normal', 'over', 'obese']
 ).astype(str)
 
-# Extra powerful feature
+# Interaction feature
 df['bmi_age'] = df['bmi'] * df['age']
 
 # =========================
@@ -65,6 +66,10 @@ features = [
 X = df[features]
 y = df['meal']
 
+print("Dataset shape:", df.shape)
+print("Unique meal classes:", y.nunique())
+print("Features:", features)
+
 # =========================
 # PREPROCESSING
 # =========================
@@ -75,7 +80,7 @@ preprocessor = ColumnTransformer([
 ], remainder='passthrough')
 
 # =========================
-# MODEL (OPTIMIZED)
+# MODEL
 # =========================
 model = RandomForestClassifier(
     n_estimators=1000,
@@ -92,32 +97,29 @@ pipeline = Pipeline([
 ])
 
 # =========================
-# TRAIN TEST SPLIT
+# TRAIN / TEST SPLIT
 # =========================
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y,
-    test_size=0.2,
-    random_state=42
+    X, y, test_size=0.2, random_state=42
 )
 
 # =========================
 # TRAIN
 # =========================
+print("\nTraining model...")
 pipeline.fit(X_train, y_train)
 
 # =========================
 # EVALUATION
 # =========================
 acc = pipeline.score(X_test, y_test)
-print("\nMODEL ACCURACY:", acc)
+print("Test accuracy:", round(acc, 4))
 
-# CROSS VALIDATION (REAL SCORE)
 cv_scores = cross_val_score(pipeline, X, y, cv=5)
-print("CROSS VALIDATION ACCURACY:", cv_scores.mean())
+print("Cross-validation accuracy:", round(cv_scores.mean(), 4))
 
 # =========================
 # SAVE MODEL
 # =========================
-joblib.dump(pipeline, "meal_model.pkl")
-
-print("\nMODEL TRAINED + SAVED SUCCESSFULLY 🚀")
+joblib.dump(pipeline, "meal_model.pkl")  # Fixed: matches app.py load name
+print("\nModel saved as meal_model.pkl ✅")

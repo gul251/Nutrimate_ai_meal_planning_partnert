@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NutriMate — About</title>
+
+  <link rel="icon" href="data:,">
+
+  <!-- CSS (FLASK SAFE) -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboardstyle.css') }}">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container-body">
+
+<a class="skip-link" href="#aboutMain">Skip to main content</a>
+
+<!-- NEWS -->
+<div class="news">
+  <span>Nutrimate Foods.</span>
+  <span>Healthy & Vegetarian.</span>
+  <span>Free Delivery All Over Pakistan.</span>
+</div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="logo"><h3>NutriMate</h3></div>
+
+  <nav class="nav">
+    <ul>
+      <li><a href="{{ url_for('dashboard') }}">Home</a></li>
+      <li><a href="{{ url_for('howitworks') }}">How It Works</a></li>
+      <li><a href="{{ url_for('about') }}">About</a></li>
+      <li><a href="#mealplans">Meal Plans</a></li>
+      <li><a href="#aiplans">AI Planner</a></li>
+      <li><a href="#goals">Goals</a></li>
+      <li><a href="{{ url_for('faq') }}">FAQ</a></li>
+      <li><a href="{{ url_for('contact') }}">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="button">
+
+  <button type="button" onclick="location.href='{{ url_for('login') }}'">
+    Login
+  </button>
+
+  <button type="button" onclick="location.href='{{ url_for('logout') }}'">
+    Logout
+  </button>
+
+</div>
+
+</header>
+
+<!-- SIDEBAR -->
+<div class="sidebar-container">
+  <button class="hamburger" id="menuBtn">&#9776;</button>
+
+  <nav class="sidebar-menu" id="sidebarMenu">
+    <a href="{{ url_for('dashboard') }}">Home</a>
+    <a href="{{ url_for('howitworks') }}">How It Works</a>
+    <a href="{{ url_for('about') }}">About</a>
+    <a href="{{ url_for('dashboard') }}#mealplans">Meal Plans</a>
+    <a href="{{ url_for('dashboard') }}#aiplans">AI Planner</a>
+    <a href="{{ url_for('dashboard') }}#goals">Goals</a>
+    <a href="{{ url_for('faq') }}">FAQ</a>
+    <a href="{{ url_for('contact') }}">Contact</a>
+    <a href="{{ url_for('dashboard') }}#profile">Profile</a>
+    <a href="{{ url_for('welcome') }}">Logout</a>
+  </nav>
+</div>
+
+
+<!-- MAIN -->
+<main class="how-container" id="aboutMain" role="main">
+  <section class="how-header">
+    <h1>About NutriMate</h1>
+    <p>A student-built wellness platform focused on practical nutrition planning.</p>
+  </section>
+
+  <section class="steps" aria-label="About sections">
+    <article class="step">
+      <div class="step-number">1</div>
+      <div class="step-content">
+        <h3>Project Vision</h3>
+        <p>NutriMate was designed to make meal planning simpler for students and young professionals who need quick, realistic, and affordable nutrition guidance.</p>
+      </div>
+    </article>
+
+    <article class="step">
+      <div class="step-number">2</div>
+      <div class="step-content">
+        <h3>What Problem We Solve</h3>
+        <p>Many users struggle to stay consistent with healthy eating. NutriMate combines daily planning, goal tracking, and guided suggestions in one simple dashboard.</p>
+      </div>
+    </article>
+
+    <article class="step">
+      <div class="step-number">3</div>
+      <div class="step-content">
+        <h3>How It Works for Users</h3>
+        <p>Users create a profile, set diet and activity preferences, define calorie/protein goals, and then receive meal suggestions with local fallback support when AI is limited.</p>
+      </div>
+    </article>
+
+    <article class="step">
+      <div class="step-number">4</div>
+      <div class="step-content">
+        <h3>Technology Stack</h3>
+        <p>NutriMate uses HTML/CSS/JavaScript on the frontend, Firebase for authentication and data storage, and a secure backend proxy pattern for AI provider integration.</p>
+      </div>
+    </article>
+
+    <article class="step">
+      <div class="step-number">5</div>
+      <div class="step-content">
+        <h3>FYP Focus</h3>
+        <p>This project is built as an FYP with emphasis on reliability, accessibility, and real-world usability. The roadmap includes continuous UI improvements and stronger trust pages.</p>
+      </div>
+    </article>
+
+    <article class="step">
+      <div class="step-number">6</div>
+      <div class="step-content">
+        <h3>Contact</h3>
+        <p>For project collaboration or feedback, email us at <a href="mailto:nutrimte.test@gmail.com">nutrimte.test@gmail.com</a>.</p>
+      </div>
+    </article>
+  </section>
+</main>
+
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+
+<div class="footer-top">
+
+<h3>Nutri<span class="white">Mate</span></h3>
+
+<ul>
+<li><a href="{{ url_for('dashboard') }}">Home</a></li>
+<li><a href="{{ url_for('howitworks') }}">How It Works</a></li>
+<li><a href="{{ url_for('about') }}">About</a></li>
+<li><a href="#mealplans">Meal Plans</a></li>
+<li><a href="#aiplans">AI Planner</a></li>
+<li><a href="#goals">Goals</a></li>
+<li><a href="{{ url_for('faq') }}">FAQ</a></li>
+<li><a href="{{ url_for('contact') }}">Contact</a></li>
+</ul>
+
+<div class="socialmedia-icons">
+<i class="fa-brands fa-tiktok"></i>
+<i class="fa-brands fa-instagram"></i>
+<i class="fa-brands fa-facebook"></i>
+<i class="fa-brands fa-whatsapp"></i>
+</div>
+
+</div>
+
+<div class="links">
+<h4>© 2026 NutriMate</h4>
+
+<a href="{{ url_for('privacy') }}">Privacy Policy</a> |
+<a href="{{ url_for('terms') }}">Terms</a> |
+<a href="{{ url_for('about') }}">About</a> |
+<a href="{{ url_for('faq') }}">FAQ</a> |
+<a href="{{ url_for('contact') }}">Contact</a>
+
+</div>
+
+</footer>
+
+</div>
+</body>
+</html>

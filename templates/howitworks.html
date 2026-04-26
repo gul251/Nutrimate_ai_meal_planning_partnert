@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NutriMate — About</title>
+
+  <link rel="icon" href="data:,">
+
+  <!-- CSS (FLASK SAFE) -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboardstyle.css') }}">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="container-body">
+
+<a class="skip-link" href="#aboutMain">Skip to main content</a>
+
+<!-- NEWS -->
+<div class="news">
+  <span>Nutrimate Foods.</span>
+  <span>Healthy & Vegetarian.</span>
+  <span>Free Delivery All Over Pakistan.</span>
+</div>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="logo"><h3>NutriMate</h3></div>
+
+  <nav class="nav">
+    <ul>
+      <li><a href="{{ url_for('dashboard') }}">Home</a></li>
+      <li><a href="{{ url_for('howitworks') }}">How It Works</a></li>
+      <li><a href="{{ url_for('about') }}">About</a></li>
+      <li><a href="#mealplans">Meal Plans</a></li>
+      <li><a href="#aiplans">AI Planner</a></li>
+      <li><a href="#goals">Goals</a></li>
+      <li><a href="{{ url_for('faq') }}">FAQ</a></li>
+      <li><a href="{{ url_for('contact') }}">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="button">
+
+  <button type="button" onclick="location.href='{{ url_for('login') }}'">
+    Login
+  </button>
+
+  <button type="button" onclick="location.href='{{ url_for('logout') }}'">
+    Logout
+  </button>
+
+</div>
+
+</header>
+
+<!-- SIDEBAR -->
+<div class="sidebar-container">
+  <button class="hamburger" id="menuBtn">&#9776;</button>
+
+  <nav class="sidebar-menu" id="sidebarMenu">
+    <a href="{{ url_for('dashboard') }}">Home</a>
+    <a href="{{ url_for('howitworks') }}">How It Works</a>
+    <a href="{{ url_for('about') }}">About</a>
+    <a href="{{ url_for('dashboard') }}#mealplans">Meal Plans</a>
+    <a href="{{ url_for('dashboard') }}#aiplans">AI Planner</a>
+    <a href="{{ url_for('dashboard') }}#goals">Goals</a>
+    <a href="{{ url_for('faq') }}">FAQ</a>
+    <a href="{{ url_for('contact') }}">Contact</a>
+    <a href="{{ url_for('dashboard') }}#profile">Profile</a>
+    <a href="{{ url_for('welcome') }}">Logout</a>
+  </nav>
+</div>
+
+
+
+<main class="how-container" id="howMain" role="main">
+
+    <section class="how-header">
+      <h1>How NutriMate Works</h1>
+      <p>Simple steps to plan meals and track your health easily</p>
+    </section>
+
+    <section class="steps" aria-label="How it works steps">
+
+      <article class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3>Create Your Profile</h3>
+          <p>
+            Enter your basic details such as age, height, weight, activity level,
+            and diet preference. This helps NutriMate understand your body needs.
+          </p>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3>Analyze Health Data</h3>
+          <p>
+            NutriMate analyzes your information to calculate calories,
+            protein needs, and overall nutrition requirements.
+          </p>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3>Get Personalized Meal Plans</h3>
+          <p>
+            Based on your goals, NutriMate suggests daily meal plans
+            that match your calorie and diet targets.
+          </p>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+          <h3>Track Daily Meals</h3>
+          <p>
+            Add your meals for breakfast, lunch, dinner, or snacks
+            and track calories, protein, and cost in one place.
+          </p>
+        </div>
+      </article>
+
+      <article class="step">
+        <div class="step-number">5</div>
+        <div class="step-content">
+          <h3>Monitor Progress</h3>
+          <p>
+            Record your weight and view progress over time to stay
+            motivated and consistent with your health goals.
+          </p>
+        </div>
+      </article>
+
+    </section>
+
+  </main>
+
+
+<!-- FOOTER -->
+<footer class="footer">
+
+<div class="footer-top">
+
+<h3>Nutri<span class="white">Mate</span></h3>
+
+<ul>
+<li><a href="{{ url_for('dashboard') }}">Home</a></li>
+<li><a href="{{ url_for('howitworks') }}">How It Works</a></li>
+<li><a href="{{ url_for('about') }}">About</a></li>
+<li><a href="#mealplans">Meal Plans</a></li>
+<li><a href="#aiplans">AI Planner</a></li>
+<li><a href="#goals">Goals</a></li>
+<li><a href="{{ url_for('faq') }}">FAQ</a></li>
+<li><a href="{{ url_for('contact') }}">Contact</a></li>
+</ul>
+
+<div class="socialmedia-icons">
+<i class="fa-brands fa-tiktok"></i>
+<i class="fa-brands fa-instagram"></i>
+<i class="fa-brands fa-facebook"></i>
+<i class="fa-brands fa-whatsapp"></i>
+</div>
+
+</div>
+
+<div class="links">
+<h4>© 2026 NutriMate</h4>
+
+<a href="{{ url_for('privacy') }}">Privacy Policy</a> |
+<a href="{{ url_for('terms') }}">Terms</a> |
+<a href="{{ url_for('about') }}">About</a> |
+<a href="{{ url_for('faq') }}">FAQ</a> |
+<a href="{{ url_for('contact') }}">Contact</a>
+
+</div>
+
+</footer>
+
+</div>
+</body>
+</html>

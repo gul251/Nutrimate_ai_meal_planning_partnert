@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account - NutriMate</title>
+
+  <!-- ✅ FLASK STATIC CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+</head>
+
+<body>
+
+<a class="skip-link" href="#signupMain">Skip to main content</a>
+
+<div class="signup-container">
+
+  <div class="register-container" id="signupMain">
+    <h2>Create Your NutriMate Account</h2>
+
+    <form id="signupForm" class="form">
+
+      <label for="name">Full Name:</label>
+      <input type="text" id="name" autocomplete="name" required>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" autocomplete="email" required>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" minlength="6" required>
+
+      <label for="weight">Weight (kg):</label>
+      <input type="number" id="weight" min="1" required>
+
+      <label for="goal">Goal:</label>
+      <select id="goal" required>
+        <option value="Lose Weight">Lose Weight</option>
+        <option value="Gain Muscle">Gain Muscle</option>
+        <option value="Maintain Weight">Maintain Weight</option>
+      </select>
+
+      <fieldset class="food-type-group">
+        <legend>Select Food Type(s):</legend>
+        <label><input type="checkbox" name="foodType" value="Vegetarian"> Vegetarian</label>
+        <label><input type="checkbox" name="foodType" value="Non-Vegetarian"> Non-Vegetarian</label>
+        <label><input type="checkbox" name="foodType" value="Vegan"> Vegan</label>
+      </fieldset>
+
+      <button type="submit">Create Account</button>
+
+      <!-- ✅ FLASK LOGIN LINK -->
+      <p>Already have an account?
+        <a href="{{ url_for('login') }}">Login here</a>
+      </p>
+
+    </form>
+  </div>
+
+  <!-- ✅ FIXED IMAGE PATH -->
+  <div class="register-image">
+    <img src="{{ url_for('static', filename='images/diet.jpg') }}" alt="Healthy food">
+  </div>
+
+</div>
+
+<!-- ✅ FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+<!-- ✅ FLASK STATIC JS -->
+<script src="{{ url_for('static', filename='js/config.js') }}"></script>
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+
+<script>
+
+  // Redirect if already logged in
+  if (typeof redirectIfAuthenticated === "function") {
+    redirectIfAuthenticated();
+  }
+
+  document.getElementById('signupForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const weight = document.getElementById('weight').value;
+    const goal = document.getElementById('goal').value;
+
+    const foodTypeCheckboxes = document.querySelectorAll('input[name="foodType"]:checked');
+    const foodTypes = Array.from(foodTypeCheckboxes).map(cb => cb.value);
+
+    if (foodTypes.length === 0) {
+      alert("Please select at least one food type");
+      return;
+    }
+
+    const submitBtn = document.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Creating Account...';
+
+    try {
+      await signUp(email, password, {
+        name,
+        weight,
+        goal,
+        foodTypes
+      });
+
+    } catch (error) {
+      console.error('Signup failed:', error);
+      alert("Signup failed");
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Create Account';
+    }
+  });
+
+</script>
+
+</body>
+</html>
