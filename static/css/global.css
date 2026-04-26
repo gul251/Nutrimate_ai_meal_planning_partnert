@@ -18,8 +18,8 @@
   --color-success-dark: #2E7D32;
   --color-info-soft: #E8F5E9;
 
-  --font-family-base: 'Roboto', sans-serif;
-  --font-family-display: 'Montserrat', sans-serif;
+  --font-family-base: 'DM Sans', sans-serif;
+  --font-family-display: 'DM Serif Display', serif;
 
   --radius-sm: 4px;
   --radius-md: 8px;
@@ -57,13 +57,11 @@
 }
 
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   min-height: 100vh;
   background-color: var(--color-accent);
   color: var(--color-text);
   line-height: 1.5;
+  display: block;
 }
 
 main,
