@@ -36,7 +36,7 @@ async function signUp(email, password, userData) {
 
     // Redirect to dashboard after 1.5 seconds
     setTimeout(() => {
-      window.location.href = 'dashboard.html';
+      window.location.href = '/dashboard';
     }, 1500);
 
     return user;
@@ -73,7 +73,7 @@ async function login(email, password) {
 
     // Redirect to dashboard after 1 second
     setTimeout(() => {
-      window.location.href = 'dashboard.html';
+      window.location.href = '/dashboard';
     }, 1000);
 
     return user;
@@ -146,7 +146,7 @@ function redirectIfAuthenticated() {
       const currentPage = window.location.pathname.split('/').pop();
       if (currentPage === 'login.html' || currentPage === 'createaccount.html' || currentPage === 'welcome.html') {
         console.log("✅ User already logged in, redirecting to dashboard");
-        window.location.href = 'dashboard.html';
+        window.location.href = '/dashboard';
       }
     }
   });
