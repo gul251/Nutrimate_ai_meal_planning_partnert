@@ -98,7 +98,7 @@ async function logout() {
     
     // Redirect to welcome page
     setTimeout(() => {
-      window.location.href = 'welcome.html';
+      window.location.href = '/';
     }, 1000);
 
   } catch (error) {
@@ -121,7 +121,7 @@ function checkAuth(redirectIfNot = false) {
       } else {
         console.log("ℹ️ No user authenticated");
         if (redirectIfNot) {
-          window.location.href = 'login.html';
+          window.location.href = '/login';
         }
         resolve(null);
       }
@@ -144,7 +144,7 @@ function redirectIfAuthenticated() {
   auth.onAuthStateChanged((user) => {
     if (user) {
       const currentPage = window.location.pathname.split('/').pop();
-      if (currentPage === 'login.html' || currentPage === 'createaccount.html' || currentPage === 'welcome.html') {
+      if (currentPage === '/login' || ... '/createaccount' || ... '/') {
         console.log("✅ User already logged in, redirecting to dashboard");
         window.location.href = '/dashboard';
       }
