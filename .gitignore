@@ -6,8 +6,8 @@ js/ai.js
 serviceAccountKey.json  
 
 #Static config files
-static/config.js
-static/ai.js
+static/js/config.js
+static/js/ai.js
 
 # Environment Variables
 .env
