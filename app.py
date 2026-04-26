@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 import joblib
 import pandas as pd
 
@@ -53,7 +53,8 @@ def login():
 
 @app.route('/logout')
 def logout():
-    return render_template('welcome.html')
+    # Firebase handles client-side signout; Flask just redirects to welcome
+    return redirect(url_for('welcome'))
 
 @app.route('/createaccount')
 def createaccount():
