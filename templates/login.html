@@ -1,105 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login - NutriMate</title>
-
-  <!-- ✅ FLASK STATIC -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login — NutriMate</title>
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboardstyle.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
 </head>
-
 <body>
-
 <a class="skip-link" href="#loginMain">Skip to main content</a>
+<div class="auth-page">
+  <div class="auth-card">
 
-<div class="login-container">
+    <div class="auth-panel-left">
+      <img src="{{ url_for('static', filename='images/nutrilogo.png') }}" alt="NutriMate logo" class="auth-art-logo">
+      <div class="auth-brand">Nutri<span class="auth-brand-amber">Mate</span></div>
+      <p class="auth-tagline-left">Your AI-powered meal planning partner. Eat smarter, live better.</p>
+    </div>
 
-  <!-- LOGIN FORM -->
-  <div class="login-section" id="loginMain">
-    <h2>Login to Your Dashboard</h2>
-
-    <form id="loginForm">
-
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="email" placeholder="Enter your email..." required>
-
-        <div class="password-box">
-          <label>Password</label>
-          <input type="password" id="password" placeholder="Enter your password..." required>
-
-          <button type="button" onclick="togglePassword()">Show</button>
+    <div class="auth-panel-right" id="loginMain">
+      <h2>Welcome Back</h2>
+      <p class="auth-sub">Sign in to your account</p>
+      <form id="loginForm" class="auth-form" novalidate>
+        <div class="field-group">
+          <label for="email"><i class="fa-solid fa-envelope"></i> Email</label>
+          <input type="email" id="email" placeholder="you@example.com" autocomplete="email" required>
         </div>
-      </div>
+        <div class="field-group">
+          <label for="password"><i class="fa-solid fa-lock"></i> Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password" required>
+            <button type="button" class="toggle-pw" onclick="togglePw()">Show</button>
+          </div>
+        </div>
+        <div class="auth-options">
+          <label><input type="checkbox"> Remember me</label>
+          <a href="mailto:nutrimte.test@gmail.com">Forgot Password?</a>
+        </div>
+        <button type="submit" class="auth-submit-btn">
+          Login <i class="fa-solid fa-arrow-right"></i>
+        </button>
+        <p class="auth-switch">Don't have an account? <a href="{{ url_for('createaccount') }}">Create Account</a></p>
+      </form>
+    </div>
 
-      <div class="options">
-        <label><input type="checkbox"> Remember me</label>
-        <a href="mailto:nutrimte.test@gmail.com">Forgot Password?</a>
-      </div>
-
-      <button type="submit" class="login-btn">Login</button>
-
-      <div class="signup">
-        Don’t have an account?
-        <!-- ✅ FIX -->
-        <a href="{{ url_for('createaccount') }}">Create Account</a>
-      </div>
-
-    </form>
   </div>
-
-  <!-- RIGHT SIDE -->
-  <div class="info-section">
-    <div class="logo">NutriMate</div>
-
-    <!-- ✅ FIXED IMAGE PATH -->
-    <img src="{{ url_for('static', filename='images/Healthy lifestyle.jpeg') }}" alt="Healthy meal">
-
-    <h3>Your AI Meal Planning Partner</h3>
-  </div>
-
 </div>
-
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
-<!-- ✅ FLASK STATIC JS -->
 <script src="{{ url_for('static', filename='js/config.js') }}"></script>
 <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
-
 <script>
-redirectIfAuthenticated();
-
-// Toggle password
-function togglePassword() {
-  const pass = document.getElementById("password");
-  pass.type = pass.type === "password" ? "text" : "password";
-}
-
-// Login
-document.getElementById('loginForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const email = document.getElementById('email').value.trim();
-  const password = document.getElementById('password').value;
-  const btn = document.querySelector('.login-btn');
-
-  btn.disabled = true;
-  btn.textContent = "Logging in...";
-
-  try {
-    await login(email, password);
-  } catch (err) {
-    console.error(err);
-  } finally {
-    btn.disabled = false;
-    btn.textContent = "Login";
-  }
-});
+  redirectIfAuthenticated();
+  function togglePw(){var p=document.getElementById("password");p.type=p.type==="password"?"text":"password";}
+  document.getElementById("loginForm").addEventListener("submit",async function(e){
+    e.preventDefault();
+    var btn=document.querySelector(".auth-submit-btn");
+    btn.disabled=true; btn.innerHTML='Logging in…';
+    try{ await login(document.getElementById("email").value.trim(), document.getElementById("password").value); }
+    catch(err){ console.error(err); }
+    finally{ btn.disabled=false; btn.innerHTML='Login <i class="fa-solid fa-arrow-right"></i>'; }
+  });
 </script>
-
 </body>
 </html>
