@@ -2,6 +2,13 @@
 js/config.js
 js/ai.js
 
+# Firebase Service Account Keys
+serviceAccountKey.json  
+
+#Static config files
+static/config.js
+static/ai.js
+
 # Environment Variables
 .env
 .env.local
