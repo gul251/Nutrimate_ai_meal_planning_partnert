@@ -18,6 +18,7 @@
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -55,11 +56,11 @@
 
 <div class="button">
 
-  <button type="button" onclick="location.href='{{ url_for('login') }}'">
+  <button type="button" id="loginBtn" style="display:none" onclick="location.href='{{ url_for('login') }}'">
     Login
   </button>
 
-  <button type="button" onclick="location.href='{{ url_for('logout') }}'">
+  <button type="button" onclick="logout()">
     Logout
   </button>
 
@@ -90,7 +91,7 @@
 <img src="{{ url_for('static', filename='images/download1.jpeg') }}" class="active">
 <img src="{{ url_for('static', filename='images/healthy.jpg') }}">
 <img src="{{ url_for('static', filename='images/juice.jpg') }}">
-<img src="{{ url_for('static', filename='images/download1.jpeg') }}">
+<img src="{{ url_for('static', filename='images/≡ƒÑù Ready to kickstart your healthy eating journey_.jpeg') }}">
 </div>
 
 <div class="dots">
@@ -188,6 +189,7 @@
 <option>gain</option>
 </select>
 
+<button id="calcGoalBtn" type="button">Calculate Goals</button>
 <input id="calTarget" placeholder="Calories">
 <input id="proteinTarget" placeholder="Protein">
 
@@ -248,7 +250,7 @@
 <script src="{{ url_for('static', filename='js/config.js') }}"></script>
 <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
 <script src="{{ url_for('static', filename='js/database.js') }}"></script>
-<script src="{{ url_for('static', filename='js/ai.js') }}"></script>
+<!-- ai.js merged into dashboard.js -->
 <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 
 </body>
