@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Welcome — NutriMate</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboardstyle.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+</head>
+<body>
+<a class="skip-link" href="#welcomeMain">Skip to main content</a>
+<div class="auth-page" id="welcomeMain">
+  <div class="auth-card">
+
+    <div class="auth-panel-left">
+      <img src="{{ url_for('static', filename='images/fyp logo-16.png') }}" alt="NutriMate logo" class="auth-art-logo">
+     
+      
+      
+    </div>
+
+    <div class="auth-panel-right welcome-right-panel">
+      <h2>Welcome to NutriMate</h2>
+      <p class="auth-sub">Get started by logging in or creating a free account</p>
+      <div class="welcome-btns">
+        <button type="button" class="auth-submit-btn"
+          onclick="location.href='{{ url_for('login') }}'">
+          <i class="fa-solid fa-right-to-bracket"></i> Login Now
+        </button>
+        <button type="button" class="welcome-create-btn"
+          onclick="location.href='{{ url_for('createaccount') }}'">
+          <i class="fa-solid fa-user-plus"></i> Create Account
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+</body>
+</html>

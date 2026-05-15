@@ -1,0 +1,450 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard — NutriMate</title>
+  <link rel="icon" href="data:,">
+  <link rel="icon" href="{{ url_for('static', filename='images/favicon.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboardstyle.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="container-body">
+<a class="skip-link" href="#mainContent">Skip to main content</a>
+<div class="news">
+  <span><i class="fa-solid fa-seedling"></i>&nbsp;Nutrimate Foods</span>
+  <span><i class="fa-solid fa-leaf"></i>&nbsp;Healthy &amp; Vegetarian</span>
+  <span><i class="fa-solid fa-truck"></i>&nbsp;Free Delivery All Over Pakistan</span>
+</div>
+<header class="header">
+  <a href="{{ url_for('dashboard') }}" class="header-logo-link">
+    <img src="{{ url_for('static', filename='images/fyp logo-11.png') }}" alt="NutriMate" class="header-logo-img">
+  </a>
+  <nav class="nav" aria-label="Primary navigation">
+    <ul>
+      <li><a href="{{ url_for('dashboard') }}">Home</a></li>
+      <li><a href="{{ url_for('howitworks') }}">How It Works</a></li>
+      <li><a href="{{ url_for('about') }}">About</a></li>
+      <li><a href="{{ url_for('dashboard') }}#mealplans">Meal Plans</a></li>
+      <li><a href="{{ url_for('dashboard') }}#aiplans">AI Planner</a></li>
+      <li><a href="{{ url_for('dashboard') }}#goals">Goals</a></li>
+      <li><a href="{{ url_for('faq') }}">FAQ</a></li>
+      <li><a href="{{ url_for('contact') }}">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="header-actions">
+    <button type="button" id="loginBtn" class="btn-outline-header" onclick="location.href='{{ url_for('login') }}';">Login</button>
+    <button type="button" class="btn-logout" onclick="logout()">
+      <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </button>
+  </div>
+</header>
+<div class="sidebar-container">
+  <button class="hamburger" id="menuBtn" aria-label="Open menu">&#9776;</button>
+  <div class="sidebar-menu" id="sidebarMenu">
+    <div class="sidebar-logo-wrap">
+      <img src="{{ url_for('static', filename='images/nutrilogo.png') }}" alt="" class="sidebar-art-logo">
+      <span>NutriMate</span>
+    </div>
+    <a href="{{ url_for('dashboard') }}"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="{{ url_for('howitworks') }}"><i class="fa-solid fa-circle-info"></i> How It Works</a>
+    <a href="{{ url_for('about') }}"><i class="fa-solid fa-users"></i> About</a>
+    <a href="{{ url_for('dashboard') }}#mealplans"><i class="fa-solid fa-utensils"></i> Meal Plans</a>
+    <a href="{{ url_for('dashboard') }}#aiplans"><i class="fa-solid fa-robot"></i> AI Planner</a>
+    <a href="{{ url_for('dashboard') }}#goals"><i class="fa-solid fa-bullseye"></i> Goals</a>
+    <a href="{{ url_for('faq') }}"><i class="fa-solid fa-circle-question"></i> FAQ</a>
+    <a href="{{ url_for('contact') }}"><i class="fa-solid fa-envelope"></i> Contact</a>
+    <a href="#" onclick="logout(); return false;" class="sidebar-logout">
+      <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </a>
+  </div>
+</div>
+
+<section id="mainSection">
+  <div class="slider">
+    <img src="{{ url_for('static', filename='images/download1.jpeg') }}" class="active" alt="Healthy food">
+    <img src="{{ url_for('static', filename='images/healthy.jpg') }}" alt="Healthy lifestyle">
+    <img src="{{ url_for('static', filename='images/juice.jpg') }}" alt="Fresh juice">
+    <img src="{{ url_for('static', filename='images/♥ Ready to kickstart your healthy eating journey_.jpeg') }}" alt="Start your journey">
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="dots">
+    <span class="dot active"></span><span class="dot"></span>
+    <span class="dot"></span><span class="dot"></span>
+  </div>
+  <div class="hero">
+    <div class="hero-badge">AI-Powered Nutrition</div>
+    <h1><span class="hero-brand">NutriMate</span><br>Your Smart Diet Planner</h1>
+    <p>Personalised meal plans crafted by AI — eat smarter, live better.</p>
+    <div class="hero-cta">
+      <a href="#mealplans" class="cta-primary">Plan Today's Meals</a>
+      <a href="#aiplans" class="cta-secondary">Get AI Suggestions</a>
+    </div>
+  </div>
+</section>
+
+<main class="dash-wrapper" id="mainContent">
+
+ <!-- LEFT COLUMN -->
+<div class="dash-left">
+
+<!-- DAILY PLANNER -->
+<div class="dash-card" id="mealplans">
+
+  <div class="card-header">
+    <div class="card-title-group">
+      <div class="card-icon"><i class="fa-solid fa-utensils"></i></div>
+      <div>
+        <h2 class="card-title">Daily Planner</h2>
+        <p class="card-subtitle">Log your meals for the day</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FIXED FLASK ROUTE -->
+ <form class="meal-form" id="mealForm">
+
+    <div class="form-row two-col">
+
+      <div class="field-group">
+        <label for="planDate">
+          <i class="fa-regular fa-calendar"></i> Date
+        </label>
+        <input type="date" id="planDate" name="planDate">
+      </div>
+
+      <div class="field-group">
+        <label for="mealSlot">
+          <i class="fa-solid fa-clock"></i> Meal Slot
+        </label>
+        <select id="mealSlot" name="mealSlot">
+          <option value="Breakfast">Breakfast</option>
+          <option value="Lunch">Lunch</option>
+          <option value="Dinner">Dinner</option>
+          <option value="Snack">Snack</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div class="field-group">
+      <label for="searchMeal">
+        <i class="fa-solid fa-magnifying-glass"></i> Meal Name
+      </label>
+      <input type="text" id="searchMeal" name="mealName" placeholder="e.g. Grilled chicken salad">
+    </div>
+
+    <div class="form-row three-col">
+
+      <div class="field-group">
+        <label for="mealCalories">
+          <i class="fa-solid fa-fire"></i> Calories
+        </label>
+        <input type="number" id="mealCalories" name="calories" placeholder="kcal" min="0">
+      </div>
+
+      <div class="field-group">
+        <label for="mealProtein">
+          <i class="fa-solid fa-dumbbell"></i> Protein
+        </label>
+        <input type="number" id="mealProtein" name="protein" placeholder="grams" min="0">
+      </div>
+
+      <div class="field-group">
+        <label for="mealCost">
+          <i class="fa-solid fa-tag"></i> Cost (Rs)
+        </label>
+        <input type="number" id="mealCost" name="cost" placeholder="0" min="0">
+      </div>
+
+    </div>
+
+<button id="addCustomMealBtn"  class="btn-add-meal"type="button">
+      <i class="fa-solid fa-plus"></i> Add Meal
+    </button>
+  </form>
+
+  <!-- LIST -->
+  <div class="meal-list-section">
+    <div id="todayMeals"></div>
+    <div id="mealList"></div>
+  </div>
+
+  <!-- TOTALS -->
+  <div class="totals-bar">
+
+    <div class="total-item">
+      <i class="fa-solid fa-fire total-icon cal-icon"></i>
+      <div>
+        <span class="total-value" id="totalCals">0</span>
+        <span class="total-label">kcal</span>
+      </div>
+    </div>
+
+    <div class="total-divider"></div>
+
+    <div class="total-item">
+      <i class="fa-solid fa-dumbbell total-icon prot-icon"></i>
+      <div>
+        <span class="total-value" id="totalProtein">0</span>
+        <span class="total-label">g protein</span>
+      </div>
+    </div>
+
+    <div class="total-divider"></div>
+
+    <div class="total-item">
+      <i class="fa-solid fa-tag total-icon cost-icon"></i>
+      <div>
+        <span class="total-value">Rs <span id="totalCost">0</span></span>
+        <span class="total-label">today</span>
+      </div>
+    </div>
+
+    <button id="clearDayBtn" class="btn-clear">
+      <i class="fa-solid fa-trash-can"></i> Clear Day
+    </button>
+
+  </div>
+
+</div>
+
+<!-- AI SECTION FIXED -->
+<div class="dash-card" id="aiplans">
+
+  <form action="/predict" method="POST">
+
+    <div class="card-header">
+      <div class="card-title-group">
+        <div class="card-icon ai-icon-bg">
+          <i class="fa-solid fa-robot"></i>
+        </div>
+        <div>
+          <h2 class="card-title">AI Meal Suggestions</h2>
+          <p class="card-subtitle">Powered by your profile & goals</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="aiSuggestions">
+      <div id="generatedMealImage"></div>
+      <p id="aiBox"></p>
+
+      <div class="ai-empty-state">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+        <p>Click below to get a personalised meal suggestion</p>
+      </div>
+    </div>
+
+    <button id="suggestMealsBtn" class="btn-ai" type="submit">
+      Generate AI Meal Plan
+    </button>
+
+  </form>
+
+  <!-- CHATBOT FIX (NO DUPLICATE ISSUE HANDLED LOGICALLY) -->
+  <div id="chatBox"></div>
+
+  <div class="field-group" style="padding:20px 24px 24px;">
+    <label for="chatInput">
+      <i class="fa-solid fa-comments"></i>
+      AI Chat
+    </label>
+
+    <input type="text" id="chatInput" placeholder="Ask NutriMate AI anything...">
+
+    <button type="button" onclick="sendChat()" class="btn-ai">
+      Send
+    </button>
+  </div>
+
+</div>
+
+</div>
+
+<!-- RIGHT COLUMN -->
+<div class="dash-right">
+
+<!-- PROFILE -->
+
+
+  <div class="profile-form" class="dash-card" id="profile">
+
+    <div class="card-header">
+        <div class="card-title-group">
+          <div class="card-icon"><i class="fa-solid fa-user"></i></div>
+          <div>
+            <h2 class="card-title">Your Profile</h2>
+            <p class="card-subtitle">Tell us about yourself</p>
+          </div>
+        </div>
+      </div>
+      <div class="profile-form">
+        <div class="field-group">
+          <label for="name"><i class="fa-solid fa-id-card"></i> Full Name</label>
+          <input id="name" type="text" placeholder="Enter your name">
+        </div>
+        <div class="form-row two-col">
+          <div class="field-group">
+            <label for="age"><i class="fa-solid fa-cake-candles"></i> Age</label>
+            <input id="age" type="number" placeholder="Years" min="1">
+          </div>
+          <div class="field-group">
+            <label for="weight"><i class="fa-solid fa-weight-scale"></i> Weight (kg)</label>
+            <input id="weight" type="number" placeholder="kg" min="1">
+          </div>
+        </div>
+        <div class="field-group">
+          <label for="height"><i class="fa-solid fa-ruler-vertical"></i> Height (cm)</label>
+          <input id="height" type="number" placeholder="cm" min="1">
+        </div>
+  
+        <div class="form-row two-col">
+        <div class="field-group">
+  <label for="gender"><i class="fa-solid fa-person-half-dress"></i>Gender</label>
+
+  <select id="gender">
+    <option value="male">Male</option>
+    <option value="female">Female</option>
+  </select>
+</div>
+
+<div class="field-group">
+  <label for="disease"><i class="fa-solid fa-virus"></i>Disease</label>
+
+  <select id="disease">
+    <option value="none">None</option>
+    <option value="diabetes">Diabetes</option>
+    <option value="bp">Blood Pressure</option>
+  </select>
+</div>
+</div>
+        <div class="form-row two-col">
+          <div class="field-group">
+            <label for="activity"><i class="fa-solid fa-person-running"></i> Activity</label>
+            <select id="activity">
+              <option value="sedentary">Sedentary</option>
+              <option value="light">Light</option>
+              <option value="moderate" selected>Moderate</option>
+              <option value="active">Active</option>
+            </select>
+          </div><br>
+          <div class="field-group">
+            <label for="dietType"><i class="fa-solid fa-leaf"></i> Diet Type</label>
+            <select id="dietType">
+              <option value="omnivore">Omnivore</option>
+              <option value="vegetarian">Vegetarian</option>
+              <option value="vegan">Vegan</option>
+            </select>
+          </div><br>
+          <button id="profileBtn" class="btn-save" class="dash-btn">
+  Save Profile
+</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- GOALS -->
+    <div class="dash-card" class="goals-form" id="goals">
+      <div class="card-header">
+        <div class="card-title-group">
+          <div class="card-icon goal-icon-bg"><i class="fa-solid fa-bullseye"></i></div>
+          <div>
+            <h2 class="card-title">Your Goals</h2>
+            <p class="card-subtitle">Set your nutrition targets</p>
+          </div>
+        </div>
+      
+
+  
+
+
+        <div class="field-group">
+          <label for="goalType"><i class="fa-solid fa-arrow-trend-up"></i> Goal</label>
+          <select id="goalType">
+            <option value="maintain">Maintain Weight</option>
+            <option value="loss">Lose Weight</option>
+            <option value="gain">Gain Muscle</option>
+          </select>
+        </div>
+        <button id="calcGoalBtn" class="btn-calculate">
+          <i class="fa-solid fa-calculator"></i> Calculate Targets
+        </button>
+        <div class="form-row two-col">
+          <div class="field-group">
+            <label for="calTarget"><i class="fa-solid fa-fire"></i> Calorie Target</label>
+            <input id="calTarget" type="number" placeholder="kcal / day">
+          </div>
+          <div class="field-group">
+            <label for="proteinTarget"><i class="fa-solid fa-dumbbell"></i> Protein Target</label>
+            <input id="proteinTarget" type="number" placeholder="g / day">
+          </div>
+        </div>
+        <button id="saveGoalsBtn" class="btn-save">
+          <i class="fa-solid fa-floppy-disk"></i> Save Goals
+        </button>
+        
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      
+      <div>
+        <img src="{{ url_for('static', filename='images/fyp logo-16.png') }}" alt="NutriMate" class="footer-text-logo">
+        <p>Your personal AI 
+diet assistant.<br>Eat smart, live well.</p>
+        <div class="social-icons">
+          <a href="#" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+          <a href="#" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-links-group">
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="{{ url_for('dashboard') }}">Home</a></li>
+        <li><a href="{{ url_for('howitworks') }}">How It Works</a></li>
+        <li><a href="{{ url_for('about') }}">About</a></li>
+        <li><a href="{{ url_for('dashboard') }}#mealplans">Meal Plans</a></li>
+        <li><a href="{{ url_for('dashboard') }}#aiplans">AI Planner</a></li>
+        <li><a href="{{ url_for('dashboard') }}#goals">Goals</a></li>
+      </ul>
+    </div>
+    <div class="footer-links-group">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="{{ url_for('faq') }}">FAQ</a></li>
+        <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+        <li><a href="{{ url_for('privacy') }}">Privacy Policy</a></li>
+        <li><a href="{{ url_for('terms') }}">Terms of Service</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 NutriMate. All rights reserved.</span>
+    <span>Made with <i class="fa-solid fa-heart" style="color:#F59E0B"></i> for healthy living</span>
+  </div>
+</footer>
+
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="{{ url_for('static', filename='js/config.js') }}"></script>
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+<script src="{{ url_for('static', filename='js/database.js') }}"></script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+
+</body>
+</html>

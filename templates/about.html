@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About NutriMate — NutriMate</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboardstyle.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="container-body">
+<a class="skip-link" href="#mainContent">Skip to main content</a>
+<div class="news">
+  <span><i class="fa-solid fa-seedling"></i>&nbsp;Nutrimate Foods</span>
+  <span><i class="fa-solid fa-leaf"></i>&nbsp;Healthy &amp; Vegetarian</span>
+  <span><i class="fa-solid fa-truck"></i>&nbsp;Free Delivery All Over Pakistan</span>
+</div>
+<header class="header">
+  <a href="{{ url_for('dashboard') }}" class="header-logo-link">
+    <img src="{{ url_for('static', filename='images/fyp logo-11.png') }}" alt="NutriMate" class="header-logo-img">
+  </a>
+  <nav class="nav" aria-label="Primary navigation">
+    <ul>
+      <li><a href="{{ url_for('dashboard') }}">Home</a></li>
+      <li><a href="{{ url_for('howitworks') }}">How It Works</a></li>
+      <li><a href="{{ url_for('about') }}">About</a></li>
+      <li><a href="{{ url_for('dashboard') }}#mealplans">Meal Plans</a></li>
+      <li><a href="{{ url_for('dashboard') }}#aiplans">AI Planner</a></li>
+      <li><a href="{{ url_for('dashboard') }}#goals">Goals</a></li>
+      <li><a href="{{ url_for('faq') }}">FAQ</a></li>
+      <li><a href="{{ url_for('contact') }}">Contact</a></li>
+    </ul>
+  </nav>
+  <div class="header-actions">
+    <button type="button" id="loginBtn" class="btn-outline-header" onclick="location.href='{{ url_for('login') }}';">Login</button>
+    <button type="button" class="btn-logout" onclick="logout()">
+      <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </button>
+  </div>
+</header>
+
+<div class="sidebar-container">
+  <button class="hamburger" id="menuBtn" aria-label="Open menu">&#9776;</button>
+  <div class="sidebar-menu" id="sidebarMenu">
+    <div class="sidebar-logo-wrap">
+      <img src="{{ url_for('static', filename='images/nutrilogo.png') }}" alt="" class="sidebar-art-logo">
+      <span>NutriMate</span>
+    </div>
+    <a href="{{ url_for('dashboard') }}"><i class="fa-solid fa-house"></i> Home</a>
+    <a href="{{ url_for('howitworks') }}"><i class="fa-solid fa-circle-info"></i> How It Works</a>
+    <a href="{{ url_for('about') }}"><i class="fa-solid fa-users"></i> About</a>
+    <a href="{{ url_for('dashboard') }}#mealplans"><i class="fa-solid fa-utensils"></i> Meal Plans</a>
+    <a href="{{ url_for('dashboard') }}#aiplans"><i class="fa-solid fa-robot"></i> AI Planner</a>
+    <a href="{{ url_for('dashboard') }}#goals"><i class="fa-solid fa-bullseye"></i> Goals</a>
+    <a href="{{ url_for('faq') }}"><i class="fa-solid fa-circle-question"></i> FAQ</a>
+    <a href="{{ url_for('contact') }}"><i class="fa-solid fa-envelope"></i> Contact</a>
+    <a href="#" onclick="logout(); return false;" class="sidebar-logout">
+      <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </a>
+  </div>
+</div>
+<div class="inner-hero" id="mainContent">
+  <h1><span class="white">About</span> NutriMate</h1>
+  <p>A student-built wellness platform focused on practical, AI-driven nutrition planning.</p>
+</div>
+<main class="how-container">
+  <div class="steps" aria-label="About NutriMate sections">
+    <article class="step">
+      <div class="step-number">1</div>
+      <div class="step-content"><h3>Project Vision</h3><p>NutriMate was built to make meal planning realistic and accessible for students and young professionals who need affordable, practical nutrition guidance.</p></div>
+    </article>
+    <article class="step">
+      <div class="step-number">2</div>
+      <div class="step-content"><h3>The Problem We Solve</h3><p>Staying consistent with healthy eating is hard. NutriMate combines daily planning, goal tracking, and AI-powered suggestions in one clean dashboard.</p></div>
+    </article>
+    <article class="step">
+      <div class="step-number">3</div>
+      <div class="step-content"><h3>How We Help Users</h3><p>Set a profile, choose your diet type and activity level, define calorie and protein goals, then get personalised meal suggestions — every day.</p></div>
+    </article>
+    <article class="step">
+      <div class="step-number">4</div>
+      <div class="step-content"><h3>Technology Stack</h3><p>NutriMate uses HTML, CSS, JavaScript, and Python Flask on the backend. Firebase handles authentication and Firestore stores all user data securely.</p></div>
+    </article>
+    <article class="step">
+      <div class="step-number">5</div>
+      <div class="step-content"><h3>FYP Project</h3><p>Built as a Final Year Project focused on reliability, accessibility, and real-world usability. We continue to refine the UI and deepen AI integration.</p></div>
+    </article>
+    <article class="step">
+      <div class="step-number">6</div>
+      <div class="step-content"><h3>Get in Touch</h3><p>For collaboration, feedback, or support — email us at <a href='mailto:nutrimte.test@gmail.com'>nutrimte.test@gmail.com</a>.</p></div>
+    </article>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      
+      <div>
+        <img src="{{ url_for('static', filename='images/fyp logo-16.png') }}" alt="NutriMate" class="footer-text-logo">
+        <p>Your personal AI 
+diet assistant.<br>Eat smart, live well.</p>
+        <div class="social-icons">
+          <a href="#" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+          <a href="#" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-links-group">
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="{{ url_for('dashboard') }}">Home</a></li>
+        <li><a href="{{ url_for('howitworks') }}">How It Works</a></li>
+        <li><a href="{{ url_for('about') }}">About</a></li>
+        <li><a href="{{ url_for('dashboard') }}#mealplans">Meal Plans</a></li>
+        <li><a href="{{ url_for('dashboard') }}#aiplans">AI Planner</a></li>
+        <li><a href="{{ url_for('dashboard') }}#goals">Goals</a></li>
+      </ul>
+    </div>
+    <div class="footer-links-group">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="{{ url_for('faq') }}">FAQ</a></li>
+        <li><a href="{{ url_for('contact') }}">Contact Us</a></li>
+        <li><a href="{{ url_for('privacy') }}">Privacy Policy</a></li>
+        <li><a href="{{ url_for('terms') }}">Terms of Service</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; 2026 NutriMate. All rights reserved.</span>
+    <span>Made with <i class="fa-solid fa-heart" style="color:#F59E0B"></i> for healthy living</span>
+  </div>
+</footer>
+
+
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="{{ url_for('static', filename='js/config.js') }}"></script>
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script><script>
+(function(){
+  var btn=document.getElementById('menuBtn'),menu=document.getElementById('sidebarMenu');
+  if(btn&&menu){
+    btn.addEventListener('click',function(e){e.stopPropagation();menu.classList.toggle('open');});
+    document.addEventListener('click',function(e){if(!menu.contains(e.target)&&!btn.contains(e.target))menu.classList.remove('open');});
+  }
+  if(typeof auth!=='undefined'){
+    auth.onAuthStateChanged(function(u){
+      var lb=document.getElementById('loginBtn');
+      if(lb)lb.style.display=u?'none':'inline-flex';
+    });
+  }
+})();
+</script>
+</div>
+</body>
+</html>

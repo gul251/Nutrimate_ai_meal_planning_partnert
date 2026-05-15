@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create Account — NutriMate</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboardstyle.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+</head>
+<body>
+<a class="skip-link" href="#signupMain">Skip to main content</a>
+<div class="auth-page">
+  <div class="auth-card">
+
+    <div class="auth-panel-left">
+       <img src="{{ url_for('static', filename='images/fyp logo-16.png') }}" alt="NutriMate logo" class="auth-art-logo">
+     
+     
+    </div>
+
+    <div class="auth-panel-right" id="signupMain">
+      <h2>Create Your Account</h2>
+      <p class="auth-sub">Fill in your details to get started</p>
+      <form id="signupForm" class="auth-form" novalidate>
+        <div class="field-group">
+          <label for="name"><i class="fa-solid fa-user"></i> Full Name</label>
+          <input type="text" id="name" placeholder="Your full name" autocomplete="name" required>
+        </div>
+        <div class="field-group">
+          <label for="email"><i class="fa-solid fa-envelope"></i> Email</label>
+          <input type="email" id="email" placeholder="you@example.com" autocomplete="email" required>
+        </div>
+        <div class="field-group">
+          <label for="password"><i class="fa-solid fa-lock"></i> Password</label>
+          <input type="password" id="password" placeholder="Min. 6 characters" minlength="6" required>
+        </div>
+        <div class="field-group">
+          <label for="weight"><i class="fa-solid fa-weight-scale"></i> Weight (kg)</label>
+          <input type="number" id="weight" placeholder="e.g. 70" min="1" required>
+        </div>
+        <div class="field-group">
+          <label for="goal"><i class="fa-solid fa-bullseye"></i> Goal</label>
+          <select id="goal" required>
+            <option value="Lose Weight">Lose Weight</option>
+            <option value="Gain Muscle">Gain Muscle</option>
+            <option value="Maintain Weight">Maintain Weight</option>
+          </select>
+        </div>
+        <fieldset class="food-type-group">
+          <legend>Food Type(s)</legend>
+          <label class="checkbox-row"><input type="checkbox" name="foodType" value="Vegetarian"> Vegetarian</label>
+          <label class="checkbox-row"><input type="checkbox" name="foodType" value="Non-Vegetarian"> Non-Vegetarian</label>
+          <label class="checkbox-row"><input type="checkbox" name="foodType" value="Vegan"> Vegan</label>
+        </fieldset>
+        <button type="submit" class="auth-submit-btn">
+          Create Account <i class="fa-solid fa-arrow-right"></i>
+        </button>
+        <p class="auth-switch">Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+      </form>
+    </div>
+
+  </div>
+</div>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+<script src="{{ url_for('static', filename='js/config.js') }}"></script>
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+<script>
+  if(typeof redirectIfAuthenticated==="function") redirectIfAuthenticated();
+  document.getElementById("signupForm").addEventListener("submit",async function(e){
+    e.preventDefault();
+    var foodTypes=Array.from(document.querySelectorAll('input[name="foodType"]:checked')).map(c=>c.value);
+    if(!foodTypes.length){showMessage("Please select at least one food type","error");return;}
+    var btn=document.querySelector(".auth-submit-btn");
+    btn.disabled=true; btn.innerHTML='Creating account…';
+    try{
+      await signUp(
+        document.getElementById("email").value.trim(),
+        document.getElementById("password").value,
+        {name:document.getElementById("name").value.trim(),
+         weight:document.getElementById("weight").value,
+         goal:document.getElementById("goal").value,
+         foodTypes}
+      );
+    }catch(err){console.error(err);}
+    finally{btn.disabled=false;btn.innerHTML='Create Account <i class="fa-solid fa-arrow-right"></i>';}
+  });
+</script>
+</body>
+</html>
