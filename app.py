@@ -81,7 +81,7 @@ def clear_meals():
 # =========================
 # 🌐 FRONTEND PAGES
 # =========================
-
+    
 @app.route("/")
 def welcome():
     return render_template("welcome.html")
@@ -278,6 +278,12 @@ def dataset_meals():
 # =========================
 
 if __name__ == "__main__":
-    app.run(debug=True)
+
     port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+
+    app.run(
+        host="0.0.0.0",
+        port=port,
+        debug=True
+    )
+ 
